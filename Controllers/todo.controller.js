@@ -32,8 +32,7 @@ console.log(error)
 
 const createTodo = (req,res)=>{
 	try{
-   const duplicateSolver = todoLstorage.reduce((max,todo)=>(todo.id >max ? todo.id : max),0)//just prevents duplicate doesn't rearrange
-  const newTodo = { id: duplicateSolver + 1, ...req.body }; // Auto-ID
+		 const newTodo = { id: todoLstorage.length + 1, ...req.body }; // Auto-ID
   if(!req.body || typeof req.body.completed !== 'boolean' ){
     return res.status(400).json({error:"task and completed required ,completedmust be boolean"});
   }

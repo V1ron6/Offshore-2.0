@@ -23,4 +23,5 @@ app.get("/",(req,res)=>{
 app.listen(port,()=>{
 	console.log(`active on ${port}`)
 
-})
+}
+ )
