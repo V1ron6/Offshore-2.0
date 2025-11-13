@@ -18,7 +18,11 @@ app.use("/api/todo",todoRoute);
 app.get("/",(req,res)=>{
 	res.send("adey active my guy")
 })
+/*
+console.log('@req.parrams')
 
+
+*/
 
 app.listen(port,()=>{
 	console.log(`active on ${port}`)
