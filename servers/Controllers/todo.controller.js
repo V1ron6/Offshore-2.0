@@ -3,7 +3,7 @@ const todoLstorage = require('../Models/todo.model.js')
 //get all todos
 const getTodo =  (req,res)=>{
 	try{
-	res.status(200).json(todoLstorage);
+	res.status(200).json({todo : todoLstorage});
 	}catch(error){
 console.log(error)
 }
@@ -13,7 +13,7 @@ console.log(error)
 const getCompleted = (req,res)=>{
 try{
 	const complete = todoLstorage.filter((t) => t.completed === true);
-  res.json(complete); // Custom Read!
+  res.json({todo : complete}); // Custom Read!
 }catch(error){
 console.log(error)
 }
@@ -23,8 +23,8 @@ console.log(error)
 //get active  todos
 const getActive = (req,res)=>{
 try{
-	const complete = todoLstorage.filter((t) => t.completed === false);
-  res.json(complete); // Custom Read!
+	const uncomplete = todoLstorage.filter((t) => t.completed === false);
+  res.json({todo: uncomplete}); // Custom Read!
 }catch(error){
 console.log(error)
 }

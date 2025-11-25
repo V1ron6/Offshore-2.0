@@ -1,5 +1,4 @@
-{
-  "name": "Offshore",
+{ "name": "Offshore",
   "private": true,
   "proxy":"http://localhost:4000",
   "version": "2.0.0",
