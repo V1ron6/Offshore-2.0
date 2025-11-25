@@ -4,8 +4,8 @@ const {
 	getTodo,
 	 getCompleted,
 	 getActive,
-	 createTodo,
-	 updateTodo
+	 createTodo
+	
 	
 	} = require('../Controllers/todo.controller.js');
 
@@ -14,7 +14,7 @@ router.get("/",getTodo);
 router.get("/completed",getCompleted);
 router.get("/active",getActive);
 router.post("/",createTodo);
-router.patch("/:id",updateTodo);
+
 
 
 

@@ -43,7 +43,7 @@ const createTodo = (req,res)=>{
 	}
 }
 
-const updateTodo =(req,res)=>{
+/* const updateTodo =(req,res)=>{
 	try{
  const id = req.params.id ;
  const upated = todoLstorage.findByIdAndUpdate(id,req.body);
@@ -55,13 +55,11 @@ const updateTodo =(req,res)=>{
 	}
 }
 
-
+*/
 
 module.exports ={
 	getTodo,
 	getCompleted,
 	getActive,
-	createTodo,
-	updateTodo
-
+	createTodo
 }
