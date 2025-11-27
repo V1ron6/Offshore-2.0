@@ -3,7 +3,7 @@
 const header=()=>{
 	return(
 		<>
-		<header class="bg-red-300 h-14  flex justify-end  w-full border-b-2 border-grey-200 rounded-b-md ">
+		<header class="bg-red-300 h-14  flex justify-space-between  w-full border-b-2 border-grey-200 rounded-b-md ">
 			<div>
 					<h1 class="justify-end text-lg  p-2">Offshore</h1>
 			</div>
