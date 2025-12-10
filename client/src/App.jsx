@@ -3,7 +3,7 @@ import './index.css'
 import Header  from './components/header.jsx'
 import Signup from './components/signUp.jsx'
 
-function App() {
+const App=()=> {
  return (
     <>
       <Header />
