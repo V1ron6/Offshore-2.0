@@ -6,7 +6,7 @@ const App=()=> {
  return (
     <>
       <Header />
-      <h1>app</h1>
+      <h1>landing page</h1>
     </>
   )
 }

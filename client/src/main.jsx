@@ -14,10 +14,10 @@ import App from "./App.jsx"
 
 
 const router = createBrowserRouter([
- {path:"/" ,element: <Login />},
+ {path:"/" ,element: <App />},
  {path:"/signup",element: <Signup />},
  {path:"/home",element: <Home />},
- {path:"/app", element:<App />},
+ {path:"/login", element:<Login />},
  {path:"*",element:<Notfound />}
 
 ])
