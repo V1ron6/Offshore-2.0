@@ -1,1 +1,18 @@
 @import "tailwindcss";
+@font-face {
+  font-family: "Baloo2";
+  src: url(./src/assets/fonts/Baloo2-VariableFont_wght.ttf);
+}
+
+.logoColor{
+	 color: rgb(235, 156, 156);
+}
+.bgImage{
+	 background: url(./src/assets/offShoreLogo.jpg);
+}
+.prefFont{
+	font-family:"Baloo2",sans-sherif;
+}
+.bgGradient{
+	background:linear-gradient(30deg,rgb(235,256,156),blue);
+}
