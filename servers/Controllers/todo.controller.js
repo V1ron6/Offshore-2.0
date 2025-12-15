@@ -5,41 +5,45 @@ const getTodo =  (req,res)=>{
 	try{
 	res.status(200).json({todo : todoLstorage});
 	}catch(error){
-console.log(error)
-}
+		console.log(error);
+		return res.status(500).json({error: "Internal server error"});
+	}
 }
 
 //get completed
 const getCompleted = (req,res)=>{
-try{
-	const complete = todoLstorage.filter((t) => t.completed === true);
-  res.json({todo : complete}); // Custom Read!
-}catch(error){
-console.log(error)
-}
+	try{
+		const complete = todoLstorage.filter((t) => t.completed === true);
+		res.status(200).json({todo : complete});
+	}catch(error){
+		console.log(error);
+		return res.status(500).json({error: "Internal server error"});
+	}
 }
 
 
 //get active  todos
 const getActive = (req,res)=>{
-try{
-	const uncomplete = todoLstorage.filter((t) => t.completed === false);
-  res.json({todo: uncomplete}); // Custom Read!
-}catch(error){
-console.log(error)
-}
+	try{
+		const uncomplete = todoLstorage.filter((t) => t.completed === false);
+		res.status(200).json({todo: uncomplete});
+	}catch(error){
+		console.log(error);
+		return res.status(500).json({error: "Internal server error"});
+	}
 }
 
 const createTodo = (req,res)=>{
 	try{
-		 const newTodo = { id: todoLstorage.length + 1, ...req.body }; // Auto-ID
-  if(!req.body || typeof req.body.completed !== 'boolean' ){
-    return res.status(400).json({error:"task and completed required ,completedmust be boolean"});
-  }
-  todoLstorage.push(newTodo);
-  res.status(201).json(newTodo); // Echo back
-}catch(error){
+		if(!req.body || !req.body.task || typeof req.body.completed !== 'boolean'){
+			return res.status(400).json({error:"task and completed required, completed must be boolean"});
+		}
+		const newTodo = { id: Date.now(), ...req.body };
+		todoLstorage.push(newTodo);
+		res.status(201).json(newTodo);
+	}catch(error){
 		console.log(error);
+		return res.status(500).json({error: "Internal server error"});
 	}
 }
 
@@ -57,9 +61,9 @@ const createTodo = (req,res)=>{
 
 */
 
-module.exports ={
+module.exports = {
 	getTodo,
 	getCompleted,
 	getActive,
 	createTodo
-}
+};
