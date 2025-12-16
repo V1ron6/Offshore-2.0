@@ -15,7 +15,7 @@
  * - Account statistics
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState,Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Edit2, Save, X, Lock, Shield } from 'lucide-react';
 
@@ -99,8 +99,8 @@ const Profile = () => {
 	// ========================================
 
 	return (
-		<>
-		<div className="min-h-screen bg-gray-100 py-8">
+		<fragment>
+			<div className="min-h-screen bg-gray-100 py-8">
 			<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
@@ -275,8 +275,8 @@ const Profile = () => {
 				</div>
 			</div>
 		</div>
-		</>
-	);
+		</div>
+	</fragment>
+)
 };
-
 export default Profile;
