@@ -19,6 +19,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 
+const button = "m-1 w-50 border border-black p-2 logoColor rounded-md";
+
 // Validation rules for signup form
 const VALIDATION_RULES = {
 	username: {
@@ -250,6 +252,27 @@ const Signup = () => {
 
 				{/* Signup Form */}
 				<form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8" noValidate>
+						{/* Navigation Tabs */}
+										<div className="rounded-md flex justify-evenly relative bottom-2 w-min shadow-sm z-100 right-2">
+											<Link to={"/signup"}>
+												<button 
+													className={button + " bg-blue-50 hover:bg-gray-100 transition duration-200 font-medium"}
+													title="you are on this page"
+													disabled
+												>
+													Signup
+												</button>
+											</Link>
+											<Link to={"/login"}>
+												<button 
+													className="m-1 w-50 border border-black p-2 logoColor rounded-md hover:bg-gray-100 transition duration-200 font-medium"												
+														title="Go To Login page"
+												>
+													Login
+												</button>
+											</Link>
+										</div>
+					
 					{/* Alert Messages */}
 					{error && (
 						<div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded" role="alert">
@@ -268,7 +291,7 @@ const Signup = () => {
 							</div>
 						</div>
 					)}
-
+        
 					{/* Username Field */}
 					<div className="mb-5">
 						<label htmlFor="username" className="block font-semibold text-gray-700 mb-2">

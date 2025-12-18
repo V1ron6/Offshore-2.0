@@ -7,7 +7,7 @@ import Offshorelogo from '../assets/Offshorelogo.jpg'
 // ========================================
 // CONSTANTS - Styling and Configuration
 // ========================================
-const button = "m-1 w-30 border border-black p-1 logoColor rounded-md";
+const button = "m-1 w-50 border border-black p-2 logoColor rounded-md";
 const buttonCenter = button + " w-60";
 
 // API Configuration
@@ -352,10 +352,10 @@ const Login = () => {
 					</div>
 
 					{/* Navigation Tabs */}
-					<div className="border rounded-md flex justify-evenly relative top-14 bg-white shadow-sm">
+					<div className="rounded-md flex justify-evenly relative top-2 w-min shadow-sm z-100 left-4 mb-2">
 						<Link to={"/signup"}>
 							<button 
-								className="m-1 w-30 border border-black p-2 logoColor rounded-md hover:bg-gray-100 transition duration-200 font-medium"
+								className="m-1 w-50 border border-black p-2 logoColor rounded-md hover:bg-gray-100 transition duration-200 font-medium"
 								title="Go to signup page"
 							>
 								Signup
@@ -365,6 +365,7 @@ const Login = () => {
 							<button 
 								className={button + " bg-blue-50 hover:bg-gray-100 transition duration-200 font-medium"}
 								title="You are on the login page"
+								disabled
 							>
 								Login
 							</button>
@@ -374,7 +375,7 @@ const Login = () => {
 					{/* Login Form */}
 					<form 
 						onSubmit={handleSubmit} 
-						className="z-0 border-2 p-6 rounded-md relative bottom-16 bg-white shadow-lg"
+						className="z-0 border-2 p-6 rounded-md relative bottom-16 bg-white shadow-lg h-130"
 						noValidate
 					>
 						<div className="z-1 relative top-10">
@@ -406,7 +407,7 @@ const Login = () => {
 							)}
 
 							{/* Form Fields Container */}
-							<div className="border relative bottom-0 m-1 p-4 justify-center rounded-md bg-gray-50">
+							<div className="relative bottom-0 m-1 p-4 justify-center rounded-md bg-gray-50">
 								
 								{/* Username Field */}
 								<div className="mb-5">
@@ -532,7 +533,8 @@ const Login = () => {
 									type="submit"
 									disabled={loading}
 									className={`
-										${buttonCenter} 
+										${buttonCenter}
+									
 										font-semibold
 										transition duration-300
 										${loading 

@@ -4,15 +4,25 @@ const app = express();
 const morgan = require("morgan");
 const port = process.env.PORT || 3000;
 const cors = require("cors");
-const corOptions = require("./middleware/cors.Multihandler.js");
+
 const todoRoute = require("./Routes/todo.route.js");
 const userRoute = require("./Routes/user.route.js");
 
 
+//demon
+ app.use(cors({
+	origin: 'http://localhost:5173',
+	credentials: true,
+	methods:['GET','PUT','POST','DELETE'],
+	allowedHeaders: ['Content-Type']
+}));
+/*
+app.use(cors())
+*/
 //middle wares
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
-app.use(cors(corOptions));
+
 app.use(morgan("combined"))
 
 
