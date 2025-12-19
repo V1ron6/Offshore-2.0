@@ -3,37 +3,31 @@
  * Profile Page Component
  * ========================================
  * 
- * User profile page showing user information and account settings.
- * Displays user details, account activity, and preferences.
+ * User profile display and management.
+ * Shows user information and account details.
  * 
  * Features:
  * - User information display
- * - Account settings
- * - Change password
- * - Activity log
- * - Profile picture upload
  * - Account statistics
+ * - Session management
+ * - Logout functionality
+ * - Protected route (requires authentication)
  */
 
-import { useEffect, useState,Fragment } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Edit2, Save, X, Lock, Shield } from 'lucide-react';
+import { User, LogOut, Lock, Edit2 } from 'lucide-react';
+import Card from '../components/Card.jsx';
+import Button from '../components/Button.jsx';
+import Alert from '../components/Alert.jsx';
 
-/**
- * Profile Component
- * Protected page showing user profile information
- */
 const Profile = () => {
 	// ========================================
 	// STATE MANAGEMENT
 	// ========================================
 	const [user, setUser] = useState(null);
-	const [isEditing, setIsEditing] = useState(false);
-	const [formData, setFormData] = useState({
-		email: '',
-		phone: '',
-		bio: ''
-	});
+	const [showAlert, setShowAlert] = useState(false);
+	const [alertMessage, setAlertMessage] = useState('');
 
 	// ========================================
 	// HOOKS
@@ -45,22 +39,15 @@ const Profile = () => {
 	// ========================================
 
 	/**
-	 * Load user data from localStorage on component mount
+	 * Check authentication on mount
 	 */
 	useEffect(() => {
-		const userData = localStorage.getItem('user');
+		const userData = JSON.parse(localStorage.getItem('user') || 'null');
 		if (!userData) {
 			navigate('/login');
 			return;
 		}
-
-		const parsedUser = JSON.parse(userData);
-		setUser(parsedUser);
-		setFormData({
-			email: parsedUser.email || '',
-			phone: parsedUser.phone || '',
-			bio: parsedUser.bio || ''
-		});
+		setUser(userData);
 	}, [navigate]);
 
 	// ========================================
@@ -68,215 +55,232 @@ const Profile = () => {
 	// ========================================
 
 	/**
-	 * Handle form input changes
+	 * Handle logout
 	 */
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData({ ...formData, [name]: value });
+	const handleLogout = () => {
+		localStorage.removeItem('user');
+		localStorage.removeItem('authToken');
+		localStorage.removeItem('rememberMe');
+		setAlertMessage('Logged out successfully!');
+		setShowAlert(true);
+		setTimeout(() => navigate('/'), 1500);
 	};
 
 	/**
-	 * Handle profile save
+	 * Calculate session duration
 	 */
-	const handleSaveProfile = () => {
-		const updatedUser = { ...user, ...formData };
-		localStorage.setItem('user', JSON.stringify(updatedUser));
-		setUser(updatedUser);
-		setIsEditing(false);
-		alert('Profile updated successfully!');
-	};
+	const getSessionDuration = () => {
+		if (!user?.loginTime) return 'Just now';
+		
+		const loginTime = new Date(user.loginTime);
+		const now = new Date();
+		const diff = Math.floor((now - loginTime) / 1000);
 
-	if (!user) {
-		return (
-			<div className="flex items-center justify-center min-h-screen">
-				<p className="text-xl text-gray-600">Loading...</p>
-			</div>
-		);
-	}
+		if (diff < 60) return `${diff}s ago`;
+		if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+		return `${Math.floor(diff / 3600)}h ago`;
+	};
 
 	// ========================================
 	// RENDER
 	// ========================================
 
+	if (!user) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<p className="text-lg text-gray-600">Loading...</p>
+			</div>
+		);
+	}
+
 	return (
-		<fragment>
-			<div className="min-h-screen bg-gray-100 py-8">
+		<div className="min-h-screen bg-gray-100 py-12">
 			<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				{/* Header */}
+				{/* Page Header */}
 				<div className="mb-8">
 					<h1 className="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
-					<p className="text-gray-600">Manage your account information and preferences</p>
+					<p className="text-gray-600">Manage your account and view your information</p>
 				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-					{/* Profile Card */}
-					<div className="lg:col-span-1">
-						<div className="bg-white rounded-lg shadow-md p-6 text-center">
-							{/* Profile Picture */}
-						<div className="w-24 h-24 bg-gradient-to-br from-red-400 to-red-600 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl">
-							<Lock size={40} />
+				{/* Alert */}
+				{showAlert && (
+					<Alert
+						type="success"
+						message={alertMessage}
+						onClose={() => setShowAlert(false)}
+					/>
+				)}
 
-							{/* User Name */}
-							<h2 className="text-2xl font-bold text-gray-900 mb-2">{user.username}</h2>
-
-							{/* Status */}
-							<div className="flex items-center justify-center gap-2 mb-4">
-								<span className="inline-block w-3 h-3 bg-green-500 rounded-full"></span>
-								<span className="text-sm text-gray-600">Active</span>
-							</div>
-
-							{/* Join Date */}
-							<p className="text-sm text-gray-600 mb-6">
-								Joined {new Date(user.loginTime || Date.now()).toLocaleDateString()}
-							</p>
-
-							{/* Action Button */}
-							<button
-								onClick={() => setIsEditing(!isEditing)}
-							className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold flex items-center justify-center space-x-2"
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+					{/* Main Profile Card */}
+					<div className="md:col-span-2 space-y-6">
+						{/* Profile Header Card */}
+						<Card 
+							title="Account Information"
+							icon={User}
 						>
-							{isEditing ? (
-								<>
-									<X size={18} />
-									<span>Cancel</span>
-								</>
-							) : (
-								<>
-									<Edit2 size={18} />
-									<span>Edit Profile</span>
-								</>
-							)}
-							</button>
-						</div>
+							<div className="space-y-6">
+								{/* Username */}
+								<div className="border-b border-gray-200 pb-4">
+									<div className="flex items-center justify-between">
+										<div className="flex items-center space-x-4">
+											<div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+												{user.username.charAt(0).toUpperCase()}
+											</div>
+											<div>
+												<p className="text-sm text-gray-600">Username</p>
+												<p className="text-2xl font-bold text-gray-900">{user.username}</p>
+											</div>
+										</div>
+										<Button
+											variant="secondary"
+											size="sm"
+											icon={Edit2}
+										>
+											Edit
+										</Button>
+									</div>
+								</div>
+
+								{/* User ID */}
+								<div className="border-b border-gray-200 pb-4">
+									<p className="text-sm text-gray-600 mb-2">User ID</p>
+									<div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+										<code className="font-mono text-gray-700">{user.id}</code>
+										<button className="text-blue-500 hover:text-blue-600 text-sm font-semibold">
+											Copy
+										</button>
+									</div>
+								</div>
+
+								{/* Account Status */}
+								<div>
+									<p className="text-sm text-gray-600 mb-2">Account Status</p>
+									<div className="flex items-center space-x-2">
+										<div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+										<span className="text-gray-900 font-semibold">Active</span>
+									</div>
+								</div>
+							</div>
+						</Card>
+
+						{/* Security Card */}
+						<Card
+							title="Security"
+							icon={Lock}
+						>
+							<div className="space-y-4">
+								<div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+									<h4 className="font-semibold text-blue-900 mb-2">Password Security</h4>
+									<p className="text-sm text-blue-700 mb-3">
+										Last changed: <span className="font-semibold">Recently</span>
+									</p>
+									<Button
+										variant="secondary"
+										size="sm"
+										fullWidth
+									>
+										Change Password
+									</Button>
+								</div>
+
+								<div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+									<h4 className="font-semibold text-green-900 mb-2">✓ Two-Factor Auth</h4>
+									<p className="text-sm text-green-700">
+										Not yet enabled. Enable for enhanced security.
+									</p>
+									<Button
+										variant="secondary"
+										size="sm"
+										fullWidth
+										className="mt-3"
+									>
+										Enable 2FA
+									</Button>
+								</div>
+							</div>
+						</Card>
 					</div>
 
-					{/* Profile Details */}
-					<div className="lg:col-span-2 space-y-6">
-						{/* Basic Information */}
-						<div className="bg-white rounded-lg shadow-md p-6">
-							<h3 className="text-xl font-bold text-gray-900 mb-6">Account Information</h3>
-
-							{!isEditing ? (
-								<div className="space-y-4">
-									<div>
-										<label className="text-sm text-gray-600">Username</label>
-										<p className="text-lg text-gray-900 font-semibold">{user.username}</p>
-									</div>
-									<div>
-										<label className="text-sm text-gray-600">Email</label>
-										<p className="text-lg text-gray-900 font-semibold">{user.email || 'Not provided'}</p>
-									</div>
-									<div>
-										<label className="text-sm text-gray-600">Phone</label>
-										<p className="text-lg text-gray-900 font-semibold">{user.phone || 'Not provided'}</p>
-									</div>
-									<div>
-										<label className="text-sm text-gray-600">Bio</label>
-										<p className="text-lg text-gray-900 font-semibold">{user.bio || 'No bio added'}</p>
-									</div>
-								</div>
-							) : (
-								<div className="space-y-4">
-									<div>
-										<label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-										<input
-											type="email"
-											name="email"
-											value={formData.email}
-											onChange={handleInputChange}
-											className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-										/>
-									</div>
-									<div>
-										<label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-										<input
-											type="tel"
-											name="phone"
-											value={formData.phone}
-											onChange={handleInputChange}
-											className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-										/>
-									</div>
-									<div>
-										<label className="block text-sm font-semibold text-gray-700 mb-2">Bio</label>
-										<textarea
-											name="bio"
-											value={formData.bio}
-											onChange={handleInputChange}
-											rows="4"
-											className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-										></textarea>
-									</div>
-									<button
-										onClick={handleSaveProfile}
-										className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold flex items-center justify-center space-x-2"
-									>
-										<Save size={18} />
-										<span>Save Changes</span>
-									</button>
-								</div>
-							)}
-						</div>
-
-						{/* Account Statistics */}
-						<div className="bg-white rounded-lg shadow-md p-6">
-							<h3 className="text-xl font-bold text-gray-900 mb-6">Account Activity</h3>
-
-							<div className="grid grid-cols-2 gap-4">
-								<div className="bg-blue-50 p-4 rounded-lg">
-									<p className="text-sm text-gray-600">Last Login</p>
-									<p className="text-2xl font-bold text-blue-600">Today</p>
-								</div>
-								<div className="bg-green-50 p-4 rounded-lg">
-									<p className="text-sm text-gray-600">Account Age</p>
-									<p className="text-2xl font-bold text-green-600">New</p>
-								</div>
-								<div className="bg-purple-50 p-4 rounded-lg">
-									<p className="text-sm text-gray-600">Total Sessions</p>
-									<p className="text-2xl font-bold text-purple-600">1</p>
-								</div>
-								<div className="bg-orange-50 p-4 rounded-lg">
-									<p className="text-sm text-gray-600">Security Status</p>
-									<p className="text-2xl font-bold text-orange-600">✓ Secure</p>
-								</div>
-							</div>
-						</div>
-
-						{/* Security Settings */}
-						<div className="bg-white rounded-lg shadow-md p-6">
-							<div className="flex items-center space-x-2 mb-6">
-								<Shield size={24} className="text-red-500" />
-								<h3 className="text-xl font-bold text-gray-900">Security & Privacy</h3>
-							</div>
-
+					{/* Sidebar */}
+					<div className="space-y-6">
+						{/* Session Info Card */}
+						<Card title="Session">
 							<div className="space-y-4">
-								<div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-									<div>
-										<p className="font-semibold text-gray-900">Two-Factor Authentication</p>
-										<p className="text-sm text-gray-600">Add an extra layer of security</p>
-									</div>
-									<button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-										Enable
-									</button>
+								<div>
+									<p className="text-sm text-gray-600">Logged In Since</p>
+									<p className="text-lg font-semibold text-gray-900">
+										{user.loginTime ? new Date(user.loginTime).toLocaleDateString() : 'Today'}
+									</p>
 								</div>
-
-								<div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-									<div>
-										<p className="font-semibold text-gray-900">Change Password</p>
-										<p className="text-sm text-gray-600">Update your password regularly</p>
-									</div>
-									<button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-										Change
-									</button>
+								<div>
+									<p className="text-sm text-gray-600">Session Duration</p>
+									<p className="text-lg font-semibold text-gray-900">
+										{getSessionDuration()}
+									</p>
 								</div>
+								<hr />
+								<Button
+									variant="danger"
+									size="sm"
+									onClick={handleLogout}
+									icon={LogOut}
+									fullWidth
+									className="mt-4"
+								>
+									Logout
+								</Button>
 							</div>
-						</div>
+						</Card>
+
+						{/* Quick Stats */}
+						<Card title="Quick Stats">
+							<div className="space-y-3 text-sm">
+								<div className="flex justify-between">
+									<span className="text-gray-600">Account Age</span>
+									<span className="font-semibold">New</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-gray-600">Last Login</span>
+									<span className="font-semibold">Today</span>
+								</div>
+								<div className="flex justify-between">
+									<span className="text-gray-600">Total Logins</span>
+									<span className="font-semibold">1</span>
+								</div>
+								<hr />
+								<p className="text-xs text-gray-500 mt-2">
+									📍 Location: Your Device
+								</p>
+							</div>
+						</Card>
+
+						{/* Account Actions */}
+						<Card title="Account">
+							<div className="space-y-2">
+								<Button
+									variant="secondary"
+									size="sm"
+									fullWidth
+									className="text-left"
+								>
+									💾 Download My Data
+								</Button>
+								<Button
+									variant="secondary"
+									size="sm"
+									fullWidth
+									className="text-left"
+								>
+									🔄 Deactivate Account
+								</Button>
+							</div>
+						</Card>
 					</div>
 				</div>
 			</div>
 		</div>
-		</div>
-	</fragment>
-)
+	);
 };
+
 export default Profile;

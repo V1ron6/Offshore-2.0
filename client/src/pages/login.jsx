@@ -257,7 +257,7 @@ const Login = () => {
 
 			// Send login request
 			const response = await axiosInstance.post(
-				`${API_BASE_URL}/user`,
+				`${API_BASE_URL}/user/login`,
 				formData
 			);
 
@@ -265,9 +265,11 @@ const Login = () => {
 			if (response.data && response.data.success) {
 				setSuccess(`Welcome ${formData.username}! Redirecting to dashboard...`);
 
-				// Save user data to localStorage
+				// Save token and user data to localStorage
+				localStorage.setItem('authToken', response.data.token);
 				localStorage.setItem('user', JSON.stringify({
-					username: formData.username,
+					id: response.data.user.id,
+					username: response.data.user.username,
 					loginTime: new Date().toISOString()
 				}));
 
