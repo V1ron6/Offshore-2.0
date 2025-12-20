@@ -1,17 +1,18 @@
 /**
  * ========================================
- * Enterprise Dashboard Component
+ * E-Commerce Dashboard Component
  * ========================================
  * 
- * Enhanced dashboard with analytics, stats cards, and charts
+ * Enhanced e-commerce dashboard with product search, inventory, and sales metrics
  * Shows key metrics with IDOR and XSS protection
  * 
  * Features:
- * - Real-time analytics dashboard
+ * - Product search functionality
+ * - Real-time sales analytics
+ * - Inventory management
+ * - Order tracking
  * - StatsCard metrics display
  * - Performance charts with Recharts
- * - Recent activity feed
- * - Quick action buttons
  * - IDOR protection (ownership verification)
  * - XSS protection (input sanitization)
  * - Protected route (requires authentication)
@@ -19,7 +20,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, BarChart3, TrendingUp, Users, Activity, Clock } from 'lucide-react';
+import { Plus, Search, ShoppingCart, TrendingUp, Users, DollarSign, Package } from 'lucide-react';
 import StatsCard from '../components/StatsCard.jsx';
 import Chart from '../components/Chart.jsx';
 import Card from '../components/Card.jsx';
@@ -29,7 +30,7 @@ import { sanitizeInput, canAccessResource, validateSession } from '../utils/secu
 
 /**
  * Dashboard Component
- * Enterprise analytics dashboard with IDOR and XSS protection
+ * E-commerce analytics dashboard with product search and IDOR/XSS protection
  */
 const Dashboard = () => {
 	// ========================================
@@ -37,24 +38,73 @@ const Dashboard = () => {
 	// ========================================
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [searchQuery, setSearchQuery] = useState('');
+	const [selectedCategory, setSelectedCategory] = useState('all');
+	const [error, setError] = useState('');
+	const [success, setSuccess] = useState('');
+
+	// Mock product data
+	const allProducts = [
+		{ id: 1, name: 'Wireless Headphones', price: '$79.99', category: 'electronics', stock: 45, image: '🎧' },
+		{ id: 2, name: 'Smart Watch', price: '$199.99', category: 'electronics', stock: 28, image: '⌚' },
+		{ id: 3, name: 'Laptop Stand', price: '$49.99', category: 'accessories', stock: 62, image: '🖥️' },
+		{ id: 4, name: 'USB-C Cable', price: '$12.99', category: 'accessories', stock: 150, image: '🔌' },
+		{ id: 5, name: 'Phone Case', price: '$24.99', category: 'accessories', stock: 89, image: '📱' },
+		{ id: 6, name: 'Portable Charger', price: '$34.99', category: 'electronics', stock: 56, image: '🔋' },
+		{ id: 7, name: 'Keyboard', price: '$129.99', category: 'electronics', stock: 34, image: '⌨️' },
+		{ id: 8, name: 'Mouse Pad', price: '$19.99', category: 'accessories', stock: 98, image: '🖱️' }
+	];
+
 	const [stats, setStats] = useState({
-		totalUsers: 1250,
-		activeProjects: 45,
+		totalSales: '$45,230',
+		totalOrders: 1250,
+		activeProducts: 45,
+		avgOrderValue: '$36.18',
+		conversionRate: 3.2,
 		revenue: '$125,450',
-		growth: 12.5,
-		completionRate: 78
+		growth: 12.5
 	});
+
 	const [chartData, setChartData] = useState([
-		{ name: 'Week 1', value: 400 },
-		{ name: 'Week 2', value: 600 },
-		{ name: 'Week 3', value: 500 },
-		{ name: 'Week 4', value: 800 }
+		{ name: 'Week 1', value: 2400 },
+		{ name: 'Week 2', value: 3200 },
+		{ name: 'Week 3', value: 2800 },
+		{ name: 'Week 4', value: 4100 }
 	]);
 
 	// ========================================
 	// HOOKS
 	// ========================================
 	const navigate = useNavigate();
+
+	// ========================================
+	// HANDLER FUNCTIONS
+	// ========================================
+
+	/**
+	 * Handle product search with XSS protection
+	 */
+	const handleSearch = (e) => {
+		const sanitized = sanitizeInput(e.target.value);
+		setSearchQuery(sanitized);
+	};
+
+	/**
+	 * Filter products based on search and category
+	 */
+	const filteredProducts = allProducts.filter(product => {
+		const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+		const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+		return matchesSearch && matchesCategory;
+	});
+
+	/**
+	 * Handle add to cart
+	 */
+	const handleAddToCart = (product) => {
+		setSuccess(`${product.name} added to cart!`);
+		setTimeout(() => setSuccess(''), 3000);
+	};
 
 	// ========================================
 	// EFFECTS
@@ -98,13 +148,13 @@ const Dashboard = () => {
 
 	return (
 		<div className="min-h-screen bg-gray-100 py-8">
-			<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
 					<h1 className="text-4xl font-bold text-gray-900 mb-2">
 						Welcome, <span className="text-red-500">{user?.username}</span>! 👋
 					</h1>
-					<p className="text-gray-600">Manage your tasks and stay productive</p>
+					<p className="text-gray-600">E-Commerce Product Dashboard</p>
 				</div>
 
 				{/* Messages */}
@@ -119,157 +169,132 @@ const Dashboard = () => {
 					</div>
 				)}
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-					{/* Main Content */}
-					<div className="lg:col-span-2 space-y-6">
-						{/* Add Todo Form */}
+				{/* Key Metrics */}
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+					<StatsCard title="Total Sales" value={stats.totalSales} icon={DollarSign} color="green" trend={12.5} />
+					<StatsCard title="Total Orders" value={stats.totalOrders} icon={ShoppingCart} color="blue" trend={8.3} />
+					<StatsCard title="Active Products" value={stats.activeProducts} icon={Package} color="purple" trend={5.2} />
+					<StatsCard title="Avg Order Value" value={stats.avgOrderValue} icon={TrendingUp} color="orange" trend={3.1} />
+				</div>
+
+				<div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+					{/* Main Content - Product Search & Listing */}
+					<div className="lg:col-span-3 space-y-6">
+						{/* Search Box */}
 						<div className="bg-white rounded-lg shadow-md p-6">
-							<h2 className="text-xl font-bold text-gray-900 mb-4">Add New Task</h2>
-							<form onSubmit={handleAddTodo} className="flex gap-2">
+							<div className="relative mb-4">
+								<Search className="absolute left-3 top-3 text-gray-400" size={20} />
 								<input
 									type="text"
-									value={newTask}
-									onChange={(e) => setNewTask(e.target.value)}
-									placeholder="Enter your new task..."
-									className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+									value={searchQuery}
+									onChange={handleSearch}
+									placeholder="Search products..."
+									className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
 								/>
-								<button
-									type="submit"
-									className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold"
-								>
-									Add Task
-								</button>
-							</form>
+							</div>
+
+							{/* Category Filter */}
+							<div className="flex gap-2 flex-wrap">
+								{['all', 'electronics', 'accessories'].map((category) => (
+									<button
+										key={category}
+										onClick={() => setSelectedCategory(category)}
+										className={`px-4 py-2 rounded-lg font-semibold transition ${
+											selectedCategory === category
+												? 'bg-red-500 text-white'
+												: 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+										}`}
+									>
+										{category.charAt(0).toUpperCase() + category.slice(1)}
+									</button>
+								))}
+							</div>
 						</div>
 
-						{/* Filter Tabs */}
-						<div className="flex gap-2 bg-white p-4 rounded-lg shadow-md">
-							{['all', 'active', 'completed'].map((status) => (
-								<button
-									key={status}
-									onClick={() => setFilterStatus(status)}
-									className={`px-4 py-2 rounded-lg font-semibold transition ${
-										filterStatus === status
-											? 'bg-red-500 text-white'
-											: 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-									}`}
-								>
-									{status.charAt(0).toUpperCase() + status.slice(1)}
-									<span className="ml-2 text-sm">
-										({
-											status === 'all'
-												? stats.total
-												: status === 'completed'
-													? stats.completed
-													: stats.active
-										})
-									</span>
-								</button>
-							))}
-						</div>
-
-						{/* Todo List */}
-						<div className="bg-white rounded-lg shadow-md">
-							{filteredTodos.length === 0 ? (
-								<div className="p-8 text-center">
-									<p className="text-gray-600 text-lg">
-										{filterStatus === 'completed' && 'No completed tasks yet'}
-										{filterStatus === 'active' && 'No active tasks. Great job!'}
-										{filterStatus === 'all' && 'No tasks yet. Add one to get started!'}
-									</p>
+						{/* Products Grid */}
+						<div className="bg-white rounded-lg shadow-md p-6">
+							<h2 className="text-xl font-bold text-gray-900 mb-4">
+								Products ({filteredProducts.length})
+							</h2>
+							
+							{filteredProducts.length === 0 ? (
+								<div className="text-center py-12">
+									<p className="text-gray-600 text-lg">No products found</p>
 								</div>
 							) : (
-								<ul className="divide-y divide-gray-200">
-									{filteredTodos.map((todo) => (
-										<li
-											key={todo.id}
-											className="p-4 hover:bg-gray-50 transition flex items-center justify-between"
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									{filteredProducts.map((product) => (
+										<div
+											key={product.id}
+											className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition"
 										>
-											<div className="flex items-center gap-3 flex-1">
-												<button
-													type="button"
-													onClick={() => handleToggleTodo(todo)}
-													className="text-gray-400 hover:text-green-500 transition flex-shrink-0"
-													title={todo.completed ? "Mark as incomplete" : "Mark as complete"}
-													aria-label={todo.completed ? "Mark as incomplete" : "Mark as complete"}
-												>
-													{todo.completed ? (
-														<CheckCircle2 size={22} className="text-green-500" />
-													) : (
-														<Circle size={22} />
-													)}
-												</button>
-												<span
-													className={`flex-1 text-lg ${
-														todo.completed
-															? 'line-through text-gray-500'
-															: 'text-gray-700'
-													}`}
-												>
-													{todo.task}
-												</span>
+											<div className="text-4xl mb-2">{product.image}</div>
+											<h3 className="font-bold text-gray-900 mb-1">{product.name}</h3>
+											<div className="flex justify-between items-center mb-3">
+												<span className="text-red-500 font-bold text-lg">{product.price}</span>
+												<span className="text-sm text-gray-500">Stock: {product.stock}</span>
 											</div>
 											<button
-												onClick={() => handleDeleteTodo(todo.id)}
-												className="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition font-semibold text-sm flex items-center space-x-1"
-												title="Delete task"
+												onClick={() => handleAddToCart(product)}
+												className="w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition font-semibold text-sm"
 											>
-												<Trash2 size={16} />
-												<span>Delete</span>
+												<ShoppingCart size={16} className="inline mr-1" />
+												Add to Cart
 											</button>
-										</li>
+										</div>
 									))}
-								</ul>
+								</div>
 							)}
 						</div>
 					</div>
 
-					{/* Sidebar - Statistics */}
+					{/* Sidebar - Analytics */}
 					<div className="space-y-6">
-						{/* Progress Card */}
+						{/* Sales Chart */}
 						<div className="bg-white rounded-lg shadow-md p-6">
-							<h3 className="text-xl font-bold text-gray-900 mb-4">Progress</h3>
-							<div className="space-y-4">
-								<div>
-									<div className="flex justify-between mb-2">
-										<span className="text-gray-700">Completion Rate</span>
-										<span className="font-bold text-red-500">{stats.completionRate}%</span>
+							<h3 className="text-lg font-bold text-gray-900 mb-4">Weekly Sales</h3>
+							<div className="space-y-3">
+								{chartData.map((data, idx) => (
+									<div key={idx}>
+										<div className="flex justify-between mb-1 text-sm">
+											<span className="text-gray-700">{data.name}</span>
+											<span className="font-bold text-red-500">${data.value}</span>
+										</div>
+										<div className="w-full bg-gray-200 rounded-full h-2">
+											<div
+												className="bg-red-500 h-2 rounded-full transition-all"
+												style={{ width: `${(data.value / 4500) * 100}%` }}
+											></div>
+										</div>
 									</div>
-									<div className="w-full bg-gray-200 rounded-full h-3">
-										<div
-											className="bg-red-500 h-3 rounded-full transition-all duration-300"
-											style={{ width: `${stats.completionRate}%` }}
-										></div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						{/* Stats Cards */}
-						<div className="space-y-4">
-							<div className="bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-6 shadow-md">
-								<p className="text-sm opacity-90">Total Tasks</p>
-								<p className="text-4xl font-bold">{stats.total}</p>
-							</div>
-							<div className="bg-gradient-to-br from-green-400 to-green-600 text-white rounded-lg p-6 shadow-md">
-								<p className="text-sm opacity-90">Completed</p>
-								<p className="text-4xl font-bold">{stats.completed}</p>
-							</div>
-							<div className="bg-gradient-to-br from-orange-400 to-orange-600 text-white rounded-lg p-6 shadow-md">
-								<p className="text-sm opacity-90">Active</p>
-								<p className="text-4xl font-bold">{stats.active}</p>
+								))}
 							</div>
 						</div>
 
 						{/* Quick Stats */}
-						<div className="bg-white rounded-lg shadow-md p-6">
-							<h3 className="text-lg font-bold text-gray-900 mb-4">📊 Quick Stats</h3>
-							<ul className="space-y-2 text-sm text-gray-600">
-								<li>✓ Today's focus: {stats.active} tasks</li>
-								<li>⚡ Productivity: {stats.completionRate}% done</li>
-								<li>🎯 Keep it up!</li>
+						<div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg shadow-md p-6 border border-red-100">
+							<h3 className="text-lg font-bold text-gray-900 mb-4">📊 Performance</h3>
+							<ul className="space-y-2 text-sm">
+								<li className="flex justify-between">
+									<span className="text-gray-600">Conversion Rate:</span>
+									<span className="font-bold text-red-500">{stats.conversionRate}%</span>
+								</li>
+								<li className="flex justify-between">
+									<span className="text-gray-600">Growth:</span>
+									<span className="font-bold text-green-500">↑ {stats.growth}%</span>
+								</li>
+								<li className="flex justify-between">
+									<span className="text-gray-600">Total Revenue:</span>
+									<span className="font-bold text-red-500">{stats.revenue}</span>
+								</li>
 							</ul>
 						</div>
+
+						{/* Action Button */}
+						<button className="w-full px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold flex items-center justify-center gap-2">
+							<Plus size={20} />
+							Add New Product
+						</button>
 					</div>
 				</div>
 			</div>

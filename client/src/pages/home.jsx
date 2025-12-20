@@ -1,25 +1,27 @@
 /**
  * ========================================
- * Home Page Component
+ * Welcome/Landing Page Component
  * ========================================
  * 
  * Landing page for the Offshore application.
  * Displays hero section, features, and call-to-action buttons.
+ * Users see this page when they first visit - not logged in
  * 
  * Features:
  * - Hero banner
  * - Feature highlights
  * - Call-to-action buttons
  * - Responsive design
- * - Image galleries or statistics
+ * - Statistics showcase
  */
 
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Zap, Lock, Smartphone } from 'lucide-react';
+import Header from '../components/header.jsx';
 
 /**
  * Home Component
- * Main landing page of the application
+ * Main landing/welcome page of the application
  */
 const Home = () => {
 	// Sample features data
@@ -28,7 +30,7 @@ const Home = () => {
 			id: 1,
 			icon: CheckCircle2,
 			title: 'Easy to Use',
-			description: 'Simple and intuitive interface for managing your tasks'
+			description: 'Simple and intuitive interface for managing your business'
 		},
 		{
 			id: 2,
@@ -51,9 +53,12 @@ const Home = () => {
 	];
 
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+		<div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white">
+			{/* Header */}
+			<Header />
+
 			{/* Hero Section */}
-			<section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+			<section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex-1">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 					{/* Hero Content */}
 					<div className="space-y-6">
@@ -61,8 +66,8 @@ const Home = () => {
 							Welcome to <span className="text-red-500">Offshore</span>
 						</h1>
 						<p className="text-xl text-gray-600">
-							Manage your tasks efficiently with our powerful todo application.
-							Stay organized, boost productivity, and achieve your goals.
+							Manage your e-commerce business efficiently with our powerful platform.
+							Increase sales, manage inventory, and boost productivity.
 						</p>
 
 						{/* CTA Buttons */}
@@ -89,7 +94,7 @@ const Home = () => {
 							</div>
 							<div>
 								<p className="text-3xl font-bold text-red-500">10K+</p>
-								<p className="text-gray-600">Tasks Completed</p>
+								<p className="text-gray-600">Products Sold</p>
 							</div>
 							<div>
 								<p className="text-3xl font-bold text-red-500">99%</p>
@@ -102,9 +107,9 @@ const Home = () => {
 					<div className="flex items-center justify-center">
 						<div className="w-full h-96 bg-gradient-to-br from-red-400 to-red-600 rounded-lg shadow-xl flex items-center justify-center">
 							<div className="text-center text-white">
-								<CheckCircle2 size={80} className="mx-auto mb-4" />
-								<p className="text-2xl font-bold">Task Management</p>
-								<p className="text-sm mt-2 opacity-90">Made Simple</p>
+								<ShoppingCart size={80} className="mx-auto mb-4" />
+								<p className="text-2xl font-bold">E-Commerce Made Easy</p>
+								<p className="text-sm mt-2 opacity-90">Grow Your Business</p>
 							</div>
 						</div>
 					</div>
@@ -139,7 +144,7 @@ const Home = () => {
 				<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
 					<h2 className="text-4xl font-bold">Ready to Get Started?</h2>
 					<p className="text-xl text-red-100">
-						Join thousands of users who are already organizing their tasks with Offshore
+						Join thousands of sellers who are already growing their business with Offshore
 					</p>
 					<Link
 						to="/signup"
@@ -149,8 +154,17 @@ const Home = () => {
 					</Link>
 				</div>
 			</section>
+
+			{/* Footer */}
+			<footer className="bg-gray-800 text-white text-center py-6 mt-12">
+				<p>&copy; 2025 Offshore. All rights reserved.</p>
+				<p className="text-sm text-gray-400 mt-2">Made with ❤️ by the Offshore Team</p>
+			</footer>
 		</div>
 	);
 };
+
+// Import ShoppingCart at the top
+import { ShoppingCart } from 'lucide-react';
 
 export default Home;

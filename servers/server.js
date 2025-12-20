@@ -8,6 +8,7 @@ const { rateLimit, sanitizeInput } = require("./middleware/security.js");
 
 const todoRoute = require("./Routes/todo.route.js");
 const userRoute = require("./Routes/user.route.js");
+const productRoute = require("./Routes/product.route.js");
 
 // CORS configuration
 app.use(cors({
@@ -28,7 +29,8 @@ app.use(morgan("combined"))
 
 // Routes
 app.use("/api/todo", todoRoute);
-app.use("/api/user", userRoute)
+app.use("/api/user", userRoute);
+app.use("/api/products", productRoute);
 
 app.get("/", (req, res) => {
 	res.send("Offshore API - Secure & Production Ready");

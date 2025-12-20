@@ -284,9 +284,9 @@ const Login = () => {
 					localStorage.removeItem('rememberMe');
 				}
 
-				// Redirect to dashboard after delay
-				setTimeout(() => {
-					navigate('/dashboard');
+			// Redirect to app (home dashboard) after delay
+			setTimeout(() => {
+				navigate('/app');
 				}, 1500);
 			} else {
 				// Handle unsuccessful login response
@@ -341,11 +341,11 @@ const Login = () => {
 
 	return (
 		<>
-			<div className="flex min-h-screen items-center justify-center border prefFont bg-gradient-to-br from-gray-50 to-gray-100">
+			<div className="flex min-h-screen items-center justify-center border prefFont bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
 				<div className="w-full max-w-md">
 					{/* Header Section */}
-					<div className='relative bottom-10 z-1 mb-8'>
-						<h1 className='font-bold text-5xl relative bottom-8 text-center z-0'>
+					<div className='relative bottom-10 z-1 mb-6 sm:mb-8'>
+						<h1 className='font-bold text-4xl sm:text-5xl relative bottom-8 text-center z-0'>
 							Off<span className='text-red-300'>Shore</span>
 						</h1>
 						<p className="text-center text-gray-600 text-sm mt-2">
@@ -377,45 +377,42 @@ const Login = () => {
 					{/* Login Form */}
 					<form 
 						onSubmit={handleSubmit} 
-						className="z-0 border-2 p-6 rounded-md relative bottom-16 bg-white shadow-lg h-130"
-						noValidate
-					>
-						<div className="z-1 relative top-10">
-							{/* Alert Messages Section */}
-							{error && (
-								<div 
-									className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md animate-pulse"
-									role="alert"
-									aria-live="polite"
-								>
-									<div className="flex items-center">
-										<AlertCircle size={20} className="mr-3" />
-										<span>{error}</span>
-									</div>
+					className="z-0 border-2 p-4 sm:p-6 rounded-md relative bottom-16 bg-white shadow-lg"
+					noValidate
+				>
+					<div className="z-1 relative top-10">
+						{/* Alert Messages Section */}
+						{error && (
+							<div 
+								className="mb-4 p-3 sm:p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md animate-pulse text-sm sm:text-base"
+								role="alert"
+								aria-live="polite"
+							>
+								<div className="flex items-start sm:items-center gap-2">
+									<AlertCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
+									<span>{error}</span>
 								</div>
-							)}
+							</div>
+						)}
 
-							{success && (
-								<div 
-									className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md"
-									role="alert"
-									aria-live="polite"
-								>
-									<div className="flex items-center">
-										<CheckCircle size={20} className="mr-3" />
-										<span>{success}</span>
-									</div>
-								</div>
+						{success && (
+							<div 
+								className="mb-4 p-3 sm:p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md text-sm sm:text-base"
+								role="alert"
+								aria-live="polite"
+							>
+								<div className="flex items-start sm:items-center gap-2">
+									<CheckCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
 							)}
 
 							{/* Form Fields Container */}
-							<div className="relative bottom-0 m-1 p-4 justify-center rounded-md bg-gray-50">
+							<div className="relative bottom-0 m-1 p-3 sm:p-4 justify-center rounded-md bg-gray-50">
 								
 								{/* Username Field */}
 								<div className="mb-5">
 									<label 
 										htmlFor="username"
-										className="block font-semibold mb-2 text-gray-700"
+										className="block font-semibold mb-2 text-sm sm:text-base text-gray-700"
 									>
 										Username
 										<span className="text-red-500 ml-1">*</span>
@@ -425,11 +422,11 @@ const Login = () => {
 											id="username"
 											type="text"
 											name="userName"
-											placeholder="Enter your username (letters, numbers, dash, underscore)"
+											placeholder="Enter username..."
 											value={username}
 											onChange={handleUsernameChange}
 											className={`
-												border rounded-lg p-3 w-full 
+												border rounded-lg p-2 sm:p-3 w-full text-sm sm:text-base
 												focus:outline-none focus:ring-2 focus:ring-blue-500 
 												transition duration-200
 												${fieldErrors.username ? 'border-red-500 bg-red-50' : 'border-gray-300'}
@@ -443,13 +440,13 @@ const Login = () => {
 											aria-describedby="username-error"
 										/>
 										{username && !fieldErrors.username && (
-											<span className="absolute right-3 top-3 text-green-500 text-xl">✓</span>
+											<span className="absolute right-3 top-2.5 sm:top-3 text-green-500 text-xl">✓</span>
 										)}
 									</div>
 									{fieldErrors.username && (
 										<p 
 											id="username-error"
-											className="mt-2 text-sm text-red-600"
+											className="mt-2 text-xs sm:text-sm text-red-600"
 										>
 											{fieldErrors.username}
 										</p>
@@ -510,6 +507,13 @@ const Login = () => {
 											{fieldErrors.password}
 										</p>
 									)}
+								</div>
+
+								{/* Demo Credentials Hint */}
+								<div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+									<p className="text-sm font-semibold text-blue-900 mb-2">Demo Credentials:</p>
+									<p className="text-sm text-blue-800"><strong>Username:</strong> user123</p>
+									<p className="text-sm text-blue-800"><strong>Password:</strong> passw0rd123</p>
 								</div>
 
 								{/* Remember Me Checkbox */}

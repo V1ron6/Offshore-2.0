@@ -217,15 +217,15 @@ const Signup = () => {
 				password: formData.password
 			};
 
-			setSuccess("Account created successfully! Redirecting to login...");
-			localStorage.setItem('user', JSON.stringify({
-				username: newUser.username,
-				email: newUser.email,
-				signupTime: new Date().toISOString()
-			}));
+		setSuccess("Account created successfully! Redirecting to dashboard...");
+		localStorage.setItem('user', JSON.stringify({
+			username: newUser.username,
+			email: newUser.email,
+			signupTime: new Date().toISOString()
+		}));
 
-			setTimeout(() => {
-				navigate('/dashboard');
+		setTimeout(() => {
+			navigate('/app');
 			}, 1500);
 		} catch (err) {
 			console.error("Signup error:", err);
@@ -240,24 +240,24 @@ const Signup = () => {
 	// ========================================
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
 			<div className="w-full max-w-md">
 				{/* Header */}
-				<div className="text-center mb-8">
-					<h1 className="text-4xl font-bold">
+				<div className="text-center mb-6 sm:mb-8">
+					<h1 className="text-4xl sm:text-5xl font-bold">
 						Off<span className="text-red-300">Shore</span>
 					</h1>
-					<p className="text-gray-600 mt-2">Create your account to get started</p>
+					<p className="text-gray-600 mt-2 text-sm sm:text-base">Create your account to get started</p>
 				</div>
 
 				{/* Signup Form */}
-				<form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8" noValidate>
-						{/* Navigation Tabs */}
-										<div className="rounded-md flex justify-evenly relative bottom-2 w-min shadow-sm z-100 right-2">
-											<Link to={"/signup"}>
-												<button 
-													className={button + " bg-blue-50 hover:bg-gray-100 transition duration-200 font-medium"}
-													title="you are on this page"
+				<form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 sm:p-8" noValidate>
+					{/* Navigation Tabs */}
+					<div className="rounded-md flex justify-evenly relative bottom-2 w-min shadow-sm z-100 right-2 mb-4">
+						<Link to={"/signup"}>
+							<button 
+								className={button + " bg-blue-50 hover:bg-gray-100 transition duration-200 font-medium text-sm sm:text-base"}
+								title="you are on this page"
 													disabled
 												>
 													Signup
@@ -275,46 +275,46 @@ const Signup = () => {
 					
 					{/* Alert Messages */}
 					{error && (
-						<div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded" role="alert">
-							<div className="flex items-center">
-								<AlertCircle size={20} className="mr-2" />
-								{error}
-							</div>
+					<div className="mb-4 p-3 sm:p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded text-sm sm:text-base" role="alert">
+						<div className="flex items-start sm:items-center gap-2">
+							<AlertCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
+							<span>{error}</span>
 						</div>
-					)}
+					</div>
+				)}
 
-					{success && (
-						<div className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded" role="alert">
-							<div className="flex items-center">
-								<CheckCircle size={20} className="mr-2" />
-								{success}
-							</div>
+				{success && (
+					<div className="mb-4 p-3 sm:p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded text-sm sm:text-base" role="alert">
+						<div className="flex items-start sm:items-center gap-2">
+							<CheckCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
+							<span>{success}</span>
 						</div>
+					</div>
+				)}
+
+				{/* Username Field */}
+				<div className="mb-5">
+					<label htmlFor="username" className="block font-semibold text-gray-700 mb-2">
+						Username <span className="text-red-500">*</span>
+					</label>
+					<input
+						id="username"
+						type="text"
+						name="username"
+						value={formData.username}
+						onChange={handleInputChange}
+						placeholder="Choose a username"
+						className={`
+							w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition
+							${fieldErrors.username ? 'border-red-500 bg-red-50' : 'border-gray-300'}
+							${loading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white'}
+						`}
+						disabled={loading}
+						required
+					/>
+					{fieldErrors.username && (
+						<p className="mt-1 text-sm text-red-600">{fieldErrors.username}</p>
 					)}
-        
-					{/* Username Field */}
-					<div className="mb-5">
-						<label htmlFor="username" className="block font-semibold text-gray-700 mb-2">
-							Username <span className="text-red-500">*</span>
-						</label>
-						<input
-							id="username"
-							type="text"
-							name="username"
-							value={formData.username}
-							onChange={handleInputChange}
-							placeholder="Choose a username"
-							className={`
-								w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition
-								${fieldErrors.username ? 'border-red-500 bg-red-50' : 'border-gray-300'}
-								${loading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white'}
-							`}
-							disabled={loading}
-							required
-						/>
-						{fieldErrors.username && (
-							<p className="mt-1 text-sm text-red-600">{fieldErrors.username}</p>
-						)}
 					</div>
 
 					{/* Email Field */}
@@ -415,20 +415,27 @@ const Signup = () => {
 						)}
 					</div>
 
-					{/* Submit Button */}
-					<button
-						type="submit"
-						disabled={loading}
-						className={`
-							w-full py-3 bg-red-500 text-white font-semibold rounded-lg transition
-							${loading 
-								? 'opacity-70 cursor-not-allowed bg-gray-400' 
-								: 'hover:bg-red-600 active:scale-95'
-							}
-						`}
-					>
-						{loading ? "Creating account..." : "Sign Up"}
-					</button>
+				{/* Demo Credentials Hint */}
+				<div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-md">
+					<p className="text-sm font-semibold text-blue-900 mb-2">Try Demo Login:</p>
+					<p className="text-sm text-blue-800"><strong>Username:</strong> user123</p>
+					<p className="text-sm text-blue-800"><strong>Password:</strong> passw0rd123</p>
+				</div>
+
+				{/* Submit Button */}
+				<button
+					type="submit"
+					disabled={loading}
+					className={`
+						w-full py-3 bg-red-500 text-white font-semibold rounded-lg transition
+						${loading 
+							? 'opacity-70 cursor-not-allowed bg-gray-400' 
+							: 'hover:bg-red-600 active:scale-95'
+						}
+					`}
+				>
+					{loading ? "Creating account..." : "Sign Up"}
+				</button>
 
 					{/* Login Link */}
 					<p className="text-center mt-6 text-gray-600">

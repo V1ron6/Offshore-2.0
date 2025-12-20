@@ -119,7 +119,7 @@ const Header = () => {
 							</>
 						) : (
 							<>
-								<Link to="/dashboard" className={getLinkClass('/dashboard')}>
+								<Link to="/app" className={getLinkClass('/app')}>
 									Dashboard
 								</Link>
 								<Link to="/profile" className={getLinkClass('/profile')}>
@@ -158,7 +158,7 @@ const Header = () => {
 											My Profile
 										</Link>
 										<Link
-											to="/dashboard"
+											to="/app"
 											className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
 											onClick={() => setUserMenuOpen(false)}
 										>
@@ -229,7 +229,7 @@ const Header = () => {
 						) : (
 							<>
 								<Link
-									to="/dashboard"
+									to="/app"
 									className="block px-4 py-2 text-white hover:bg-red-400 rounded-md transition"
 									onClick={() => setMobileMenuOpen(false)}
 								>
