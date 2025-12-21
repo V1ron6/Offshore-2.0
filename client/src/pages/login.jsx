@@ -377,7 +377,7 @@ const Login = () =>{
 					{/* Login Form */}
 					<form 
 						onSubmit={handleSubmit} 
-					className="z-0 border-2 p-4 sm:p-6 rounded-md relative bottom-16 bg-white shadow-lg"
+					className="z-0 border-2 p-4 sm:p-6 rounded-md relative bottom-16 bg-white shadow-lg  h-150"
 					noValidate
 				>
 					<div className="z-1 relative top-10">
