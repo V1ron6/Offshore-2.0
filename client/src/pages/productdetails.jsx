@@ -27,12 +27,14 @@ const ProductDetails = () => {
 			try {
 				setLoading(true);
 				const response = await fetch(`http://localhost:4000/api/products/${id}`);
+				console.log('id - product',id)
 				if (!response.ok) {
 					throw new Error('Failed to fetch product details');
 				}
 				const data = await response.json();
-				setProduct(data);
+				setProduct(data.data);
 				setError(null);
+				console.log('product from api',product)
 			} catch (err) {
 				setError(err.message || 'Error loading product');
 				console.error('Error fetching product:', err);
@@ -79,6 +81,7 @@ const ProductDetails = () => {
 			setQuantity(newQuantity);
 		}
 	};
+
 
 	if (loading) {
 		return (
