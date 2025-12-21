@@ -26,7 +26,7 @@ const ProductDetails = () => {
 		const fetchProduct = async () => {
 			try {
 				setLoading(true);
-				const response = await fetch(`/api/products/${id}`);
+				const response = await fetch(`http://localhost:4000/api/products/${id}`);
 				if (!response.ok) {
 					throw new Error('Failed to fetch product details');
 				}
@@ -201,14 +201,14 @@ const ProductDetails = () => {
 						{/* Pricing */}
 						<div className="border-t border-gray-200 pt-6">
 							<div className="flex items-end gap-3 mb-6">
-								<span className="text-5xl font-bold text-red-500">${product.price.toFixed(2)}</span>
+								<span className="text-5xl font-bold text-red-500">${product?.price ? product.price.toFixed(2) : '0.00'}</span>
 								{product.originalPrice && (
-									<span className="text-2xl text-gray-500 line-through mb-2">${product.originalPrice.toFixed(2)}</span>
+									<span className="text-2xl text-gray-500 line-through mb-2">${product.originalPrice ? product.originalPrice.toFixed(2) : '0.00'}</span>
 								)}
 							</div>
 							{product.originalPrice && (
 								<div className="text-green-600 font-semibold mb-6">
-									Save ${(product.originalPrice - product.price).toFixed(2)}
+									Save ${product.originalPrice && product.price ? (product.originalPrice - product.price).toFixed(2) : '0.00'}
 								</div>
 							)}
 						</div>

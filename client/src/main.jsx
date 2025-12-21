@@ -19,8 +19,8 @@ const flipper = createBrowserRouter([
  {path:"/product/:id", element: <ProductDetails />},
  {path:"/signup",element: <Signup />},
  {path:"/login", element:<Login />},
- {path:"/profile/:id/p",element: <Profile />},
- {path:"/dashboard/:id",element:<Dashboard />},
+ {path:"/profile/",element: <Profile />},
+ {path:"/dashboard/",element:<Dashboard />},
  {path:"*",element:<Notfound />}
 ])
 

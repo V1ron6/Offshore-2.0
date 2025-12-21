@@ -414,13 +414,14 @@ const Signup = () => {
 							<p className="mt-1 text-sm text-red-600">{fieldErrors.confirmPassword}</p>
 						)}
 					</div>
-
-				{/* Demo Credentials Hint */}
+        {/* have been left here intentionally */}
+				{/* Demo Credentials Hint 
 				<div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-md">
 					<p className="text-sm font-semibold text-blue-900 mb-2">Try Demo Login:</p>
 					<p className="text-sm text-blue-800"><strong>Username:</strong> user123</p>
 					<p className="text-sm text-blue-800"><strong>Password:</strong> passw0rd123</p>
 				</div>
+				*/}
 
 				{/* Submit Button */}
 				<button

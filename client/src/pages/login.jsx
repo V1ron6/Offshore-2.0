@@ -11,7 +11,7 @@ const button = "m-1 w-50 border border-black p-2 logoColor rounded-md";
 const buttonCenter = button + " w-60";
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:4000/api';
 const LOGIN_TIMEOUT = 10000; // 10 seconds timeout for API calls
 
 // Validation rules
@@ -40,7 +40,7 @@ const VALIDATION_RULES = {
  * - Auto-redirect on successful login
  * - Accessibility features (focus management, ARIA labels)
  */
-const Login = () => {
+const Login = () =>{
 	// ========================================
 	// STATE MANAGEMENT
 	// ========================================
@@ -403,87 +403,90 @@ const Login = () => {
 							>
 								<div className="flex items-start sm:items-center gap-2">
 									<CheckCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
+								<span>{success}</span>
+							</div>
+						</div>
+					)}
+
+					{/* Form Fields Container */}
+					<div className="relative bottom-0 m-1 p-3 sm:p-4 justify-center rounded-md bg-gray-50">
+						
+						{/* Username Field */}
+						<div className="mb-5">
+							<label 
+								htmlFor="username"
+								className="block font-semibold mb-2 text-sm sm:text-base text-gray-700"
+							>
+								Username
+								<span className="text-red-500 ml-1">*</span>
+							</label>
+							<div className="relative">
+								<input
+									id="username"
+									type="text"
+									name="userName"
+									placeholder="Enter username..."
+									value={username}
+									onChange={handleUsernameChange}
+									className={`
+										border rounded-lg p-2 sm:p-3 w-full text-sm sm:text-base
+										focus:outline-none focus:ring-2 focus:ring-blue-500 
+										transition duration-200
+										${fieldErrors.username ? 'border-red-500 bg-red-50' : 'border-gray-300'}
+										${loading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white'}
+									`}
+									disabled={loading}
+									required
+									minLength={VALIDATION_RULES.username.minLength}
+									maxLength={VALIDATION_RULES.username.maxLength}
+									aria-invalid={fieldErrors.username ? "true" : "false"}
+									aria-describedby="username-error"
+								/>
+								{username && !fieldErrors.username && (
+									<span className="absolute right-3 top-2.5 sm:top-3 text-green-500 text-xl">✓</span>
+								)}
+							</div>
+							{fieldErrors.username && (
+								<p 
+									id="username-error"
+									className="mt-2 text-xs sm:text-sm text-red-600"
+								>
+									{fieldErrors.username}
+								</p>
 							)}
+						</div>
 
-							{/* Form Fields Container */}
-							<div className="relative bottom-0 m-1 p-3 sm:p-4 justify-center rounded-md bg-gray-50">
-								
-								{/* Username Field */}
-								<div className="mb-5">
-									<label 
-										htmlFor="username"
-										className="block font-semibold mb-2 text-sm sm:text-base text-gray-700"
-									>
-										Username
-										<span className="text-red-500 ml-1">*</span>
-									</label>
-									<div className="relative">
-										<input
-											id="username"
-											type="text"
-											name="userName"
-											placeholder="Enter username..."
-											value={username}
-											onChange={handleUsernameChange}
-											className={`
-												border rounded-lg p-2 sm:p-3 w-full text-sm sm:text-base
-												focus:outline-none focus:ring-2 focus:ring-blue-500 
-												transition duration-200
-												${fieldErrors.username ? 'border-red-500 bg-red-50' : 'border-gray-300'}
-												${loading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white'}
-											`}
-											disabled={loading}
-											required
-											minLength={VALIDATION_RULES.username.minLength}
-											maxLength={VALIDATION_RULES.username.maxLength}
-											aria-invalid={fieldErrors.username ? "true" : "false"}
-											aria-describedby="username-error"
-										/>
-										{username && !fieldErrors.username && (
-											<span className="absolute right-3 top-2.5 sm:top-3 text-green-500 text-xl">✓</span>
-										)}
-									</div>
-									{fieldErrors.username && (
-										<p 
-											id="username-error"
-											className="mt-2 text-xs sm:text-sm text-red-600"
-										>
-											{fieldErrors.username}
-										</p>
-									)}
-								</div>
-
-								{/* Password Field */}
-								<div className="mb-5 relative">
-									<label 
-										htmlFor="password"
-										className="block font-semibold mb-2 text-gray-700"
-									>
-										Password
-										<span className="text-red-500 ml-1">*</span>
-									</label>
-									<div className="relative">
-										<input
-											id="password"
-											type={showPassword ? "text" : "password"}
-											name="password"
-											placeholder="Enter your password"
-											value={password}
-											onChange={handlePasswordChange}
-											className={`
-												border rounded-lg p-3 w-full pr-12
-												focus:outline-none focus:ring-2 focus:ring-blue-500 
-												transition duration-200
-												${fieldErrors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'}
-												${loading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white'}
-											`}
-											disabled={loading}
-											required
-											minLength={VALIDATION_RULES.password.minLength}
-											maxLength={VALIDATION_RULES.password.maxLength}
-											aria-invalid={fieldErrors.password ? "true" : "false"}
-											aria-describedby="password-error"
-										/>
+						{/* Password Field */}
+						<div className="mb-5 relative">
+							<label 
+								htmlFor="password"
+								className="block font-semibold mb-2 text-gray-700"
+							>
+								Password
+								<span className="text-red-500 ml-1">*</span>
+							</label>
+							<div className="relative">
+								<input
+									id="password"
+									type={showPassword ? "text" : "password"}
+									name="password"
+									placeholder="Enter your password"
+									value={password}
+									onChange={handlePasswordChange}
+									className={`
+										border rounded-lg p-3 w-full pr-12
+										focus:outline-none focus:ring-2 focus:ring-blue-500 
+										transition duration-200
+										${fieldErrors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'}
+										${loading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white'}
+									`}
+									disabled={loading}
+									required
+									minLength={VALIDATION_RULES.password.minLength}
+									maxLength={VALIDATION_RULES.password.maxLength}
+									aria-invalid={fieldErrors.password ? "true" : "false"}
+									aria-describedby="password-error"
+								/>
 										<button
 											type="button"
 											onClick={togglePasswordVisibility}
@@ -509,14 +512,15 @@ const Login = () => {
 									)}
 								</div>
 
-								{/* Demo Credentials Hint */}
+						{/* Demo Credentials Hint 
 								<div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
 									<p className="text-sm font-semibold text-blue-900 mb-2">Demo Credentials:</p>
 									<p className="text-sm text-blue-800"><strong>Username:</strong> user123</p>
 									<p className="text-sm text-blue-800"><strong>Password:</strong> passw0rd123</p>
 								</div>
-
+            */}
 								{/* Remember Me Checkbox */}
+								
 								<div className="mb-6 flex items-center">
 									<input
 										id="rememberMe"

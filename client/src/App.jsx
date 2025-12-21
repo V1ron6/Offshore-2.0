@@ -66,7 +66,7 @@ const App = () => {
 			params.append('sort', sort);
 			
 			const response = await fetch(
-				`http://localhost:3000/api/products?${params.toString()}`,
+				`http://localhost:4000/api/products?${params.toString()}`,
 				{
 					method: 'GET',
 					headers: {
@@ -93,7 +93,7 @@ const App = () => {
 	 */
 	const fetchCategories = async () => {
 		try {
-			const response = await fetch('http://localhost:3000/api/products/categories', {
+			const response = await fetch('http://localhost:4000/api/products/categories', {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'

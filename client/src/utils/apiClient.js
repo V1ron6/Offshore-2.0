@@ -6,7 +6,7 @@
 import axios from 'axios';
 import { sanitizeInput, validateSession, getSecureHeaders, logSecurityEvent, isValidJWT } from './security.js';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
 // Create axios instance with secure defaults
 const apiClient = axios.create({
