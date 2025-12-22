@@ -18,6 +18,8 @@
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Zap, Lock, Smartphone } from 'lucide-react';
 import Header from '../components/header.jsx';
+// Import ShoppingCart at the top
+import { ShoppingCart } from 'lucide-react';
 
 /**
  * Home Component
@@ -150,7 +152,7 @@ const Home = () => {
 						to="/signup"
 						className="inline-block px-8 py-4 bg-white text-red-500 rounded-lg font-bold hover:bg-red-50 transition transform hover:scale-105"
 					>
-						Create Free Account
+						Create Free err Account
 					</Link>
 				</div>
 			</section>
@@ -164,7 +166,6 @@ const Home = () => {
 	);
 };
 
-// Import ShoppingCart at the top
-import { ShoppingCart } from 'lucide-react';
+
 
 export default Home;

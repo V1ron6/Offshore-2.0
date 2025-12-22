@@ -20,7 +20,6 @@ import { User, LogOut, Lock, Edit2 } from 'lucide-react';
 import Card from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
 import Alert from '../components/Alert.jsx';
-
 const Profile = () => {
 	// ========================================
 	// STATE MANAGEMENT
@@ -95,7 +94,9 @@ const Profile = () => {
 
 	return (
 		<div className="min-h-screen bg-gray-100 py-12">
+			
 			<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+			
 				{/* Page Header */}
 				<div className="mb-8">
 					<h1 className="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>

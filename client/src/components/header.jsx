@@ -119,8 +119,11 @@ const Header = () => {
 							</>
 						) : (
 							<>
-								<Link to="/app" className={getLinkClass('/app')}>
+								<Link to="/dashboard" className={getLinkClass('/dashboard')}>
 									Dashboard
+								</Link>
+								<Link to="/app" className={getLinkClass('/app')}>
+									Market Place
 								</Link>
 								<Link to="/profile" className={getLinkClass('/profile')}>
 									Profile

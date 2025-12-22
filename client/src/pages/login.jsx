@@ -11,7 +11,7 @@ const button = "m-1 w-50 border border-black p-2 logoColor rounded-md";
 const buttonCenter = button + " w-60";
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:4000/api';
+const API_BASE_URL = import.meta.env.apiUrl || "http://localhost:4000/api";
 const LOGIN_TIMEOUT = 10000; // 10 seconds timeout for API calls
 
 // Validation rules

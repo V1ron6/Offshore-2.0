@@ -5,14 +5,14 @@ const morgan = require("morgan");
 const port = process.env.PORT || 3000;
 const cors = require("cors");
 const { rateLimit, sanitizeInput } = require("./middleware/security.js");
-
+const frontendurl= process.env.frontEndUrl || "http://localhost:5173";
 const todoRoute = require("./Routes/todo.route.js");
 const userRoute = require("./Routes/user.route.js");
 const productRoute = require("./Routes/product.route.js");
 
 // CORS configuration
 app.use(cors({
-	origin: 'http://localhost:5173',
+	origin: frontendurl,
 	credentials: true,
 	methods: ['GET', 'PUT', 'POST', 'DELETE'],
 	allowedHeaders: ['Content-Type', 'Authorization']

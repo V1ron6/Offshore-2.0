@@ -21,12 +21,13 @@ const ProductDetails = () => {
 		setCart(savedCart);
 	}, [user.id]);
 
+	const API_URL = import.meta.env.apiURL || "http://localhost:4000/api";
 	// Fetch product details
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
 				setLoading(true);
-				const response = await fetch(`http://localhost:4000/api/products/${id}`);
+				const response = await fetch(`${API_URL}/products/${id}`);
 				console.log('id - product',id)
 				if (!response.ok) {
 					throw new Error('Failed to fetch product details');

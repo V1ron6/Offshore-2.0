@@ -152,7 +152,7 @@ const Dashboard = () => {
 				{/* Header */}
 				<div className="mb-8">
 					<h1 className="text-4xl font-bold text-gray-900 mb-2">
-						Welcome, <span className="text-red-500">{user?.username}</span>! 👋
+						Welcome, retx<span className="text-red-500">{user?.username}</span>! 👋
 					</h1>
 					<p className="text-gray-600">E-Commerce Product Dashboard</p>
 				</div>

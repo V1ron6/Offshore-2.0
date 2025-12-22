@@ -56,6 +56,7 @@ const App = () => {
 	/**
 	 * Fetch products from backend
 	 */
+	const API_URL = import.meta.env.apiURL || "http://localhost:4000/api"
 	const fetchProducts = async (category = 'all', search = '', sort = 'featured') => {
 		try {
 			setLoading(true);
@@ -66,7 +67,7 @@ const App = () => {
 			params.append('sort', sort);
 			
 			const response = await fetch(
-				`http://localhost:4000/api/products?${params.toString()}`,
+				`${API_URL}/products?${params.toString()}`,
 				{
 					method: 'GET',
 					headers: {
@@ -93,7 +94,7 @@ const App = () => {
 	 */
 	const fetchCategories = async () => {
 		try {
-			const response = await fetch('http://localhost:4000/api/products/categories', {
+			const response = await fetch(`${API_URL}/products/categories`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
