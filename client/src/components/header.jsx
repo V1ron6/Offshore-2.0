@@ -161,7 +161,7 @@ const Header = () => {
 											My Profile
 										</Link>
 										<Link
-											to="/app"
+											to="/dashboard"
 											className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
 											onClick={() => setUserMenuOpen(false)}
 										>
@@ -232,7 +232,7 @@ const Header = () => {
 						) : (
 							<>
 								<Link
-									to="/app"
+									to="/dashboard"
 									className="block px-4 py-2 text-white hover:bg-red-400 rounded-md transition"
 									onClick={() => setMobileMenuOpen(false)}
 								>
