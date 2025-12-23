@@ -152,7 +152,7 @@ const Home = () => {
 						to="/signup"
 						className="inline-block px-8 py-4 bg-white text-red-500 rounded-lg font-bold hover:bg-red-50 transition transform hover:scale-105"
 					>
-						Create Free err Account
+						Create Free Account
 					</Link>
 				</div>
 			</section>

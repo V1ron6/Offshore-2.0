@@ -11,7 +11,7 @@ const { mockProducts } = require('../Models/product.model.js');
  */
 const getAllProducts = (req, res) => {
 	try {
-		const { category, search, sort = 'featured', limit = 50 } = req.query;
+		const { category, search, sort = 'featured', limit = 200 } = req.query;
 		
 		let products = [...mockProducts];
 
@@ -44,7 +44,7 @@ const getAllProducts = (req, res) => {
 		}
 
 		// Apply limit
-		const maxLimit = Math.min(parseInt(limit) || 50, 100);
+		const maxLimit = Math.min(parseInt(limit) || 150, 200);
 		products = products.slice(0, maxLimit);
 
 		res.status(200).json({

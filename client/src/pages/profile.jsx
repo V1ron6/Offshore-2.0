@@ -15,7 +15,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,Link } from 'react-router-dom';
 import { User, LogOut, Lock, Edit2 } from 'lucide-react';
 import Card from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
@@ -275,6 +275,17 @@ const Profile = () => {
 								>
 									🔄 Deactivate Account
 								</Button>
+								
+								<Link to="/app">
+								<Button
+									variant="secondary"
+									size="sm"
+									fullWidth
+									className="text-left"
+								>
+									back
+								</Button>
+								</Link>
 							</div>
 						</Card>
 					</div>

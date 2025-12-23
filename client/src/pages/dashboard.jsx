@@ -19,8 +19,8 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Plus, Search, ShoppingCart, TrendingUp, Users, DollarSign, Package } from 'lucide-react';
+import { useNavigate ,Link} from 'react-router-dom';
+import { Plus, Search, ShoppingCart, TrendingUp, Users, DollarSign, Package,Home } from 'lucide-react';
 import StatsCard from '../components/StatsCard.jsx';
 import Chart from '../components/Chart.jsx';
 import Card from '../components/Card.jsx';
@@ -152,7 +152,7 @@ const Dashboard = () => {
 				{/* Header */}
 				<div className="mb-8">
 					<h1 className="text-4xl font-bold text-gray-900 mb-2">
-						Welcome, retx<span className="text-red-500">{user?.username}</span>! 👋
+						Welcome, <span className="text-red-500">{user?.username}</span>! 👋
 					</h1>
 					<p className="text-gray-600">E-Commerce Product Dashboard</p>
 				</div>
@@ -295,6 +295,12 @@ const Dashboard = () => {
 							<Plus size={20} />
 							Add New Product
 						</button>
+						<Link to="/app">
+						<button className="w-full px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold flex items-center justify-center gap-2">
+							<Home size={20} />
+							back
+						</button>
+						</Link>
 					</div>
 				</div>
 			</div>

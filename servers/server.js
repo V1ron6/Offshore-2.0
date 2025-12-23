@@ -4,6 +4,8 @@ const app = express();
 const morgan = require("morgan");
 const port = process.env.PORT || 3000;
 const cors = require("cors");
+const fs = require("fs");
+const path =require("path")
 const { rateLimit, sanitizeInput } = require("./middleware/security.js");
 const frontendurl= process.env.frontEndUrl || "http://localhost:5173";
 const todoRoute = require("./Routes/todo.route.js");
@@ -22,10 +24,15 @@ app.use(cors({
 app.use(rateLimit(100, 60000)); // 100 requests per minute
 app.use(sanitizeInput); // Sanitize all inputs
 
+
+
+
 // Standard Middleware
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
-app.use(morgan("combined"))
+const accessLog = fs.createWriteStream(path.join(__dirname,'access.log'),{flag:'a'});
+app.use(morgan('combined',{stream:accessLog}));
+
 
 // Routes
 app.use("/api/todo", todoRoute);
