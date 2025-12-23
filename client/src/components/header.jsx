@@ -103,9 +103,7 @@ const Header = () => {
 					{/* Desktop Navigation Menu */}
 					<nav className="hidden md:flex items-center space-x-2">
 						{/* Public Links */}
-						<Link to="/" className={getLinkClass('/')}>
-							Home
-						</Link>
+						
 
 						{/* Conditional Links Based on Login Status */}
 						{!isLoggedIn ? (
