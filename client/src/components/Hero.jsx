@@ -10,7 +10,6 @@ const Hero = ({
   subtitle,
   cta,
   ctaSecondary,
-  backgroundImage = null,
   bgColor = 'from-red-500 to-orange-600'
 }) => {
   return (

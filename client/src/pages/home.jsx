@@ -85,6 +85,7 @@ const Home = () => {
 							className="px-8 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition text-center"
 						>
 							Browse Products
+							</Link>
 							<div>
 								<p className="text-3xl font-bold text-red-500">10K+</p>
 								<p className="text-gray-600">Products Sold</p>

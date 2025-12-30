@@ -11,8 +11,7 @@ const StatsCard = ({
   trend = 0,
   icon: Icon = null,
   color = 'blue',
-  subtitle = '',
-  bgGradient = true
+  subtitle = ''
 }) => {
   const colorClasses = {
     blue: 'from-blue-400 to-blue-600',

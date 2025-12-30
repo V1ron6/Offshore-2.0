@@ -14,7 +14,7 @@
  * - XSS and IDOR protection
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, Trash2, Plus, Minus, X, Moon, Sun } from 'lucide-react';
 import Header from './components/header.jsx';
@@ -42,7 +42,6 @@ const App = () => {
 		const savedCart = localStorage.getItem('cart');
 		return savedCart ? JSON.parse(savedCart) : [];
 	});
-	const [showCart, setShowCart] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(() => {
 		const savedTheme = localStorage.getItem('theme');
 		return savedTheme ? savedTheme === 'dark' : false;
@@ -69,7 +68,7 @@ const App = () => {
 	 * Fetch products from backend
 	 */
 	const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api"
-	const fetchProducts = async (category = 'all', search = '', sort = 'featured') => {
+	const fetchProducts = useCallback(async (category = 'all', search = '', sort = 'featured') => {
 		try {
 			setLoading(true);
 			const params = new URLSearchParams();
@@ -99,12 +98,12 @@ const App = () => {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, [API_URL]);
 
 	/**
 	 * Fetch categories from backend
 	 */
-	const fetchCategories = async () => {
+	const fetchCategories = useCallback(async () => {
 		try {
 			const response = await fetch(`${API_URL}/products/categories`, {
 				method: 'GET',
@@ -120,7 +119,7 @@ const App = () => {
 		} catch (err) {
 			console.error('Failed to load categories:', err);
 		}
-	};
+	}, [API_URL]);
 
 	// ========================================
 	// CART FUNCTIONS
@@ -237,7 +236,7 @@ const App = () => {
 		setTimeout(() => {
 			setCart([]);
 			localStorage.removeItem('cart');
-			setShowCart(false);
+			navigate('/order-confirmation');
 		}, 2000);
 	};
 
@@ -277,7 +276,7 @@ const App = () => {
 		if (user) {
 			fetchCategories();
 		}
-	}, [user]);
+	}, [user, fetchCategories]);
 
 	/**
 	 * Debounced fetch when search or filters change
@@ -285,12 +284,12 @@ const App = () => {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			if (user) {
-				fetchProducts{`min-h-screen flex flex-col ${isDarkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
-			{/* Header */}
-			<Header isDarkMode={isDarkMode} toggleTheme={toggleTheme}
+				fetchProducts(selectedCategory, searchQuery, sortBy);
+			}
+		}, 500);
 
 		return () => clearTimeout(timer);
-	}, [searchQuery, selectedCategory, sortBy, user]);
+	}, [searchQuery, selectedCategory, sortBy, user, fetchProducts]);
 
 	// ========================================
 	// RENDER
@@ -312,6 +311,15 @@ const App = () => {
 			{/* Header */}
 			<Header />
 
+			{/* Theme Toggle Button */}
+			<button
+				onClick={toggleTheme}
+				className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-red-500 text-white hover:bg-red-600 transition shadow-lg"
+				title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+			>
+				{isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+			</button>
+
 			{/* Main Content */}
 			<main className="flex-1 w-full">
 				<div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
@@ -324,7 +332,7 @@ const App = () => {
 							<p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Browse our amazing products</p>
 						</div>
 						<button
-							onClick={() => setShowCart(!showCart)}
+							onClick={() => navigate('/cart')}
 							className="relative px-4 sm:px-6 py-2 sm:py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold flex items-center justify-center sm:justify-start gap-2 w-full sm:w-auto"
 						>
 							<ShoppingCart size={20} />
@@ -418,87 +426,6 @@ const App = () => {
 
 						{/* Main Content - Products */}
 						<div className="md:col-span-3">
-							{/* Shopping Cart Modal */}
-							{showCart && (
-								<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 sm:p-0">
-									<div className="bg-white rounded-lg shadow-xl w-full sm:max-w-2xl max-h-[80vh] sm:max-h-96 overflow-y-auto">
-										<div className="flex justify-between items-center p-4 sm:p-6 border-b">
-											<h2 className="text-xl sm:text-2xl font-bold text-gray-900">Shopping Cart</h2>
-											<button
-												onClick={() => setShowCart(false)}
-												className="text-gray-500 hover:text-gray-700"
-											>
-												<X size={24} />
-											</button>
-										</div>
-
-										<div className="p-4 sm:p-6">
-											{cart.length === 0 ? (
-												<p className="text-center text-gray-600 py-8">Your cart is empty</p>
-											) : (
-												<div className="space-y-3 sm:space-y-4">
-													{cart.map((item) => (
-														<div
-															key={item.id}
-															className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-3 sm:p-4 border rounded-lg hover:shadow-md transition"
-														>
-															<div className="flex-1 min-w-0">
-																<h4 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{item.name}</h4>
-																<p className="text-red-500 font-bold text-sm sm:text-base">${item.price.toFixed(2)}</p>
-															</div>
-															
-															<div className="flex items-center gap-2 sm:gap-3 justify-between sm:justify-start">
-																<button
-																	onClick={() => updateQuantity(item.id, item.quantity - 1)}
-																	className="p-1 hover:bg-gray-200 rounded"
-																>
-																	<Minus size={16} />
-																</button>
-																<span className="w-8 text-center font-semibold text-sm">{item.quantity}</span>
-																<button
-																	onClick={() => updateQuantity(item.id, item.quantity + 1)}
-																	className="p-1 hover:bg-gray-200 rounded"
-																>
-																	<Plus size={16} />
-																</button>
-
-																<button
-																	onClick={() => removeFromCart(item.id)}
-																	className="ml-2 p-1 text-red-600 hover:bg-red-100 rounded transition"
-																>
-																	<Trash2 size={16} />
-																</button>
-															</div>
-														</div>
-													))}
-
-													<div className="border-t pt-3 sm:pt-4 mt-3 sm:mt-4">
-														<div className="flex justify-between mb-3 sm:mb-4">
-															<span className="font-semibold text-sm sm:text-base">Subtotal:</span>
-															<span className="text-lg sm:text-xl font-bold text-red-500">${cartTotals.subtotal.toFixed(2)}</span>
-														</div>
-														<div className="flex gap-2 sm:gap-3">
-															<button
-																onClick={clearCart}
-																className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition font-semibold"
-															>
-																Clear
-															</button>
-															<button
-																onClick={handleCheckout}
-																className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold"
-															>
-																Checkout
-															</button>
-														</div>
-													</div>
-												</div>
-											)}
-										</div>
-									</div>
-								</div>
-							)}
-
 							{/* Products Grid */}
 							<div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
 								<h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">

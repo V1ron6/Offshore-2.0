@@ -125,6 +125,36 @@ const Profile = () => {
 	};
 
 	/**
+	 * Handle download user data
+	 */
+	const handleDownloadData = () => {
+		const userData = JSON.stringify(user, null, 2);
+		const element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(userData));
+		element.setAttribute('download', `user-data-${user.id}.json`);
+		element.style.display = 'none';
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+		setAlertMessage('User data downloaded successfully!');
+		setShowAlert(true);
+	};
+
+	/**
+	 * Handle deactivate account
+	 */
+	const handleDeactivateAccount = () => {
+		if (window.confirm('Are you sure you want to deactivate your account? This action cannot be undone.')) {
+			localStorage.removeItem('user');
+			localStorage.removeItem('authToken');
+			localStorage.removeItem('rememberMe');
+			setAlertMessage('Account deactivated. Redirecting to home...');
+			setShowAlert(true);
+			setTimeout(() => navigate('/'), 1500);
+		}
+	};
+
+	/**
 	 * Calculate session duration
 	 */
 	const getSessionDuration = () => {
@@ -329,6 +359,7 @@ const Profile = () => {
 									size="sm"
 									fullWidth
 									className="text-left"
+									onClick={handleDownloadData}
 								>
 									💾 Download My Data
 								</Button>
@@ -337,6 +368,7 @@ const Profile = () => {
 									size="sm"
 									fullWidth
 									className="text-left"
+									onClick={handleDeactivateAccount}
 								>
 									🔄 Deactivate Account
 								</Button>
@@ -356,7 +388,6 @@ const Profile = () => {
 					</div>
 				</div>
 			</div>
-		</div>
 
 			{/* Edit Profile Modal */}
 			{showEditModal && (
@@ -489,3 +520,8 @@ const Profile = () => {
 					</Card>
 				</div>
 			)}
+		</div>
+	);
+};
+
+export default Profile;

@@ -11,15 +11,23 @@ const ProductDetails = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(null);
-	const [cart, setCart] = useState([]);
 
 	// Get user from localStorage
 	const user = JSON.parse(localStorage.getItem('user')) || {};
 
 	// Load cart from localStorage
 	useEffect(() => {
-		const savedCart = getCart(user.id);
-		setCart(savedCart);
+		getCart(user.id);
+
+		// Listen for cart updates from other tabs/windows
+		const handleCartUpdate = (e) => {
+			if (e.detail?.userId === user.id) {
+				// Cart updated from another tab
+			}
+		};
+
+		window.addEventListener('cartUpdated', handleCartUpdate);
+		return () => window.removeEventListener('cartUpdated', handleCartUpdate);
 	}, [user.id]);
 
 	const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
@@ -36,7 +44,7 @@ const ProductDetails = () => {
 				const data = await response.json();
 				setProduct(data.data);
 				setError(null);
-				console.log('product from api',product)
+				console.log('product from api',data.data)
 			} catch (err) {
 				setError(err.message || 'Error loading product');
 				console.error('Error fetching product:', err);
@@ -45,18 +53,33 @@ const ProductDetails = () => {
 			}
 		};
 
-		if (id) {
+		if (id && API_URL) {
 			fetchProduct();
 		}
-	}, [id]);
+	}, [id, API_URL]);
 
 	const addToCartHandler = () => {
 		if (!product || quantity <= 0) return;
 
+		if (!product.inStock) {
+			setError('This item is out of stock!');
+			return;
+		}
+
+		// Prepare product data for cart
+		const cartItem = {
+			id: product.id,
+			name: product.name,
+			price: product.price,
+			image: product.image,
+			category: product.category,
+			sku: product.sku
+		};
+
 		// Use cart service to add to cart
-		const updatedCart = addToCart(user.id, product, quantity);
-		setCart(updatedCart);
-		setSuccess(`${product.name} added to cart!`);
+		addToCart(user.id, cartItem, quantity);
+		setSuccess(`${product.name} added to cart! (Qty: ${quantity})`);
+		setError(null);
 		setQuantity(1);
 		setTimeout(() => setSuccess(null), 3000);
 	};
