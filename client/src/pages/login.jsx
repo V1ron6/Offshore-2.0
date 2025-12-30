@@ -7,11 +7,9 @@ import Offshorelogo from '../assets/Offshorelogo.jpg'
 // ========================================
 // CONSTANTS - Styling and Configuration
 // ========================================
-const button = "m-1 w-50 border border-black p-2 logoColor rounded-md";
-const buttonCenter = button + " w-60";
 
 // API Configuration
-const API_BASE_URL = import.meta.env.apiUrl || "http://localhost:4000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 const LOGIN_TIMEOUT = 10000; // 10 seconds timeout for API calls
 
 // Validation rules
@@ -340,32 +338,31 @@ const Login = () =>{
 	// ========================================
 
 	return (
-		<>
-			<div className="flex min-h-screen items-center justify-center border prefFont bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
-				<div className="w-full max-w-md">
-					{/* Header Section */}
-					<div className='relative bottom-10 z-1 mb-6 sm:mb-8'>
-						<h1 className='font-bold text-4xl sm:text-5xl relative bottom-8 text-center z-0'>
-							Off<span className='text-red-300'>Shore</span>
-						</h1>
-						<p className="text-center text-gray-600 text-sm mt-2">
-							Sign in to your account to continue
-						</p>
-					</div>
+		<div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
+			<div className="w-full max-w-md">
+				{/* Header */}
+				<div className="text-center mb-6 sm:mb-8">
+					<h1 className="text-4xl sm:text-5xl font-bold">
+						Off<span className="text-red-300">Shore</span>
+					</h1>
+					<p className="text-gray-600 mt-2 text-sm sm:text-base">Sign in to your account to continue</p>
+				</div>
 
+				{/* Login Form */}
+				<form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 sm:p-8" noValidate>
 					{/* Navigation Tabs */}
-					<div className="rounded-md flex justify-evenly relative top-2 w-min shadow-sm z-100 left-4 mb-2">
-						<Link to={"/signup"}>
+					<div className="rounded-md flex justify-center gap-2 sm:gap-4 w-full shadow-sm z-100 mb-4 sm:mb-6">
+						<Link to={"/signup"} className="flex-1 sm:flex-none">
 							<button 
-								className="m-1 w-50 border border-black p-2 logoColor rounded-md hover:bg-gray-100 transition duration-200 font-medium"
+								className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-black logoColor rounded-md hover:bg-gray-100 transition duration-200 font-medium"
 								title="Go to signup page"
 							>
 								Signup
 							</button>
 						</Link>
-						<Link to={"/login"}>
+						<Link to={"/login"} className="flex-1 sm:flex-none">
 							<button 
-								className={button + " bg-blue-50 hover:bg-gray-100 transition duration-200 font-medium"}
+								className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-black bg-blue-50 rounded-md hover:bg-gray-100 transition duration-200 font-medium"
 								title="You are on the login page"
 								disabled
 							>
@@ -373,50 +370,40 @@ const Login = () =>{
 							</button>
 						</Link>
 					</div>
-
-					{/* Login Form */}
-					<form 
-						onSubmit={handleSubmit} 
-					className="z-0 border-2 p-4 sm:p-6 rounded-md relative bottom-16 bg-white shadow-lg  h-150"
-					noValidate
-				>
-					<div className="z-1 relative top-10">
-						{/* Alert Messages Section */}
-						{error && (
-							<div 
-								className="mb-4 p-3 sm:p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md animate-pulse text-sm sm:text-base"
-								role="alert"
-								aria-live="polite"
-							>
-								<div className="flex items-start sm:items-center gap-2">
-									<AlertCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
-									<span>{error}</span>
-								</div>
+					
+					{/* Alert Messages */}
+					{error && (
+						<div 
+							className="mb-4 p-3 sm:p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded text-sm sm:text-base"
+							role="alert"
+							aria-live="polite"
+						>
+							<div className="flex items-start sm:items-center gap-2">
+								<AlertCircle size={20} className="mt-0.5 sm:mt-0 shrink-0" />
+								<span>{error}</span>
 							</div>
-						)}
+						</div>
+					)}
 
-						{success && (
-							<div 
-								className="mb-4 p-3 sm:p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md text-sm sm:text-base"
-								role="alert"
-								aria-live="polite"
-							>
-								<div className="flex items-start sm:items-center gap-2">
-									<CheckCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
+					{success && (
+						<div 
+							className="mb-4 p-3 sm:p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded text-sm sm:text-base"
+							role="alert"
+							aria-live="polite"
+						>
+							<div className="flex items-start sm:items-center gap-2">
+								<CheckCircle size={20} className="mt-0.5 sm:mt-0 shrink-0" />
 								<span>{success}</span>
 							</div>
 						</div>
 					)}
 
-					{/* Form Fields Container */}
-					<div className="relative bottom-0 m-1 p-3 sm:p-4 justify-center rounded-md bg-gray-50">
-						
-						{/* Username Field */}
-						<div className="mb-5">
-							<label 
-								htmlFor="username"
-								className="block font-semibold mb-2 text-sm sm:text-base text-gray-700"
-							>
+					{/* Username Field */}
+					<div className="mb-5">
+						<label 
+							htmlFor="username"
+							className="block font-semibold mb-2 text-sm sm:text-base text-gray-700"
+						>
 								Username
 								<span className="text-red-500 ml-1">*</span>
 							</label>
@@ -543,13 +530,11 @@ const Login = () =>{
 									type="submit"
 									disabled={loading}
 									className={`
-										${buttonCenter}
-									
-										font-semibold
+										w-full py-3 px-4 sm:py-2.5 sm:px-3 bg-red-500 text-white font-semibold rounded-lg
 										transition duration-300
 										${loading 
 											? 'opacity-70 cursor-not-allowed bg-gray-400' 
-											: 'hover:bg-blue-600 hover:text-white active:scale-95'
+											: 'hover:bg-red-600 active:scale-95'
 										}
 									`}
 									title={loading ? "Logging in..." : "Click to login"}
@@ -569,13 +554,10 @@ const Login = () =>{
 								<p className="text-center text-xs text-gray-600 mt-4">
 									Demo Credentials: username: <span className="font-semibold">viron</span> | password: <span className="font-semibold">1234</span>
 								</p>
-							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
-			</div>
-		</>
-	);
-};
+		);
+	};
 
-export default Login;
+	export default Login;

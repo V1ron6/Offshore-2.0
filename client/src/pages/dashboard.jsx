@@ -27,6 +27,7 @@ import Card from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
 import Hero from '../components/Hero.jsx';
 import { sanitizeInput, canAccessResource, validateSession } from '../utils/security.js';
+import { addToCart } from '../utils/cartService.js';
 
 /**
  * Dashboard Component
@@ -42,9 +43,9 @@ const Dashboard = () => {
 	const [selectedCategory, setSelectedCategory] = useState('all');
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
-
-	// Mock product data
-	const allProducts = [
+	const [showAddProductModal, setShowAddProductModal] = useState(false);
+	const [newProduct, setNewProduct] = useState({ name: '', price: '', stock: '', category: '' });
+	const [products, setProducts] = useState([
 		{ id: 1, name: 'Wireless Headphones', price: '$79.99', category: 'electronics', stock: 45, image: '🎧' },
 		{ id: 2, name: 'Smart Watch', price: '$199.99', category: 'electronics', stock: 28, image: '⌚' },
 		{ id: 3, name: 'Laptop Stand', price: '$49.99', category: 'accessories', stock: 62, image: '🖥️' },
@@ -53,7 +54,7 @@ const Dashboard = () => {
 		{ id: 6, name: 'Portable Charger', price: '$34.99', category: 'electronics', stock: 56, image: '🔋' },
 		{ id: 7, name: 'Keyboard', price: '$129.99', category: 'electronics', stock: 34, image: '⌨️' },
 		{ id: 8, name: 'Mouse Pad', price: '$19.99', category: 'accessories', stock: 98, image: '🖱️' }
-	];
+	]);
 
 	const [stats, setStats] = useState({
 		totalSales: '$45,230',
@@ -92,7 +93,7 @@ const Dashboard = () => {
 	/**
 	 * Filter products based on search and category
 	 */
-	const filteredProducts = allProducts.filter(product => {
+	const filteredProducts = products.filter(product => {
 		const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
 		const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
 		return matchesSearch && matchesCategory;
@@ -102,7 +103,43 @@ const Dashboard = () => {
 	 * Handle add to cart
 	 */
 	const handleAddToCart = (product) => {
-		setSuccess(`${product.name} added to cart!`);
+		if (product.stock <= 0) {
+			setError('This item is out of stock!');
+			return;
+		}
+
+		// Add to cart using cart service
+		addToCart(user.id, product, 1);
+
+		// Reduce stock in dashboard
+		setProducts(products.map(p => 
+			p.id === product.id ? { ...p, stock: p.stock - 1 } : p
+		));
+
+		setSuccess(`${product.name} added to cart! Stock: ${product.stock - 1}`);
+		setTimeout(() => setSuccess(''), 3000);
+	};
+
+	/**
+	 * Handle add new product
+	 */
+	const handleAddProduct = () => {
+		if (!newProduct.name || !newProduct.price || !newProduct.stock) {
+			setError('Please fill in all fields');
+			return;
+		}
+		const productToAdd = {
+			id: products.length + 1,
+			name: newProduct.name,
+			price: newProduct.price,
+			stock: parseInt(newProduct.stock),
+			category: newProduct.category || 'electronics',
+			image: '📦'
+		};
+		setProducts([...products, productToAdd]);
+		setSuccess(`Product "${newProduct.name}" added successfully!`);
+		setShowAddProductModal(false);
+		setNewProduct({ name: '', price: '', stock: '', category: '' });
 		setTimeout(() => setSuccess(''), 3000);
 	};
 
@@ -272,7 +309,7 @@ const Dashboard = () => {
 						</div>
 
 						{/* Quick Stats */}
-						<div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg shadow-md p-6 border border-red-100">
+						<div className="bg-linear-to-br from-red-50 to-orange-50 rounded-lg shadow-md p-6 border border-red-100">
 							<h3 className="text-lg font-bold text-gray-900 mb-4">📊 Performance</h3>
 							<ul className="space-y-2 text-sm">
 								<li className="flex justify-between">
@@ -291,7 +328,10 @@ const Dashboard = () => {
 						</div>
 
 						{/* Action Button */}
-						<button className="w-full px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold flex items-center justify-center gap-2">
+						<button 
+							onClick={() => setShowAddProductModal(true)}
+							className="w-full px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold flex items-center justify-center gap-2"
+						>
 							<Plus size={20} />
 							Add New Product
 						</button>

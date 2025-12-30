@@ -19,8 +19,6 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 
-const button = "m-1 w-50 border border-black p-2 logoColor rounded-md";
-
 // Validation rules for signup form
 const VALIDATION_RULES = {
 	username: {
@@ -240,7 +238,7 @@ const Signup = () => {
 	// ========================================
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
+		<div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 px-4 py-8 sm:px-6 lg:px-8">
 			<div className="w-full max-w-md">
 				{/* Header */}
 				<div className="text-center mb-6 sm:mb-8">
@@ -253,31 +251,31 @@ const Signup = () => {
 				{/* Signup Form */}
 				<form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 sm:p-8" noValidate>
 					{/* Navigation Tabs */}
-					<div className="rounded-md flex justify-evenly relative bottom-2 w-min shadow-sm z-100 right-2 mb-4">
-						<Link to={"/signup"}>
+					<div className="rounded-md flex justify-center gap-2 sm:gap-4 w-full shadow-sm z-100 mb-4 sm:mb-6">
+						<Link to={"/signup"} className="flex-1 sm:flex-none">
 							<button 
-								className={button + " bg-blue-50 hover:bg-gray-100 transition duration-200 font-medium text-sm sm:text-base"}
+								className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-black bg-blue-50 rounded-md hover:bg-gray-100 transition duration-200 font-medium text-sm sm:text-base"
 								title="you are on this page"
-													disabled
-												>
-													Signup
-												</button>
-											</Link>
-											<Link to={"/login"}>
-												<button 
-													className="m-1 w-50 border border-black p-2 logoColor rounded-md hover:bg-gray-100 transition duration-200 font-medium"												
-														title="Go To Login page"
-												>
-													Login
-												</button>
-											</Link>
-										</div>
+								disabled
+							>
+								Signup
+							</button>
+						</Link>
+						<Link to={"/login"} className="flex-1 sm:flex-none">
+							<button 
+								className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-black logoColor rounded-md hover:bg-gray-100 transition duration-200 font-medium"
+								title="Go To Login page"
+							>
+								Login
+							</button>
+						</Link>
+					</div>
 					
 					{/* Alert Messages */}
 					{error && (
 					<div className="mb-4 p-3 sm:p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded text-sm sm:text-base" role="alert">
 						<div className="flex items-start sm:items-center gap-2">
-							<AlertCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
+							<AlertCircle size={20} className="mt-0.5 sm:mt-0 shrink-0" />
 							<span>{error}</span>
 						</div>
 					</div>
@@ -286,7 +284,7 @@ const Signup = () => {
 				{success && (
 					<div className="mb-4 p-3 sm:p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded text-sm sm:text-base" role="alert">
 						<div className="flex items-start sm:items-center gap-2">
-							<CheckCircle size={20} className="mt-0.5 sm:mt-0 flex-shrink-0" />
+							<CheckCircle size={20} className="mt-0.5 sm:mt-0 shrink-0" />
 							<span>{success}</span>
 						</div>
 					</div>
@@ -428,7 +426,7 @@ const Signup = () => {
 					type="submit"
 					disabled={loading}
 					className={`
-						w-full py-3 bg-red-500 text-white font-semibold rounded-lg transition
+						w-full py-3 px-4 sm:py-2.5 sm:px-3 bg-red-500 text-white font-semibold rounded-lg transition
 						${loading 
 							? 'opacity-70 cursor-not-allowed bg-gray-400' 
 							: 'hover:bg-red-600 active:scale-95'

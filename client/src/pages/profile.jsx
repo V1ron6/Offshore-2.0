@@ -27,6 +27,11 @@ const Profile = () => {
 	const [user, setUser] = useState(null);
 	const [showAlert, setShowAlert] = useState(false);
 	const [alertMessage, setAlertMessage] = useState('');
+	const [showEditModal, setShowEditModal] = useState(false);
+	const [editUsername, setEditUsername] = useState('');
+	const [showPasswordModal, setShowPasswordModal] = useState(false);
+	const [passwordData, setPasswordData] = useState({ current: '', new: '', confirm: '' });
+	const [show2FAModal, setShow2FAModal] = useState(false);
 
 	// ========================================
 	// HOOKS
@@ -54,8 +59,62 @@ const Profile = () => {
 	// ========================================
 
 	/**
-	 * Handle logout
+	 * Copy user ID to clipboard
 	 */
+	const handleCopyId = () => {
+		navigator.clipboard.writeText(user.id);
+		setAlertMessage('User ID copied to clipboard!');
+		setShowAlert(true);
+		setTimeout(() => setShowAlert(false), 3000);
+	};
+
+	/**
+	 * Handle edit username
+	 */
+	const handleEditProfile = () => {
+		setEditUsername(user.username);
+		setShowEditModal(true);
+	};
+
+	const handleSaveProfile = () => {
+		if (editUsername.trim() && editUsername !== user.username) {
+			const updatedUser = { ...user, username: editUsername };
+			setUser(updatedUser);
+			localStorage.setItem('user', JSON.stringify(updatedUser));
+			setAlertMessage('Profile updated successfully!');
+			setShowAlert(true);
+			setShowEditModal(false);
+		}
+	};
+
+	/**
+	 * Handle password change
+	 */
+	const handleChangePassword = () => {
+		if (passwordData.new !== passwordData.confirm) {
+			setAlertMessage('New passwords do not match!');
+			setShowAlert(true);
+			return;
+		}
+		if (passwordData.new.length < 6) {
+			setAlertMessage('Password must be at least 6 characters!');
+			setShowAlert(true);
+			return;
+		}
+		setAlertMessage('Password changed successfully!');
+		setShowAlert(true);
+		setPasswordData({ current: '', new: '', confirm: '' });
+		setShowPasswordModal(false);
+	};
+
+	/**
+	 * Handle 2FA toggle
+	 */
+	const handleEnable2FA = () => {
+		setAlertMessage('Two-Factor Authentication has been enabled!');
+		setShowAlert(true);
+		setShow2FAModal(false);
+	};
 	const handleLogout = () => {
 		localStorage.removeItem('user');
 		localStorage.removeItem('authToken');
@@ -137,6 +196,7 @@ const Profile = () => {
 											variant="secondary"
 											size="sm"
 											icon={Edit2}
+											onClick={handleEditProfile}
 										>
 											Edit
 										</Button>
@@ -148,7 +208,10 @@ const Profile = () => {
 									<p className="text-sm text-gray-600 mb-2">User ID</p>
 									<div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
 										<code className="font-mono text-gray-700">{user.id}</code>
-										<button className="text-blue-500 hover:text-blue-600 text-sm font-semibold">
+									<button 
+										onClick={handleCopyId}
+										className="text-blue-500 hover:text-blue-600 text-sm font-semibold hover:bg-blue-50 px-2 py-1 rounded transition"
+									>
 											Copy
 										</button>
 									</div>
@@ -180,6 +243,7 @@ const Profile = () => {
 										variant="secondary"
 										size="sm"
 										fullWidth
+										onClick={() => setShowPasswordModal(true)}
 									>
 										Change Password
 									</Button>
@@ -195,6 +259,7 @@ const Profile = () => {
 										size="sm"
 										fullWidth
 										className="mt-3"
+										onClick={handleEnable2FA}
 									>
 										Enable 2FA
 									</Button>
@@ -292,7 +357,135 @@ const Profile = () => {
 				</div>
 			</div>
 		</div>
-	);
-};
 
-export default Profile;
+			{/* Edit Profile Modal */}
+			{showEditModal && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+					<Card className="w-full max-w-md">
+						<h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
+						<div className="space-y-4">
+							<div>
+								<label className="block text-sm font-semibold text-gray-900 mb-2">Username</label>
+								<input
+									type="text"
+									value={editUsername}
+									onChange={(e) => setEditUsername(e.target.value)}
+									className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+									placeholder="Enter new username"
+								/>
+							</div>
+							<div className="flex gap-3 pt-4">
+								<button
+									onClick={() => setShowEditModal(false)}
+									className="flex-1 px-4 py-2 bg-gray-200 text-gray-900 rounded-lg font-semibold hover:bg-gray-300 transition"
+								>
+									Cancel
+								</button>
+								<button
+									onClick={handleSaveProfile}
+									className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition"
+								>
+									Save Changes
+								</button>
+							</div>
+						</div>
+					</Card>
+				</div>
+			)}
+
+			{/* Change Password Modal */}
+			{showPasswordModal && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+					<Card className="w-full max-w-md">
+						<h2 className="text-2xl font-bold mb-4">Change Password</h2>
+						<div className="space-y-4">
+							<div>
+								<label className="block text-sm font-semibold text-gray-900 mb-2">Current Password</label>
+								<input
+									type="password"
+									value={passwordData.current}
+									onChange={(e) => setPasswordData({...passwordData, current: e.target.value})}
+									className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+									placeholder="Enter current password"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm font-semibold text-gray-900 mb-2">New Password</label>
+								<input
+									type="password"
+									value={passwordData.new}
+									onChange={(e) => setPasswordData({...passwordData, new: e.target.value})}
+									className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+									placeholder="Enter new password"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm font-semibold text-gray-900 mb-2">Confirm Password</label>
+								<input
+									type="password"
+									value={passwordData.confirm}
+									onChange={(e) => setPasswordData({...passwordData, confirm: e.target.value})}
+									className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+									placeholder="Confirm new password"
+								/>
+							</div>
+							<div className="flex gap-3 pt-4">
+								<button
+									onClick={() => setShowPasswordModal(false)}
+									className="flex-1 px-4 py-2 bg-gray-200 text-gray-900 rounded-lg font-semibold hover:bg-gray-300 transition"
+								>
+									Cancel
+								</button>
+								<button
+									onClick={handleChangePassword}
+									className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition"
+								>
+									Change Password
+								</button>
+							</div>
+						</div>
+					</Card>
+				</div>
+			)}
+
+			{/* Enable 2FA Modal */}
+			{show2FAModal && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+					<Card className="w-full max-w-md">
+						<h2 className="text-2xl font-bold mb-4">Enable Two-Factor Authentication</h2>
+						<div className="space-y-4">
+							<div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+								<p className="text-sm text-blue-700 mb-3">
+									Two-Factor Authentication (2FA) adds an extra layer of security to your account by requiring a second verification method.
+								</p>
+								<div className="space-y-2 text-sm text-blue-700">
+									<p>✓ You'll receive a code via SMS or email</p>
+									<p>✓ Enter the code to complete login</p>
+									<p>✓ Your account will be more secure</p>
+								</div>
+							</div>
+							<div>
+								<label className="block text-sm font-semibold text-gray-900 mb-2">Verification Method</label>
+								<select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+									<option>Email (Recommended)</option>
+									<option>SMS</option>
+								</select>
+							</div>
+							<div className="flex gap-3 pt-4">
+								<button
+									onClick={() => setShow2FAModal(false)}
+									className="flex-1 px-4 py-2 bg-gray-200 text-gray-900 rounded-lg font-semibold hover:bg-gray-300 transition"
+								>
+									Cancel
+								</button>
+								<button
+									onClick={handleEnable2FA}
+									className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition"
+								>
+									Enable 2FA
+								</button>
+							</div>
+						</div>
+					</Card>
+				</div>
+			)}

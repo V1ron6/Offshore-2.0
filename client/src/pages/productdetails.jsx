@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Star, Minus, Plus, CheckCircle } from 'lucide-react';
+import { addToCart, getCart } from '../utils/cartService.js';
 
 const ProductDetails = () => {
 	const { id } = useParams();
@@ -17,11 +18,11 @@ const ProductDetails = () => {
 
 	// Load cart from localStorage
 	useEffect(() => {
-		const savedCart = JSON.parse(localStorage.getItem(`cart_${user.id}`)) || [];
+		const savedCart = getCart(user.id);
 		setCart(savedCart);
 	}, [user.id]);
 
-	const API_URL = import.meta.env.apiURL || "http://localhost:4000/api";
+	const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 	// Fetch product details
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -49,30 +50,14 @@ const ProductDetails = () => {
 		}
 	}, [id]);
 
-	const addToCart = () => {
+	const addToCartHandler = () => {
 		if (!product || quantity <= 0) return;
 
-		const cartItem = {
-			id: product.id,
-			name: product.name,
-			price: product.price,
-			quantity: quantity,
-			image: product.image,
-			category: product.category,
-		};
-
-		let updatedCart = [...cart];
-		const existingItem = updatedCart.find(item => item.id === product.id);
-
-		if (existingItem) {
-			existingItem.quantity += quantity;
-		} else {
-			updatedCart.push(cartItem);
-		}
-
+		// Use cart service to add to cart
+		const updatedCart = addToCart(user.id, product, quantity);
 		setCart(updatedCart);
-		localStorage.setItem(`cart_${user.id}`, JSON.stringify(updatedCart));
 		setSuccess(`${product.name} added to cart!`);
+		setQuantity(1);
 		setTimeout(() => setSuccess(null), 3000);
 	};
 
@@ -138,7 +123,7 @@ const ProductDetails = () => {
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					{/* Product Image */}
-					<div className="flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg p-8 min-h-96">
+					<div className="flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 rounded-lg p-8 min-h-96">
 						<div className="text-8xl sm:text-9xl">{product.image}</div>
 					</div>
 
@@ -255,7 +240,7 @@ const ProductDetails = () => {
 							</div>
 
 							<button
-								onClick={addToCart}
+								onClick={addToCartHandler}
 								disabled={!product.inStock}
 								className={`w-full py-4 px-6 rounded-lg font-bold text-lg flex items-center justify-center gap-2 transition ${
 									product.inStock

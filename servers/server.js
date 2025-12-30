@@ -5,8 +5,9 @@ const morgan = require("morgan");
 const port = process.env.PORT || 3000;
 const cors = require("cors");
 const fs = require("fs");
-const path =require("path")
+const path = require("path")
 const { rateLimit, sanitizeInput } = require("./middleware/security.js");
+const loggingMiddleware = require("./middleware/logging.js");
 const frontendurl= process.env.frontEndUrl || "http://localhost:5173";
 const todoRoute = require("./Routes/todo.route.js");
 const userRoute = require("./Routes/user.route.js");
@@ -30,8 +31,7 @@ app.use(sanitizeInput); // Sanitize all inputs
 // Standard Middleware
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
-const accessLog = fs.createWriteStream(path.join(__dirname,'access.log'),{flag:'a'});
-app.use(morgan('combined',{stream:accessLog}));
+app.use(loggingMiddleware);
 
 
 // Routes

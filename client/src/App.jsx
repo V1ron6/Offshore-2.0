@@ -16,7 +16,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, ShoppingCart, Trash2, Plus, Minus, X } from 'lucide-react';
+import { Search, ShoppingCart, Trash2, Plus, Minus, X, Moon, Sun } from 'lucide-react';
 import Header from './components/header.jsx';
 import { sanitizeInput } from './utils/security.js';
 
@@ -43,11 +43,23 @@ const App = () => {
 		return savedCart ? JSON.parse(savedCart) : [];
 	});
 	const [showCart, setShowCart] = useState(false);
+	const [isDarkMode, setIsDarkMode] = useState(() => {
+		const savedTheme = localStorage.getItem('theme');
+		return savedTheme ? savedTheme === 'dark' : false;
+	});
 
 	// ========================================
 	// HOOKS
 	// ========================================
 	const navigate = useNavigate();
+
+	// Toggle theme and persist to localStorage
+	const toggleTheme = () => {
+		const newTheme = !isDarkMode;
+		setIsDarkMode(newTheme);
+		localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+		document.documentElement.classList.toggle('dark', newTheme);
+	};
 
 	// ========================================
 	// API FUNCTIONS
@@ -56,7 +68,7 @@ const App = () => {
 	/**
 	 * Fetch products from backend
 	 */
-	const API_URL = import.meta.env.apiURL || "http://localhost:4000/api"
+	const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api"
 	const fetchProducts = async (category = 'all', search = '', sort = 'featured') => {
 		try {
 			setLoading(true);
@@ -229,6 +241,17 @@ const App = () => {
 		}, 2000);
 	};
 
+	/**
+	 * Apply theme on mount
+	 */
+	useEffect(() => {
+		if (isDarkMode) {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+		}
+	}, [isDarkMode]);
+
 	// ========================================
 	// EFFECTS
 	// ========================================
@@ -262,9 +285,9 @@ const App = () => {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			if (user) {
-				fetchProducts(selectedCategory, searchQuery, sortBy);
-			}
-		}, 500);
+				fetchProducts{`min-h-screen flex flex-col ${isDarkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
+			{/* Header */}
+			<Header isDarkMode={isDarkMode} toggleTheme={toggleTheme}
 
 		return () => clearTimeout(timer);
 	}, [searchQuery, selectedCategory, sortBy, user]);

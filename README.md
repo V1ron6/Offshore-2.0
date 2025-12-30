@@ -1,5 +1,5 @@
 # Offshore Project
-
+# make sure to check the documentation folder for more information
 A full-stack e-commerce web application with a React frontend and Express.js backend. Features product browsing, shopping cart functionality, user authentication, and responsive design.
 
 ## Project Structure
@@ -8,11 +8,11 @@ A full-stack e-commerce web application with a React frontend and Express.js bac
 offshore/
 ├── client/                 # React frontend
 │   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/         # Page components (home, login, signup, profile, app, productdetails)
+│   │   ├── components/    # Reusable components (all error-free)
+│   │   ├── pages/         # Page components (all error-free)
 │   │   ├── utils/         # Utility functions (apiClient, security)
-│   │   ├── assets/        # Static assets
-│   │   ├── App.jsx        # Shopping dashboard component
+│   │   ├── assets/        # Static assets (including offShoreLogo.jpg)
+│   │   ├── App.jsx        # Shopping dashboard component (FIXED)
 │   │   ├── main.jsx       # Router entry point
 │   │   ├── index.css      # Global styles
 │   │   └── App.css        # App-specific styles
@@ -27,14 +27,17 @@ offshore/
     │   └── product.controller.js
     ├── Models/           # Data models
     │   ├── user.model.js
-    │   └── product.model.js (105+ products)
+    │   └── product.model.js (177 products!)
     ├── Routes/           # API routes
     │   ├── user.route.js
     │   └── product.route.js
-    ├── middleware/       # Middleware
+    ├── middleware/       # Middleware (enhanced logging)
     │   ├── cors.Multihandler.js
-    │   └── security.js
-    ├── server.js         # Server entry point
+    │   ├── security.js
+    │   └── logging.js (NEW - date-based logging middleware)
+    ├── logs/             # Date-based log files (NEW)
+    │   └── access-DDMMYYYY.log
+    ├── server.js         # Server entry point (UPDATED)
     ├── package.json      # Dependencies
     └── .env              # Environment variables
 ```
@@ -140,22 +143,48 @@ npm run dev
 ### Backend
 
 - ✅ **RESTful API** - Product and user management
-- 📦 **105+ Products** - Across 9 supermarket categories
+- 📦 **177 Products** - Massively expanded product catalog across 18+ categories
 - 🔐 **Security Middleware** - CORS, rate limiting, input validation
-- 📝 **Logging** - Morgan HTTP request logging
+- 📝 **Professional Logging** - Date-based log files with logging middleware
 - ⚡ **Express.js** - Fast, lightweight server
 
 ## Product Categories
 
-- Electronics (10 products)
-- Devices (5 products)
-- Foodstuffs (18 products)
-- Accessories (10 products)
-- Home (5 products)
-- Personal Care (3 products)
-- Beauty (3 products)
-- Clothing (8 products)
-- Books (4 products)
+**Electronics & Devices:**
+
+- Electronics (gaming monitors, cameras, audio equipment)
+- Devices (smartphones, tablets, smart home devices)
+- Gaming & Peripherals (gaming chairs, headsets, peripherals)
+- Audio & Music (studio monitors, microphones, turntables)
+
+**Home & Kitchen:**
+
+- Home (decor, smart home, office supplies)
+- Kitchen Appliances (air fryer, instant pot, blenders)
+- Furniture (gaming chairs, office chairs)
+
+**Fashion & Personal:**
+
+- Clothing (t-shirts, jeans, hoodies, shoes, coats)
+- Personal Care & Beauty (skincare, makeup, perfume)
+
+**Food & Supplements:**
+
+- Foodstuffs (snacks, beverages, supplements, fresh produce)
+- Healthy Foods (organic products, protein bars)
+
+**Outdoor & Sports:**
+
+- Camping & Outdoor (tents, sleeping bags, hiking gear)
+- Sports & Fitness (bikes, skateboard, yoga mats, dumbbells)
+- Accessories (cameras, photography, pet supplies, automotive)
+
+**Other:**
+
+- Books (fiction, non-fiction, cookbooks)
+- Toys & Games (board games, puzzles, LEGO)
+
+**Total: 177 products across 18+ categories**
 
 ## Technologies Used
 

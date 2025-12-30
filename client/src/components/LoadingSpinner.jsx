@@ -1,52 +1,66 @@
+import offShoreLogo from '../assets/offShoreLogo.jpg';
+
 /**
  * ========================================
  * Loading Spinner Component
  * ========================================
  * 
- * Animated loading spinner for async operations.
+ * Animated loading spinner with bouncing logo.
  * 
  * Props:
- * - size: 'sm' | 'md' | 'lg' - Spinner size
- * - color: string - Tailwind color class
  * - message: string - Optional loading message
  */
 
 const LoadingSpinner = ({ 
-	size = 'md', 
-	color = 'text-blue-500',
 	message = 'Loading...'
 }) => {
-	const sizeClasses = {
-		sm: 'w-6 h-6',
-		md: 'w-10 h-10',
-		lg: 'w-16 h-16'
-	};
-
 	return (
-		<div className="flex flex-col items-center justify-center py-8">
-			<div className={`${sizeClasses[size]} ${color} animate-spin`}>
-				<svg 
-					className="w-full h-full" 
-					xmlns="http://www.w3.org/2000/svg" 
-					fill="none" 
-					viewBox="0 0 24 24"
-				>
-					<circle 
-						className="opacity-25" 
-						cx="12" 
-						cy="12" 
-						r="10" 
-						stroke="currentColor" 
-						strokeWidth="4"
-					/>
-					<path 
-						className="opacity-75" 
-						fill="currentColor" 
-						d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-					/>
-				</svg>
+		<div className="flex flex-col items-center justify-center py-8 w-full px-4">
+			<style>{`
+				@keyframes bounce-gentle {
+					0%, 100% {
+						transform: translateY(0);
+					}
+					50% {
+						transform: translateY(-20px);
+					}
+				}
+				.logo-bounce {
+					animation: bounce-gentle 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+				}
+				@keyframes float-glow {
+					0%, 100% {
+						box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
+					}
+					50% {
+						box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 60px rgba(59, 130, 246, 0.2);
+					}
+				}
+				.logo-glow {
+					animation: float-glow 2s ease-in-out infinite;
+				}
+			`}</style>
+
+			{/* Bouncing Logo */}
+			<div className="logo-bounce logo-glow">
+				<img 
+					src={offShoreLogo} 
+					alt="Loading..." 
+					className="w-24 h-24 rounded-full object-cover shadow-lg"
+				/>
 			</div>
-			{message && <p className="mt-4 text-gray-600 font-medium">{message}</p>}
+
+			{/* Loading Message */}
+			{message && (
+				<div className="mt-6 text-center">
+					<p className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base">{message}</p>
+					<div className="mt-3 flex justify-center gap-1">
+						<span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
+						<span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+						<span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

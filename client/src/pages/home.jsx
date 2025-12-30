@@ -81,19 +81,10 @@ const Home = () => {
 								Get Started
 							</Link>
 							<Link
-								to="/login"
-								className="px-8 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition text-center"
-							>
-								Sign In
-							</Link>
-						</div>
-
-						{/* Stats */}
-						<div className="grid grid-cols-3 gap-4 pt-8">
-							<div>
-								<p className="text-3xl font-bold text-red-500">1K+</p>
-								<p className="text-gray-600">Active Users</p>
-							</div>
+							to="/categories"
+							className="px-8 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition text-center"
+						>
+							Browse Products
 							<div>
 								<p className="text-3xl font-bold text-red-500">10K+</p>
 								<p className="text-gray-600">Products Sold</p>
