@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import Offshorelogo from '../assets/Offshorelogo.jpg'
-
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 // ========================================
 // CONSTANTS - Styling and Configuration
 // ========================================

@@ -119,7 +119,9 @@ export const clearCart = (userId) => {
  */
 export const getCartTotal = (cart) => {
 	return cart.reduce((total, item) => {
-		const price = parseFloat(item.price?.replace('$', '') || 0);
+		// Handle both string (with $) and numeric prices
+		const priceString = typeof item.price === 'string' ? item.price : String(item.price);
+		const price = parseFloat(priceString.replace('$', '') || 0);
 		return total + (price * item.quantity);
 	}, 0);
 };

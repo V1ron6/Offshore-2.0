@@ -20,6 +20,7 @@ import { User, LogOut, Lock, Edit2 } from 'lucide-react';
 import Card from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
 import Alert from '../components/Alert.jsx';
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 const Profile = () => {
 	// ========================================
 	// STATE MANAGEMENT

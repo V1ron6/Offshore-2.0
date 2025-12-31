@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Package, Truck, Clock, ArrowRight } from 'lucide-react';
 import Card from '../components/Card';
-
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 const OrderConfirmation = () => {
 	const [orderNumber] = useState(`ORD-${Date.now().toString().slice(-8).toUpperCase()}`);
 	const [estimatedDelivery] = useState(() => {

@@ -12,6 +12,7 @@ const frontendurl= process.env.frontEndUrl || "http://localhost:5173";
 const todoRoute = require("./Routes/todo.route.js");
 const userRoute = require("./Routes/user.route.js");
 const productRoute = require("./Routes/product.route.js");
+const adminRoute = require("./Routes/admin.route.js");
 
 // CORS configuration
 app.use(cors({
@@ -38,6 +39,7 @@ app.use(loggingMiddleware);
 app.use("/api/todo", todoRoute);
 app.use("/api/user", userRoute);
 app.use("/api/products", productRoute);
+app.use("/api/admin", adminRoute);
 
 app.get("/", (req, res) => {
 	res.send("Offshore API - Secure & Production Ready");

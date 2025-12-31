@@ -8,6 +8,7 @@ import { Plus, Minus, Trash2, ShoppingBag, ChevronRight, AlertCircle } from 'luc
 import { getCart, removeFromCart, updateQuantity, getCartTotal } from '../utils/cartService';
 import Button from '../components/Button';
 import Card from '../components/Card';
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 
 const CartPage = () => {
 	const [user, setUser] = useState(null);
@@ -66,11 +67,7 @@ const CartPage = () => {
 	const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
 	if (loading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-50">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
-			</div>
-		);
+		return <LoadingScreen message="Loading Cart" submessage="Fetching your items..." />;
 	}
 
 	return (
@@ -119,10 +116,8 @@ const CartPage = () => {
 													{item.name}
 												</h3>
 												<p className="text-red-600 font-bold text-lg mb-4">
-													${item.price.toFixed(2)}
+													${(typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price).toFixed(2)}
 												</p>
-
-												{/* Quantity Controls */}
 												<div className="flex items-center gap-4 mb-4">
 													<div className="flex items-center gap-2 bg-gray-100 rounded-lg p-2">
 														<button
@@ -150,7 +145,7 @@ const CartPage = () => {
 												</div>
 
 												<div className="text-right font-bold text-gray-900">
-													Subtotal: ${(item.price * item.quantity).toFixed(2)}
+													Subtotal: ${((typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price) * item.quantity).toFixed(2)}
 												</div>
 											</div>
 										</div>

@@ -1,0 +1,7 @@
+::ffff:127.0.0.1 - - [31/Dec/2025:08:40:34 +0000] "POST /api/admin/login HTTP/1.1" 200 165 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [31/Dec/2025:08:42:49 +0000] "GET /api/products/categories HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [31/Dec/2025:08:42:53 +0000] "GET /api/products?sort=featured HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [31/Dec/2025:08:51:29 +0000] "GET /api/products/2 HTTP/1.1" 200 306 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [31/Dec/2025:08:51:29 +0000] "GET /api/products/2 HTTP/1.1" 200 306 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [31/Dec/2025:08:52:14 +0000] "GET /api/products/categories HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [31/Dec/2025:08:52:14 +0000] "GET /api/products?sort=featured HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"

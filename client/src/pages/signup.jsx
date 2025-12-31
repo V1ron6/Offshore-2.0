@@ -18,7 +18,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
-
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 // Validation rules for signup form
 const VALIDATION_RULES = {
 	username: {

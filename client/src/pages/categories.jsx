@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 
 const CategoriesPage = () => {
 	const [viewMode, setViewMode] = useState('grid'); // grid or list

@@ -17,6 +17,9 @@ import CheckoutPage from "./pages/checkout.jsx"
 import OrderConfirmation from "./pages/orderconfirmation.jsx"
 import OrdersPage from "./pages/orders.jsx"
 import CategoriesPage from "./pages/categories.jsx"
+import AddProductPage from "./pages/addproduct.jsx"
+import AdminLogin from "./pages/admin/adminlogin.jsx"
+import AdminDashboard from "./pages/admin/admindashboard.jsx"
 
 
 const flipper = createBrowserRouter([
@@ -27,11 +30,14 @@ const flipper = createBrowserRouter([
  {path:"/login", element:<Login />},
  {path:"/profile/",element: <Profile />},
  {path:"/dashboard/",element:<Dashboard />},
+ {path:"/add-product",element:<AddProductPage />},
  {path:"/cart",element:<CartPage />},
  {path:"/checkout",element:<CheckoutPage />},
  {path:"/order-confirmation",element:<OrderConfirmation />},
  {path:"/orders",element:<OrdersPage />},
  {path:"/categories",element:<CategoriesPage />},
+ {path:"/admin/login",element:<AdminLogin />},
+ {path:"/admin/dashboard",element:<AdminDashboard />},
  {path:"*",element:<Notfound />}
 ])
 

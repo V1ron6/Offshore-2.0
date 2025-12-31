@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Star, Minus, Plus, CheckCircle } from 'lucide-react';
 import { addToCart, getCart } from '../utils/cartService.js';
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 
 const ProductDetails = () => {
 	const { id } = useParams();
@@ -93,11 +94,7 @@ const ProductDetails = () => {
 
 
 	if (loading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-50">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
-			</div>
-		);
+		return <LoadingScreen message="Loading Product" submessage="Fetching product details..." />;
 	}
 
 	if (error || !product) {

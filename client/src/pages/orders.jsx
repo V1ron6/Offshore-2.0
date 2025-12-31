@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Package, ChevronRight, Calendar, MapPin, DollarSign, Star } from 'lucide-react';
 import Card from '../components/Card';
-
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 const OrdersPage = () => {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -103,11 +103,7 @@ const OrdersPage = () => {
 	};
 
 	if (loading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-50">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
-			</div>
-		);
+		return <LoadingScreen message="Loading Orders" submessage="Fetching your order history..." />;
 	}
 
 	return (

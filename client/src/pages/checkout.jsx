@@ -7,7 +7,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ChevronRight, Truck, MapPin, CreditCard, Lock } from 'lucide-react';
 import { getCart, getCartTotal, clearCart } from '../utils/cartService';
 import Card from '../components/Card';
-
+import LoadingScreen  from '../components/LoadingScreen.jsx'
 const CheckoutPage = () => {
 	const [user, setUser] = useState(null);
 	const [cart, setCart] = useState([]);
@@ -107,11 +107,7 @@ const CheckoutPage = () => {
 	};
 
 	if (loading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-50">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
-			</div>
-		);
+		return <LoadingScreen message="Processing" submessage="Completing your order..." />;
 	}
 
 	const cartTotal = getCartTotal(cart);
