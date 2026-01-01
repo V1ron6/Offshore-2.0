@@ -2,12 +2,17 @@ const defaultUser = [
 	{
 		id: 1,
 		username: "user",
-		password: "passw0rd123"
+		password: "password123"
 	},
 	{
 		id: 2,
-		username: "admin",
-		password: "@dm1n_v1r0n"
+		username: "john",
+		password: "12john3"
+	},
+	{
+		id: 3,
+		username: "david",
+		password: "yoofi123"
 	}
 ];
 

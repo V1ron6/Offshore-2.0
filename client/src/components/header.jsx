@@ -18,6 +18,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, LogOut, User, BarChart3, LogIn } from 'lucide-react';
+import '../index.css'
 
 /**
  * Header Component
@@ -86,7 +87,7 @@ const Header = () => {
 	// ========================================
 
 	return (
-		<header className="bg-gradient-to-r from-red-400 to-red-500 shadow-lg sticky top-0 z-50">
+		<header className="bg-gradient-to-r from-red-400 to-red-500 shadow-lg sticky top-0 z-50 prefFont">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex justify-between items-center h-16">
 					{/* Logo Section */}
@@ -96,7 +97,7 @@ const Header = () => {
 						title="Go to home page"
 					>
 						<h1 className="text-2xl font-bold text-white group-hover:scale-105 transition transform duration-200">
-							Off<span className="text-yellow-200">Shore</span>
+							Off<span className="text-red-200">Shore</span>
 						</h1>
 					</Link>
 

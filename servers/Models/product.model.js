@@ -1211,7 +1211,7 @@ const mockProducts = [
 	// ========================================
 	{
 		id: 67,
-		name: 'Fiction Novel: The Adventure',
+		name: 'Fiction Novel: The Epic Advantage',
 		description: 'Epic adventure novel, 500 pages',
 		price: 15.99,
 		originalPrice: 22.99,
@@ -1227,7 +1227,7 @@ const mockProducts = [
 	},
 	{
 		id: 68,
-		name: 'Non-Fiction: Success Guide',
+		name: 'Non-Fiction: Do The Imposible',
 		description: 'Comprehensive guide to personal success',
 		price: 19.99,
 		originalPrice: 29.99,
@@ -1243,7 +1243,7 @@ const mockProducts = [
 	},
 	{
 		id: 69,
-		name: 'Self-Help: Mindfulness',
+		name: 'Self-Help: Quiet Mind',
 		description: 'Guide to mindfulness and meditation',
 		price: 17.99,
 		originalPrice: 25.99,

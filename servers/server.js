@@ -46,5 +46,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-	console.log(`🚀 Secure server running on port ${port}`)
+	console.log(` Secure server running on port ${port}`)
 });

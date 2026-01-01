@@ -18,8 +18,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, Trash2, Plus, Minus, X, Moon, Sun } from 'lucide-react';
 import Header from './components/header.jsx';
-import { sanitizeInput } from './utils/security.js';
 
+import { sanitizeInput } from './utils/security.js';
+import LoadingScreen from './components/LoadingScreen.jsx'
 /**
  * App Component - E-Commerce Shopping Page
  */
@@ -297,12 +298,7 @@ const App = () => {
 
 	if (loading && products.length === 0) {
 		return (
-			<div className="flex items-center justify-center min-h-screen">
-				<div className="text-center">
-					<p className="text-2xl font-bold text-gray-700 mb-4">Loading products...</p>
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
-				</div>
-			</div>
+		<LoadingScreen message="verifying credentials" submessage="loading products..." />
 		);
 	}
 
@@ -327,7 +323,7 @@ const App = () => {
 					<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
 						<div className="min-w-0">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 break-words">
-								Welcome, <span className="text-red-500">{user?.username}</span>! 👋
+								Welcome, <span className="text-red-500">{user?.username}</span> to the market place
 							</h1>
 							<p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Browse our amazing products</p>
 						</div>

@@ -33,7 +33,7 @@ const Button = ({
 		primary: 'bg-red-500 text-white hover:bg-red-600 active:bg-red-700',
 		secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 active:bg-gray-400',
 		danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
-		ghost: 'bg-transparent text-gray-700 hover:bg-gray-100'
+		ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 rounded-md'
 	};
 
 	const sizeClasses = {
@@ -60,7 +60,7 @@ const Button = ({
 			`}
 		>
 			{isLoading && (
-				<span className="inline-block animate-spin">⏳</span>
+				<span className="inline-block animate-spin">|</span>
 			)}
 			{Icon && !isLoading && <Icon size={20} />}
 			<span>{children}</span>

@@ -15,6 +15,7 @@ import {
 import Card from '../components/Card';
 import Button from '../components/Button';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import HeaderBeforeLogin from '../components/HeaderBeforeLogin.jsx'
 
 const CategoriesPage = () => {
 	const [viewMode, setViewMode] = useState('grid'); // grid or list
@@ -63,9 +64,13 @@ const CategoriesPage = () => {
 	});
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8 sm:py-12">
+		<>
+		{/* Header */}
+				<HeaderBeforeLogin />
+		<div className="min-h-screen bg-gray-50 py-8 sm:py-12 prefFont ">
+				
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				{/* Header */}
+			
 				<div className="mb-8">
 					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Shop All Products</h1>
 					<p className="text-gray-600">Discover our wide range of products</p>
@@ -227,7 +232,7 @@ const CategoriesPage = () => {
 													${product.price.toFixed(2)}
 												</p>
 												<Link
-													to={`/product/${product.id}`}
+													to={`/`}
 													className="w-full py-2 bg-linear-to-r from-red-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition flex items-center justify-center gap-2"
 												>
 													<ShoppingCart size={18} />
@@ -278,7 +283,7 @@ const CategoriesPage = () => {
 											</p>
 
 											<Link
-												to={`/product/${product.id}`}
+												to={`/`}
 												className="inline-flex py-2 px-6 bg-linear-to-r from-red-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition gap-2"
 											>
 												<ShoppingCart size={18} />
@@ -293,6 +298,7 @@ const CategoriesPage = () => {
 				</div>
 			</div>
 		</div>
+	</>
 	);
 };
 

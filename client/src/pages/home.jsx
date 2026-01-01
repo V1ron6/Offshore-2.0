@@ -12,7 +12,9 @@ import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Zap, Shield, Truck, RotateCcw, Star, TrendingUp, Users, DollarSign } from 'lucide-react';
 import Button from '../components/Button.jsx';
+import Footer from '../components/Footer.jsx'
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import HeaderBeforeLogin from '../components/HeaderBeforeLogin.jsx'
 const Home = () => {
 	const navigate = useNavigate();
 
@@ -64,26 +66,8 @@ const Home = () => {
 	return (
 		<div className="min-h-screen bg-white">
 			{/* Navigation */}
-			<nav className="bg-gradient-to-r from-red-600 to-red-500 text-white sticky top-0 z-50 shadow-lg">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="flex justify-between items-center h-16">
-						<h1 className="text-3xl font-bold">OFFSHORE</h1>
-						<div className="flex gap-4">
-							<Link to="/login">
-								<Button variant="secondary" size="sm">
-									Sign In
-								</Button>
-							</Link>
-							<Link to="/signup">
-								<Button variant="danger" size="sm" className="bg-yellow-400 text-red-600 hover:bg-yellow-300">
-									Get Started
-								</Button>
-							</Link>
-						</div>
-					</div>
-				</div>
-			</nav>
-
+			
+     <HeaderBeforeLogin />
 			{/* Hero Section */}
 			<section className="bg-gradient-to-r from-red-50 to-orange-50 border-b-4 border-red-500">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -119,6 +103,11 @@ const Home = () => {
 								<Link to="/login" className="w-full sm:w-auto">
 									<Button variant="secondary" fullWidth size="lg" className="py-4 text-lg border-2 border-gray-300">
 										Sign In
+									</Button>
+								</Link>
+								<Link to="/categories" className="w-full sm:w-auto">
+									<Button variant="ghost" fullWidth size="lg" className="py-4 text-lg border-2 border-gray-300 capitalize">
+									 a peak
 									</Button>
 								</Link>
 							</div>
@@ -234,49 +223,7 @@ const Home = () => {
 			</section>
 
 			{/* Footer */}
-			<footer className="bg-gray-900 text-gray-400 border-t border-gray-800">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-					<div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-						<div>
-							<h4 className="text-white font-bold mb-4">About ShopHub</h4>
-							<ul className="space-y-2 text-sm">
-								<li><a href="#" className="hover:text-white transition">About Us</a></li>
-								<li><a href="#" className="hover:text-white transition">Careers</a></li>
-								<li><a href="#" className="hover:text-white transition">Blog</a></li>
-							</ul>
-						</div>
-						<div>
-							<h4 className="text-white font-bold mb-4">Customer Service</h4>
-							<ul className="space-y-2 text-sm">
-								<li><a href="#" className="hover:text-white transition">Contact Us</a></li>
-								<li><a href="#" className="hover:text-white transition">Returns</a></li>
-								<li><a href="#" className="hover:text-white transition">Shipping Info</a></li>
-							</ul>
-						</div>
-						<div>
-							<h4 className="text-white font-bold mb-4">Policies</h4>
-							<ul className="space-y-2 text-sm">
-								<li><a href="#" className="hover:text-white transition">Privacy Policy</a></li>
-								<li><a href="#" className="hover:text-white transition">Terms & Conditions</a></li>
-								<li><a href="#" className="hover:text-white transition">Security</a></li>
-							</ul>
-						</div>
-						<div>
-							<h4 className="text-white font-bold mb-4">Follow Us</h4>
-							<ul className="space-y-2 text-sm">
-								<li><a href="#" className="hover:text-white transition">Facebook</a></li>
-								<li><a href="#" className="hover:text-white transition">Twitter</a></li>
-								<li><a href="#" className="hover:text-white transition">Instagram</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div className="border-t border-gray-800 pt-8 text-center">
-						<p>&copy; 2025 ShopHub. All rights reserved.</p>
-						<p className="text-sm mt-2">Made with ❤️ for smart shoppers</p>
-					</div>
-				</div>
-			</footer>
+		<Footer />
 		</div>
 	);
 };
