@@ -15,6 +15,7 @@ import Button from '../components/Button.jsx';
 import Footer from '../components/Footer.jsx'
 import LoadingScreen  from '../components/LoadingScreen.jsx'
 import HeaderBeforeLogin from '../components/HeaderBeforeLogin.jsx'
+
 const Home = () => {
 	const navigate = useNavigate();
 
@@ -107,7 +108,7 @@ const Home = () => {
 								</Link>
 								<Link to="/categories" className="w-full sm:w-auto">
 									<Button variant="ghost" fullWidth size="lg" className="py-4 text-lg border-2 border-gray-300 capitalize">
-									 a peak
+									have a peak
 									</Button>
 								</Link>
 							</div>
@@ -198,7 +199,7 @@ const Home = () => {
 							<input
 								type="email"
 								placeholder="Enter your email"
-								className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500"
+								className="flex-1 px-4 py-3 rounded-lg text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 border-white  border-1"
 							/>
 							<Button variant="danger" className="px-8 py-3">
 								Subscribe
