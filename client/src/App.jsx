@@ -442,7 +442,7 @@ const App = () => {
 											>
 												{/* Product Image */}
 												<div className="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-4xl sm:text-5xl h-32 sm:h-40 flex items-center justify-center group-hover:scale-110 transition">
-													{product.image}
+													<img src={product.image} />
 												</div>
 
 												{/* Product Info */}
