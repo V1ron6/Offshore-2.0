@@ -443,7 +443,7 @@ const App = () => {
 											>
 												{/* Product Image */}
 												<div className="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-4xl sm:text-5xl h-32 sm:h-40 flex items-center justify-center group-hover:scale-110 transition">
-												<img src={product.image.startsWith('http') ? product.image : IMAGE_BASE_URL + product.image} alt={product.name} />
+												<img src={product.image} alt={product.name} />
 											</div>
 
 												{/* Product Info */}

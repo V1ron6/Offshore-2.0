@@ -26,8 +26,7 @@ app.use(cors({
 app.use(rateLimit(100, 60000)); // 100 requests per minute
 app.use(sanitizeInput); // Sanitize all inputs
 
-// Serve static files from localassets
-app.use("/localassets", express.static(path.join(__dirname, "Models/localassets")));
+
 
 // Standard Middleware
 app.use(express.json());

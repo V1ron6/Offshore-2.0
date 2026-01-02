@@ -102,7 +102,7 @@ const mockProducts = [
 		category: 'electronics',
 		subcategory: 'audio',
 		stock: 45,
-		image:'/localassets/firstasset/wirelessheadphonespro.jpg',
+		image:'',
 		rating: 4.5,
 		reviews: 128,
 		sku: 'HDPH-001',
