@@ -1,5 +1,28 @@
 /**
- * CartMenu Component - Responsive shopping cart display
+ * ========================================
+ * CartMenu Component
+ * ========================================
+ * 
+ * Responsive shopping cart display with
+ * cart items, quantity controls, and checkout.
+ * 
+ * Props:
+ * - user: object - User object from auth
+ * - isDarkMode: boolean - Dark mode toggle
+ * 
+ * USAGE:
+ * Display shopping cart in header/navbar.
+ * 
+ * Example:
+ * <CartMenu 
+ *   user={currentUser} 
+ *   isDarkMode={isDarkMode}
+ * />
+ * 
+ * // In navbar:
+ * <Navbar>
+ *   <CartMenu user={user} isDarkMode={isDarkMode} />
+ * </Navbar>
  */
 
 import { useState, useEffect, useCallback } from 'react';

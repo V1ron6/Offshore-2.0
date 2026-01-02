@@ -6,9 +6,26 @@ import offShoreLogo from '../assets/offShoreLogo.jpg';
  * ========================================
  * 
  * Animated loading spinner with bouncing logo.
+ * Smaller alternative to full LoadingScreen.
  * 
  * Props:
  * - message: string - Optional loading message
+ * 
+ * USAGE:
+ * Show inline loading indicator while data loads or processing.
+ * 
+ * Example:
+ * {isLoading ? (
+ *   <LoadingSpinner message="Loading your orders..." />
+ * ) : (
+ *   <OrdersList orders={orders} />
+ * )}
+ * 
+ * // In components with async operations:
+ * <div className="space-y-4">
+ *   {loadingItems.length > 0 && <LoadingSpinner message="Updating..." />}
+ *   <ProductList items={items} />
+ * </div>
  */
 
 const LoadingSpinner = ({ 

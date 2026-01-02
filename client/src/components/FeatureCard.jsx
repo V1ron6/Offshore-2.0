@@ -1,6 +1,33 @@
 /**
+ * ========================================
  * Feature Card Component
- * Showcase features with icons
+ * ========================================
+ * 
+ * Showcase features with icons and descriptions.
+ * 
+ * Props:
+ * - icon: ReactComponent - Icon component
+ * - title: string - Feature title
+ * - description: string - Feature description
+ * - onClick: function - Optional click handler
+ * - index: number - Card index for color cycling
+ * 
+ * USAGE:
+ * Display product features or service highlights.
+ * 
+ * Example:
+ * <FeatureCard 
+ *   icon={Truck} 
+ *   title="Fast Shipping" 
+ *   description="Free delivery on orders over $50"
+ *   index={0}
+ * />
+ * 
+ * <div className="grid grid-cols-3 gap-4">
+ *   <FeatureCard icon={Shield} title="Secure" description="SSL encrypted" index={0} />
+ *   <FeatureCard icon={Zap} title="Fast" description="Lightning quick" index={1} />
+ *   <FeatureCard icon={Users} title="Support" description="24/7 support" index={2} />
+ * </div>
  */
 
 const FeatureCard = ({

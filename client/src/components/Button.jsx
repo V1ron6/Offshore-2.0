@@ -15,6 +15,35 @@
  * - icon: ReactComponent - Optional icon
  * - className: string - Additional classes
  * - fullWidth: boolean - Full width button
+ * 
+ * USAGE:
+ * Use for all clickable button actions throughout the app.
+ * 
+ * Example:
+ * <Button 
+ *   variant="primary" 
+ *   size="md" 
+ *   onClick={handleAddToCart}
+ * >
+ *   Add to Cart
+ * </Button>
+ * 
+ * <Button 
+ *   variant="danger" 
+ *   size="sm"
+ *   onClick={handleDelete}
+ *   isLoading={isDeleting}
+ * >
+ *   Delete
+ * </Button>
+ * 
+ * <Button 
+ *   variant="secondary" 
+ *   disabled={!isFormValid}
+ *   fullWidth
+ * >
+ *   Cancel
+ * </Button>
  */
 
 const Button = ({

@@ -69,6 +69,7 @@ const App = () => {
 	 * Fetch products from backend
 	 */
 	const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api"
+	const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_URL || "http://localhost:4000"
 	const fetchProducts = useCallback(async (category = 'all', search = '', sort = 'featured') => {
 		try {
 			setLoading(true);
@@ -442,8 +443,8 @@ const App = () => {
 											>
 												{/* Product Image */}
 												<div className="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-4xl sm:text-5xl h-32 sm:h-40 flex items-center justify-center group-hover:scale-110 transition">
-													<img src={product.image} />
-												</div>
+												<img src={product.image.startsWith('http') ? product.image : IMAGE_BASE_URL + product.image} alt={product.name} />
+											</div>
 
 												{/* Product Info */}
 												<div className="p-3 sm:p-4 space-y-2 sm:space-y-3 flex-grow flex flex-col">

@@ -1,4 +1,3 @@
-import React from 'react';
 
 const LoadingScreen = ({ message = "Loading", submessage = "Please wait..." }) => {
 	return (

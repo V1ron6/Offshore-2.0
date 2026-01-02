@@ -1,0 +1,5 @@
+::ffff:127.0.0.1 - - [01/Jan/2026:22:05:09 +0000] "GET /api/products/categories HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [01/Jan/2026:22:05:09 +0000] "GET /api/products?sort=featured HTTP/1.1" 200 50004 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [01/Jan/2026:22:10:10 +0000] "GET /api/product/1 HTTP/1.1" 404 152 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [01/Jan/2026:22:10:28 +0000] "GET /api/products/1 HTTP/1.1" 200 368 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [01/Jan/2026:22:10:29 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:4000/api/products/1" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"

@@ -12,6 +12,32 @@
  * - children: ReactNode - Modal content
  * - actions: array - Action buttons
  * - size: 'sm' | 'md' | 'lg' - Modal size
+ * 
+ * USAGE:
+ * Display modal dialogs for confirmations, forms, or alerts.
+ * 
+ * Example:
+ * <Modal 
+ *   isOpen={showDeleteModal} 
+ *   onClose={() => setShowDeleteModal(false)}
+ *   title="Confirm Delete"
+ *   size="sm"
+ *   actions={[
+ *     { label: 'Cancel', onClick: () => setShowDeleteModal(false) },
+ *     { label: 'Delete', onClick: handleDelete, variant: 'danger' }
+ *   ]}
+ * >
+ *   <p>Are you sure you want to delete this item?</p>
+ * </Modal>
+ * 
+ * <Modal 
+ *   isOpen={showFormModal} 
+ *   onClose={closeModal}
+ *   title="Edit Product"
+ *   size="lg"
+ * >
+ *   <ProductForm onSubmit={handleSubmit} />
+ * </Modal>
  */
 
 import { X } from 'lucide-react';

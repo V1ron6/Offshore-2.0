@@ -1,6 +1,37 @@
 /**
+ * ========================================
  * CTA (Call-To-Action) Component
- * Interactive action banner
+ * ========================================
+ * 
+ * Interactive action banner for promotions.
+ * 
+ * Props:
+ * - title: string - Banner title
+ * - description: string - Banner description
+ * - features: array - Feature list
+ * - buttonText: string - CTA button text
+ * - onButtonClick: function - Button click handler
+ * - variant: 'primary' | 'gradient' | 'dark' - Style variant
+ * 
+ * USAGE:
+ * Create promotional banners or action sections.
+ * 
+ * Example:
+ * <CTA 
+ *   title="Limited Time Offer" 
+ *   description="Get 50% off all products this week"
+ *   features={['Free shipping', 'Easy returns', 'Money back guarantee']}
+ *   buttonText="Shop Now"
+ *   onButtonClick={() => navigate('/shop')}
+ *   variant="gradient"
+ * />
+ * 
+ * <CTA 
+ *   title="Premium Membership"
+ *   description="Unlock exclusive benefits and rewards"
+ *   buttonText="Upgrade Now"
+ *   variant="dark"
+ * />
  */
 
 import { CheckCircle2 } from 'lucide-react';

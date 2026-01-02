@@ -10,6 +10,32 @@
  * - children: ReactNode - Card content
  * - className: string - Additional classes
  * - icon: ReactComponent - Optional icon
+ * 
+ * USAGE:
+ * Use to wrap content in a styled container with optional header.
+ * 
+ * Example:
+ * <Card 
+ *   title="Order Summary" 
+ *   icon={ShoppingCart}
+ * >
+ *   <div>Order ID: #12345</div>
+ *   <div>Total: $99.99</div>
+ * </Card>
+ * 
+ * <Card className="bg-blue-50">
+ *   <p>This is a simple card without a header</p>
+ * </Card>
+ * 
+ * <Card 
+ *   title="Account Settings"
+ *   icon={Settings}
+ *   action={<Button size="sm">Edit</Button>}
+ * >
+ *   <form>
+ *     
+ *   </form>
+ * </Card>
  */
 
 const Card = ({ 

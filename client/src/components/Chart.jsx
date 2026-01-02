@@ -1,5 +1,40 @@
 /**
- * Chart Component - Simple bar and line charts
+ * ========================================
+ * Chart Component
+ * ========================================
+ * 
+ * Simple bar and line charts for data visualization.
+ * 
+ * Props:
+ * - type: 'bar' | 'line' - Chart type
+ * - data: array - Chart data points
+ * - dataKey: string - Key for values in data
+ * - xAxisKey: string - Key for x-axis labels
+ * - color: string - Chart color hex code
+ * - height: number - Chart height in pixels
+ * - showLegend: boolean - Show legend
+ * 
+ * USAGE:
+ * Display sales, analytics, or other metrics.
+ * 
+ * Example:
+ * <Chart 
+ *   type="bar" 
+ *   data={[
+ *     { name: 'Jan', value: 400 },
+ *     { name: 'Feb', value: 300 },
+ *     { name: 'Mar', value: 500 }
+ *   ]}
+ *   dataKey="value"
+ *   xAxisKey="name"
+ *   color="#ef4444"
+ * />
+ * 
+ * <Chart 
+ *   type="line" 
+ *   data={salesData}
+ *   height={400}
+ * />
  */
 
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';

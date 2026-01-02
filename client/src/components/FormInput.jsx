@@ -15,6 +15,37 @@
  * - required: boolean - Is required
  * - disabled: boolean - Disabled state
  * - icon: ReactComponent - Optional icon
+ * 
+ * USAGE:
+ * Build forms with styled, validated input fields.
+ * 
+ * Example:
+ * <FormInput
+ *   label="Email"
+ *   type="email"
+ *   value={email}
+ *   onChange={(e) => setEmail(e.target.value)}
+ *   placeholder="john@example.com"
+ *   error={emailError}
+ *   required
+ *   icon={Mail}
+ * />
+ * 
+ * <FormInput
+ *   label="Password"
+ *   type="password"
+ *   value={password}
+ *   onChange={(e) => setPassword(e.target.value)}
+ *   placeholder="Enter password"
+ *   minLength={8}
+ *   required
+ * />
+ * 
+ * <form>
+ *   <FormInput label="Name" value={name} onChange={handleNameChange} />
+ *   <FormInput label="Phone" type="tel" value={phone} onChange={handlePhoneChange} />
+ *   <FormInput label="Address" value={address} onChange={handleAddressChange} disabled={isLoading} />
+ * </form>
  */
 
 import { Eye, EyeOff } from 'lucide-react';

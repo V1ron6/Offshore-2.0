@@ -3,9 +3,11 @@
  * Stores admin user credentials
  */
 
+const { v4: uuidv4 } = require('uuid');
+
 let admins = [
 	{
-		id: 1,
+		id: uuidv4(),
 		username: 'admin1',
 		email: 'admin1@offshore.com',
 		password: 'Admin@123', // In production, this should be hashed
@@ -13,7 +15,7 @@ let admins = [
 		role: 'super_admin'
 	},
 	{
-		id: 2,
+		id: uuidv4(),
 		username: 'admin2',
 		email: 'admin2@offshore.com',
 		password: 'Admin@456', // In production, this should be hashed

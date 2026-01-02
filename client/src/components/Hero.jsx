@@ -1,6 +1,36 @@
 /**
+ * ========================================
  * Hero Section Component
- * Eye-catching banner for pages
+ * ========================================
+ * 
+ * Eye-catching banner for pages with title, 
+ * subtitle, and call-to-action buttons.
+ * 
+ * Props:
+ * - title: string - Hero title
+ * - subtitle: string - Hero subtitle
+ * - cta: object - Primary button {label, onClick}
+ * - ctaSecondary: object - Secondary button {label, onClick}
+ * - bgColor: string - Gradient color classes
+ * 
+ * USAGE:
+ * Create prominent hero sections on landing/category pages.
+ * 
+ * Example:
+ * <Hero 
+ *   title="Welcome to Offshore" 
+ *   subtitle="Shop the latest products with exclusive deals"
+ *   cta={{ label: 'Shop Now', onClick: () => navigate('/shop') }}
+ *   ctaSecondary={{ label: 'Learn More', onClick: () => navigate('/about') }}
+ *   bgColor="from-red-500 to-orange-600"
+ * />
+ * 
+ * <Hero 
+ *   title="Flash Sale - 50% Off" 
+ *   subtitle="Limited time offer on selected items"
+ *   cta={{ label: 'Shop Sale', onClick: handleShopSale }}
+ *   bgColor="from-purple-500 via-red-500 to-orange-500"
+ * />
  */
 
 import { ArrowRight, Zap } from 'lucide-react';
