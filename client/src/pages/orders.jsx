@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { Package, ChevronRight, Calendar, MapPin, DollarSign, Star } from 'lucide-react';
 import Card from '../components/Card';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+
 const OrdersPage = () => {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -19,57 +22,36 @@ const OrdersPage = () => {
 			navigate('/login');
 			return;
 		}
-		// Mock orders data
-		const mockOrders = [
-			{
-				id: 'ORD-20251230-001',
-				date: '2025-12-30',
-				status: 'delivered',
-				total: 299.99,
-				items: [
-					{ name: 'Wireless Headphones', qty: 1, price: 79.99 },
-					{ name: 'Smart Watch', qty: 1, price: 199.99 }
-				],
-				estimatedDelivery: '2025-12-28',
-				trackingNumber: '1Z999AA12345'
-			},
-			{
-				id: 'ORD-20251225-002',
-				date: '2025-12-25',
-				status: 'delivered',
-				total: 49.99,
-				items: [
-					{ name: 'Laptop Stand', qty: 1, price: 49.99 }
-				],
-				estimatedDelivery: '2025-12-27',
-				trackingNumber: '1Z999AA12346'
-			},
-			{
-				id: 'ORD-20251220-003',
-				date: '2025-12-20',
-				status: 'processing',
-				total: 124.97,
-				items: [
-					{ name: 'USB-C Cable', qty: 2, price: 12.99 },
-					{ name: 'Phone Case', qty: 1, price: 24.99 }
-				],
-				estimatedDelivery: '2026-01-05',
-				trackingNumber: 'TBD'
-			},
-			{
-				id: 'ORD-20251215-004',
-				date: '2025-12-15',
-				status: 'shipped',
-				total: 129.99,
-				items: [
-					{ name: 'Keyboard', qty: 1, price: 129.99 }
-				],
-				estimatedDelivery: '2026-01-02',
-				trackingNumber: '1Z999AA12347'
+
+		// Fetch orders from backend
+		const fetchOrders = async () => {
+			try {
+				const token = localStorage.getItem('authToken');
+				const response = await fetch(`${API_BASE_URL}/orders`, {
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				});
+
+				if (response.ok) {
+					const data = await response.json();
+					console.log('Orders received:', data);
+					if (data.success && data.data) {
+						setOrders(data.data);
+					}
+				} else {
+					console.error('Failed to fetch orders:', response.status);
+				}
+			} catch (err) {
+				console.error('Error fetching orders:', err);
+			} finally {
+				setLoading(false);
 			}
-		];
-		setOrders(mockOrders);
-		setLoading(false);
+		};
+
+		fetchOrders();
 	}, [navigate]);
 
 	const getStatusColor = (status) => {
@@ -134,7 +116,7 @@ const OrdersPage = () => {
 									<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
 										<div className="flex-1">
 											<h3 className="font-bold text-lg text-gray-900 mb-2">
-												{order.id}
+											{order.orderId}
 											</h3>
 											<div className="flex flex-col sm:flex-row sm:gap-6 gap-2 text-sm text-gray-600">
 												<span className="flex items-center gap-2">
@@ -153,7 +135,7 @@ const OrdersPage = () => {
 										</div>
 										<div className="text-right">
 											<p className="font-bold text-lg text-red-600 mb-2">
-												${order.total.toFixed(2)}
+											${order.totalAmount.toFixed(2)}
 											</p>
 											<span
 												className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(
@@ -171,9 +153,9 @@ const OrdersPage = () => {
 											{order.items.map((item, idx) => (
 												<div key={idx} className="flex justify-between text-sm text-gray-600">
 													<span>
-														{item.name} x {item.qty}
-													</span>
-													<span>${(item.price * item.qty).toFixed(2)}</span>
+													{item.name} x {item.quantity}
+												</span>
+												<span>${(item.price * item.quantity).toFixed(2)}</span>
 												</div>
 											))}
 										</div>
@@ -215,7 +197,7 @@ const OrdersPage = () => {
 									{/* Order Number */}
 									<div className="mb-6 pb-6 border-b border-gray-200">
 										<p className="text-sm text-gray-600 mb-2">Order Number</p>
-										<p className="font-mono font-bold text-gray-900">{selectedOrder.id}</p>
+										<p className="font-mono font-bold text-gray-900">{selectedOrder.orderId}</p>
 									</div>
 
 									{/* Order Date */}
@@ -244,7 +226,7 @@ const OrdersPage = () => {
 									</div>
 
 									{/* Tracking Number */}
-									{selectedOrder.trackingNumber !== 'TBD' && (
+									{selectedOrder.trackingNumber !== 'TBD' && selectedOrder.trackingNumber && (
 										<div className="mb-6 pb-6 border-b border-gray-200">
 											<p className="text-sm text-gray-600 mb-2">Tracking Number</p>
 											<p className="font-mono font-bold text-blue-600">
@@ -257,7 +239,7 @@ const OrdersPage = () => {
 									<div className="mb-6 pb-6 border-b border-gray-200">
 										<p className="text-sm text-gray-600 mb-2">Order Total</p>
 										<p className="text-2xl font-bold text-red-600">
-											${selectedOrder.total.toFixed(2)}
+											${selectedOrder.totalAmount.toFixed(2)}
 										</p>
 									</div>
 

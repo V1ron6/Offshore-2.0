@@ -20,6 +20,10 @@ import CategoriesPage from "./pages/categories.jsx"
 import AddProductPage from "./pages/addproduct.jsx"
 import AdminLogin from "./pages/admin/adminlogin.jsx"
 import AdminDashboard from "./pages/admin/admindashboard.jsx"
+import ManageUsers from "./pages/admin/ManageUsers.jsx"
+import ManageProducts from "./pages/admin/ManageProducts.jsx"
+import ViewOrders from "./pages/admin/ViewOrders.jsx"
+import Analytics from "./pages/admin/Analytics.jsx"
 
 
 const flipper = createBrowserRouter([
@@ -38,6 +42,10 @@ const flipper = createBrowserRouter([
  {path:"/categories",element:<CategoriesPage />},
  {path:"/admin/login",element:<AdminLogin />},
  {path:"/admin/dashboard",element:<AdminDashboard />},
+ {path:"/admin/manage-users",element:<ManageUsers />},
+ {path:"/admin/manage-products",element:<ManageProducts />},
+ {path:"/admin/view-orders",element:<ViewOrders />},
+ {path:"/admin/analytics",element:<Analytics />},
  {path:"*",element:<Notfound />}
 ])
 

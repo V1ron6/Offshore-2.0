@@ -4,6 +4,9 @@
  */
 
 const { verifyAdminCredentials, getAllAdmins } = require('../Models/admin.model.js');
+const { mockProducts } = require('../Models/product.model.js');
+const defaultUser = require('../Models/user.model.js');
+const { mockOrders } = require('../Models/order.model.js');
 
 // Admin Login
 const adminLogin = (req, res) => {
@@ -51,6 +54,64 @@ const getAllAdminsData = (req, res) => {
 	}
 };
 
+// Get dashboard statistics
+const getDashboardStats = (req, res) => {
+	try {
+		const totalUsers = defaultUser.length;
+		const totalProducts = mockProducts.length;
+		const totalOrders = mockOrders.length;
+
+		return res.status(200).json({
+			success: true,
+			stats: {
+				totalUsers,
+				totalProducts,
+				totalOrders
+			}
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			message: 'Error fetching dashboard stats',
+			error: error.message
+		});
+	}
+};
+
+// Get total users count
+const getUsersCount = (req, res) => {
+	try {
+		const totalUsers = defaultUser.length;
+		return res.status(200).json({
+			success: true,
+			count: totalUsers
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			message: 'Error fetching users count',
+			error: error.message
+		});
+	}
+};
+
+// Get total products count
+const getProductsCount = (req, res) => {
+	try {
+		const totalProducts = mockProducts.length;
+		return res.status(200).json({
+			success: true,
+			count: totalProducts
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			message: 'Error fetching products count',
+			error: error.message
+		});
+	}
+};
+
 // Verify admin token (middleware)
 const verifyAdminToken = (req, res, next) => {
 	const token = req.headers.authorization?.split(' ')[1];
@@ -77,5 +138,8 @@ const verifyAdminToken = (req, res, next) => {
 module.exports = {
 	adminLogin,
 	getAllAdminsData,
+	getDashboardStats,
+	getUsersCount,
+	getProductsCount,
 	verifyAdminToken
 };

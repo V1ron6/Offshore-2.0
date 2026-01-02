@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { LogOut, Users, ShoppingCart, TrendingUp, Package, BarChart3, AlertCircle, CheckCircle, Trash2, Edit2 } from 'lucide-react';
 import Button from '../../components/Button.jsx';
 import LoadingScreen from '../../components/LoadingScreen.jsx';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 const AdminDashboard = () => {
 	const [loading, setLoading] = useState(false);
@@ -12,24 +14,18 @@ const AdminDashboard = () => {
 	const [error, setError] = useState('');
 	const navigate = useNavigate();
 
-	// Dashboard Stats (Mock Data)
-	const [stats] = useState({
-		totalUsers: 1250,
-		totalProducts: 145,
-		totalOrders: 890,
+	// Dashboard Stats (From Backend)
+	const [stats, setStats] = useState({
+		totalUsers: 0,
+		totalProducts: 0,
+		totalOrders: 0,
 		totalRevenue: 125450,
 		activeAdmins: 2,
 		systemHealth: '✓ Optimal'
 	});
 
-	// Mock Orders Data
-	const [recentOrders] = useState([
-		{ id: '#ORD001', customer: 'John Doe', amount: 299.99, status: 'completed', date: '2024-12-30' },
-		{ id: '#ORD002', customer: 'Jane Smith', amount: 149.50, status: 'pending', date: '2024-12-30' },
-		{ id: '#ORD003', customer: 'Mike Johnson', amount: 549.00, status: 'processing', date: '2024-12-29' },
-		{ id: '#ORD004', customer: 'Sarah Williams', amount: 89.99, status: 'completed', date: '2024-12-29' },
-		{ id: '#ORD005', customer: 'Tom Brown', amount: 199.99, status: 'shipped', date: '2024-12-28' }
-	]);
+	// Recent Orders Data (From Backend)
+	const [recentOrders, setRecentOrders] = useState([]);
 
 	useEffect(() => {
 		// Verify admin is logged in
@@ -44,6 +40,62 @@ const AdminDashboard = () => {
 		try {
 			setAdmin(JSON.parse(adminData));
 			setLoading(true);
+			
+			// Fetch dashboard stats from backend
+			const fetchStats = async () => {
+				try {
+					const response = await fetch(`${API_BASE_URL}/admin/stats`, {
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ${adminToken}`,
+							'Content-Type': 'application/json'
+						}
+					});
+
+					if (response.ok) {
+						const data = await response.json();
+						console.log('Stats data received:', data);
+						if (data.success && data.stats) {
+							setStats(prevStats => ({
+								...prevStats,
+								totalUsers: data.stats.totalUsers || 0,
+								totalProducts: data.stats.totalProducts || 0,
+								totalOrders: data.stats.totalOrders || 0
+							}));
+						}
+					} else {
+						console.error('Failed to fetch stats:', response.status);
+					}
+				} catch (err) {
+					console.error('Error fetching stats:', err);
+				}
+			};
+
+			// Fetch recent orders from backend
+			const fetchRecentOrders = async () => {
+				try {
+					const response = await fetch(`${API_BASE_URL}/orders/recent?limit=5`, {
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ${adminToken}`,
+							'Content-Type': 'application/json'
+						}
+					});
+
+					if (response.ok) {
+						const data = await response.json();
+						console.log('Recent orders received:', data);
+						if (data.success && data.data) {
+							setRecentOrders(data.data);
+						}
+					} else {
+						console.error('Failed to fetch recent orders:', response.status);
+					}
+				} catch (err) {
+					console.error('Error fetching recent orders:', err);
+				}
+			};
+
 			// Simulate loading admin list
 			setTimeout(() => {
 				setAdminList([
@@ -52,6 +104,10 @@ const AdminDashboard = () => {
 				]);
 				setLoading(false);
 			}, 1000);
+
+			// Fetch stats and orders
+			fetchStats();
+			fetchRecentOrders();
 		} catch (err) {
 			navigate('/admin/login');
 			console.log(err)
@@ -69,6 +125,8 @@ const AdminDashboard = () => {
 
 	const getStatusColor = (status) => {
 		switch (status) {
+			case 'delivered':
+				return 'bg-green-100 text-green-800';
 			case 'completed':
 				return 'bg-green-100 text-green-800';
 			case 'pending':
@@ -77,6 +135,8 @@ const AdminDashboard = () => {
 				return 'bg-blue-100 text-blue-800';
 			case 'shipped':
 				return 'bg-purple-100 text-purple-800';
+			case 'cancelled':
+				return 'bg-red-100 text-red-800';
 			default:
 				return 'bg-gray-100 text-gray-800';
 		}
@@ -211,9 +271,9 @@ const AdminDashboard = () => {
 								<tbody>
 									{recentOrders.map((order, index) => (
 										<tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition">
-											<td className="py-3 px-4 font-mono text-sm text-gray-900">{order.id}</td>
-											<td className="py-3 px-4 text-gray-700">{order.customer}</td>
-											<td className="py-3 px-4 font-semibold text-gray-900">${order.amount}</td>
+											<td className="py-3 px-4 font-mono text-sm text-gray-900">{order.orderId}</td>
+											<td className="py-3 px-4 text-gray-700">{order.customerName}</td>
+											<td className="py-3 px-4 font-semibold text-gray-900">${order.totalAmount.toFixed(2)}</td>
 											<td className="py-3 px-4">
 												<span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
 													{order.status.charAt(0).toUpperCase() + order.status.slice(1)}
@@ -254,18 +314,26 @@ const AdminDashboard = () => {
 
 				{/* Quick Actions */}
 				<div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+				<Link to="/admin/manage-users" className="no-underline">
 					<Button variant="danger" fullWidth className="py-3 flex items-center justify-center gap-2">
 						<Users size={20} /> Manage Users
 					</Button>
+				</Link>
+				<Link to="/admin/manage-products" className="no-underline">
 					<Button variant="danger" fullWidth className="py-3 flex items-center justify-center gap-2">
 						<Package size={20} /> Manage Products
 					</Button>
+				</Link>
+				<Link to="/admin/view-orders" className="no-underline">
 					<Button variant="danger" fullWidth className="py-3 flex items-center justify-center gap-2">
 						<ShoppingCart size={20} /> View Orders
 					</Button>
+				</Link>
+				<Link to="/admin/analytics" className="no-underline">
 					<Button variant="danger" fullWidth className="py-3 flex items-center justify-center gap-2">
 						<BarChart3 size={20} /> Analytics
 					</Button>
+				</Link>
 				</div>
 			</div>
 		</div>
