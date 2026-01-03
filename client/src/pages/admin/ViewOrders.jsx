@@ -12,7 +12,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 
 const ViewOrders = () => {
 	const [loading, setLoading] = useState(false);
-	const [admin, setAdmin] = useState(null);
 	const [orders, setOrders] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [statusFilter, setStatusFilter] = useState('all');
@@ -31,7 +30,6 @@ const ViewOrders = () => {
 		}
 
 		try {
-			setAdmin(JSON.parse(adminData));
 			setLoading(true);
 
 			// Fetch orders from backend
@@ -61,7 +59,7 @@ const ViewOrders = () => {
 			};
 
 			fetchOrders();
-		} catch (err) {
+		} catch {
 			navigate('/admin/login');
 		}
 	}, [navigate]);
@@ -83,19 +81,56 @@ const ViewOrders = () => {
 		return matchesSearch && matchesStatus;
 	});
 
-	const handleDeleteOrder = (orderId) => {
+	const handleDeleteOrder = async (orderId) => {
 		if (confirm('Are you sure you want to delete this order?')) {
-			setOrders(orders.filter(o => o.id !== orderId));
-			setSuccess('Order deleted successfully');
+			try {
+				const adminToken = localStorage.getItem('adminToken');
+				const response = await fetch(`${API_BASE_URL}/orders/${orderId}`, {
+					method: 'DELETE',
+					headers: {
+						'Authorization': `Bearer ${adminToken}`,
+						'Content-Type': 'application/json'
+					}
+				});
+
+				if (response.ok) {
+					setOrders(orders.filter(o => o.id !== orderId && o._id !== orderId));
+					setSuccess('Order deleted successfully');
+				} else {
+					setError('Failed to delete order');
+				}
+			} catch (err) {
+				console.error('Error deleting order:', err);
+				setError('Failed to delete order');
+			}
 		}
 	};
 
-	const handleUpdateStatus = (orderId, newStatus) => {
-		setOrders(orders.map(o =>
-			o.id === orderId ? { ...o, status: newStatus } : o
-		));
-		setSuccess('Order status updated');
-		setSelectedOrder(null);
+	const handleUpdateStatus = async (orderId, newStatus) => {
+		try {
+			const adminToken = localStorage.getItem('adminToken');
+			const response = await fetch(`${API_BASE_URL}/orders/${orderId}`, {
+				method: 'PUT',
+				headers: {
+					'Authorization': `Bearer ${adminToken}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ status: newStatus })
+			});
+
+			if (response.ok) {
+				setOrders(orders.map(o =>
+					(o.id === orderId || o._id === orderId) ? { ...o, status: newStatus } : o
+				));
+				setSuccess('Order status updated');
+				setSelectedOrder(null);
+			} else {
+				setError('Failed to update order status');
+			}
+		} catch (err) {
+			console.error('Error updating order:', err);
+			setError('Failed to update order status');
+		}
 	};
 
 	const getStatusColor = (status) => {

@@ -12,12 +12,13 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
 
 const ManageUsers = () => {
 	const [loading, setLoading] = useState(false);
-	const [admin, setAdmin] = useState(null);
 	const [users, setUsers] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [success, setSuccess] = useState('');
 	const [error, setError] = useState('');
 	const [selectedUser, setSelectedUser] = useState(null);
+	const [showAddModal, setShowAddModal] = useState(false);
+	const [newUser, setNewUser] = useState({ username: '', email: '', password: '', status: 'active' });
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -30,7 +31,6 @@ const ManageUsers = () => {
 		}
 
 		try {
-			setAdmin(JSON.parse(adminData));
 			setLoading(true);
 
 			// Fetch users from backend
@@ -48,23 +48,13 @@ const ManageUsers = () => {
 						const data = await response.json();
 						console.log('Users data received:', data);
 						
-						// Use backend data if available, otherwise use mock data
+						// Use backend data if available
 						if (Array.isArray(data)) {
 							setUsers(data);
 						} else if (data.data && Array.isArray(data.data)) {
 							setUsers(data.data);
 						} else {
-							// Fallback to mock data if backend doesn't return expected format
-							setUsers([
-								{ id: 1, username: 'user', email: 'user@example.com', status: 'active', joinDate: '2024-10-15' },
-								{ id: 2, username: 'john', email: 'john@example.com', status: 'active', joinDate: '2024-11-20' },
-								{ id: 3, username: 'david', email: 'david@example.com', status: 'active', joinDate: '2024-12-01' },
-								{ id: 4, username: 'alice', email: 'alice@example.com', status: 'active', joinDate: '2024-12-10' },
-								{ id: 5, username: 'bob', email: 'bob@example.com', status: 'inactive', joinDate: '2024-11-05' },
-								{ id: 6, username: 'sarah', email: 'sarah@example.com', status: 'active', joinDate: '2024-12-15' },
-								{ id: 7, username: 'mike', email: 'mike@example.com', status: 'active', joinDate: '2024-12-20' },
-								{ id: 8, username: 'emma', email: 'emma@example.com', status: 'active', joinDate: '2024-12-22' }
-							]);
+							setUsers([]);
 						}
 					}
 				} catch (err) {
@@ -76,7 +66,7 @@ const ManageUsers = () => {
 			};
 
 			fetchUsers();
-		} catch (err) {
+		} catch {
 			navigate('/admin/login');
 		}
 	}, [navigate]);
@@ -95,18 +85,94 @@ const ManageUsers = () => {
 		user.email.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
-	const handleDeleteUser = (userId) => {
+	const handleDeleteUser = async (userId) => {
 		if (confirm('Are you sure you want to delete this user?')) {
-			setUsers(users.filter(u => u.id !== userId));
-			setSuccess('User deleted successfully');
+			try {
+				const adminToken = localStorage.getItem('adminToken');
+				const response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+					method: 'DELETE',
+					headers: {
+						'Authorization': `Bearer ${adminToken}`,
+						'Content-Type': 'application/json'
+					}
+				});
+
+				if (response.ok) {
+					setUsers(users.filter(u => u.id !== userId && u._id !== userId));
+					setSuccess('User deleted successfully');
+				} else {
+					setError('Failed to delete user');
+				}
+			} catch (err) {
+				console.error('Error deleting user:', err);
+				setError('Failed to delete user');
+			}
 		}
 	};
 
-	const handleStatusChange = (userId) => {
-		setUsers(users.map(u =>
-			u.id === userId ? { ...u, status: u.status === 'active' ? 'inactive' : 'active' } : u
-		));
-		setSuccess('User status updated');
+	const handleStatusChange = async (userId) => {
+		const user = users.find(u => u.id === userId || u._id === userId);
+		const newStatus = user?.status === 'active' ? 'inactive' : 'active';
+		
+		try {
+			const adminToken = localStorage.getItem('adminToken');
+			const response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+				method: 'PUT',
+				headers: {
+					'Authorization': `Bearer ${adminToken}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ status: newStatus })
+			});
+
+			if (response.ok) {
+				setUsers(users.map(u =>
+					(u.id === userId || u._id === userId) ? { ...u, status: newStatus } : u
+				));
+				setSuccess('User status updated');
+				setSelectedUser(null);
+			} else {
+				setError('Failed to update user status');
+			}
+		} catch (err) {
+			console.error('Error updating user:', err);
+			setError('Failed to update user status');
+		}
+	};
+
+	const handleAddUser = async (e) => {
+		e.preventDefault();
+		if (!newUser.username || !newUser.email || !newUser.password) {
+			setError('Please fill in all fields');
+			return;
+		}
+		
+		try {
+			const adminToken = localStorage.getItem('adminToken');
+			const response = await fetch(`${API_BASE_URL}/user/register`, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${adminToken}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newUser)
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				const addedUser = data.user || data.data || { ...newUser, id: Date.now(), joinDate: new Date().toISOString().split('T')[0] };
+				setUsers([...users, addedUser]);
+				setSuccess('User added successfully');
+				setShowAddModal(false);
+				setNewUser({ username: '', email: '', password: '', status: 'active' });
+			} else {
+				const data = await response.json();
+				setError(data.message || 'Failed to add user');
+			}
+		} catch (err) {
+			console.error('Error adding user:', err);
+			setError('Failed to add user');
+		}
 	};
 
 	if (loading) {
@@ -119,9 +185,20 @@ const ManageUsers = () => {
 			<div className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg sticky top-0 z-50">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 					<div className="flex items-center justify-between">
-						<div>
-							<h1 className="text-3xl font-bold">Manage Users</h1>
-							<p className="text-red-100 text-sm">Total users: {users.length}</p>
+						<div className="flex items-center gap-4">
+							<Button
+								variant="secondary"
+								size="sm"
+								onClick={() => navigate('/admin/dashboard')}
+								className="flex items-center gap-2 text-white hover:text-red-100"
+							>
+								<ArrowLeft size={18} />
+								Back
+							</Button>
+							<div>
+								<h1 className="text-3xl font-bold">Manage Users</h1>
+								<p className="text-red-100 text-sm">Total users: {users.length}</p>
+							</div>
 						</div>
 						<Button 
 							variant="danger" 
@@ -164,7 +241,7 @@ const ManageUsers = () => {
 								className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
 							/>
 						</div>
-						<Button variant="danger" className="flex items-center gap-2">
+						<Button variant="danger" className="flex items-center gap-2" onClick={() => setShowAddModal(true)}>
 							<Plus size={18} />
 							Add New User
 						</Button>
@@ -267,6 +344,73 @@ const ManageUsers = () => {
 									</button>
 								</div>
 							</div>
+						</div>
+					</div>
+				)}
+
+				{/* Add User Modal */}
+				{showAddModal && (
+					<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+						<div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+							<h3 className="text-2xl font-bold mb-4">Add New User</h3>
+							<form onSubmit={handleAddUser} className="space-y-4">
+								<div>
+									<label className="block text-sm text-gray-600 mb-1">Username</label>
+									<input
+										type="text"
+										value={newUser.username}
+										onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+										className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+										placeholder="Enter username"
+									/>
+								</div>
+								<div>
+									<label className="block text-sm text-gray-600 mb-1">Email</label>
+									<input
+										type="email"
+										value={newUser.email}
+										onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+										className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+										placeholder="Enter email"
+									/>
+								</div>
+								<div>
+									<label className="block text-sm text-gray-600 mb-1">Password</label>
+									<input
+										type="password"
+										value={newUser.password}
+										onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+										className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+										placeholder="Enter password"
+									/>
+								</div>
+								<div>
+									<label className="block text-sm text-gray-600 mb-1">Status</label>
+									<select
+										value={newUser.status}
+										onChange={(e) => setNewUser({ ...newUser, status: e.target.value })}
+										className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+									>
+										<option value="active">Active</option>
+										<option value="inactive">Inactive</option>
+									</select>
+								</div>
+								<div className="flex gap-2 pt-4">
+									<button
+										type="submit"
+										className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition"
+									>
+										Add User
+									</button>
+									<button
+										type="button"
+										onClick={() => { setShowAddModal(false); setNewUser({ username: '', email: '', password: '', status: 'active' }); }}
+										className="flex-1 px-4 py-2 bg-gray-300 text-gray-900 rounded-lg font-semibold hover:bg-gray-400 transition"
+									>
+										Cancel
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				)}
