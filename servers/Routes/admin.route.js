@@ -11,6 +11,9 @@ const {
 	getDashboardStats,
 	getUsersCount,
 	getProductsCount,
+	getAllUsers,
+	deleteUser,
+	updateUser,
 	verifyAdminToken 
 } = require('../Controllers/admin.controller.js');
 
@@ -18,7 +21,16 @@ const {
 router.post('/login', adminLogin);
 
 // Get all admins (protected)
-router.get('/users', verifyAdminToken, getAllAdminsData);
+router.get('/admins', verifyAdminToken, getAllAdminsData);
+
+// Get all users (protected) - for ManageUsers page
+router.get('/users', verifyAdminToken, getAllUsers);
+
+// Delete a user (protected)
+router.delete('/users/:id', verifyAdminToken, deleteUser);
+
+// Update a user (protected)
+router.put('/users/:id', verifyAdminToken, updateUser);
 
 // Get dashboard statistics (protected)
 router.get('/stats', verifyAdminToken, getDashboardStats);

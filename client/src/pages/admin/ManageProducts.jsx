@@ -36,7 +36,7 @@ const ManageProducts = () => {
 			// Fetch products from backend
 			const fetchProducts = async () => {
 				try {
-					const response = await fetch(`${API_BASE_URL}/products?limit=20`, {
+					const response = await fetch(`${API_BASE_URL}/products?limit=200`, {
 						method: 'GET',
 						headers: {
 							'Authorization': `Bearer ${adminToken}`,
@@ -48,7 +48,7 @@ const ManageProducts = () => {
 						const data = await response.json();
 						console.log('Products data received:', data);
 						if (data.success && data.data) {
-							setProducts(data.data.slice(0, 20));
+							setProducts(data.data);
 						}
 					}
 				} catch (err) {

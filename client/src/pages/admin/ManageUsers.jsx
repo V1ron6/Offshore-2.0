@@ -36,7 +36,7 @@ const ManageUsers = () => {
 			// Fetch users from backend
 			const fetchUsers = async () => {
 				try {
-					const response = await fetch(`${API_BASE_URL}/user`, {
+					const response = await fetch(`${API_BASE_URL}/admin/users`, {
 						method: 'GET',
 						headers: {
 							'Authorization': `Bearer ${adminToken}`,
@@ -49,7 +49,9 @@ const ManageUsers = () => {
 						console.log('Users data received:', data);
 						
 						// Use backend data if available
-						if (Array.isArray(data)) {
+						if (data.success && data.data) {
+							setUsers(data.data);
+						} else if (Array.isArray(data)) {
 							setUsers(data);
 						} else if (data.data && Array.isArray(data.data)) {
 							setUsers(data.data);
@@ -81,15 +83,15 @@ const ManageUsers = () => {
 	};
 
 	const filteredUsers = users.filter(user =>
-		user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-		user.email.toLowerCase().includes(searchTerm.toLowerCase())
+		user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+		user.email?.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
 	const handleDeleteUser = async (userId) => {
 		if (confirm('Are you sure you want to delete this user?')) {
 			try {
 				const adminToken = localStorage.getItem('adminToken');
-				const response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+				const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
 					method: 'DELETE',
 					headers: {
 						'Authorization': `Bearer ${adminToken}`,
@@ -116,7 +118,7 @@ const ManageUsers = () => {
 		
 		try {
 			const adminToken = localStorage.getItem('adminToken');
-			const response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+			const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Authorization': `Bearer ${adminToken}`,

@@ -112,6 +112,101 @@ const getProductsCount = (req, res) => {
 	}
 };
 
+// Get all users
+const getAllUsers = (req, res) => {
+	try {
+		// Return users without passwords for security
+		const usersWithoutPasswords = defaultUser.map(user => ({
+			id: user.id,
+			username: user.username,
+			email: user.email || `${user.username}@example.com`,
+			status: user.status || 'active',
+			createdAt: user.createdAt || new Date().toISOString()
+		}));
+		
+		return res.status(200).json({
+			success: true,
+			data: usersWithoutPasswords,
+			count: usersWithoutPasswords.length
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			message: 'Error fetching users',
+			error: error.message
+		});
+	}
+};
+
+// Delete a user
+const deleteUser = (req, res) => {
+	try {
+		const { id } = req.params;
+		const userIndex = defaultUser.findIndex(user => user.id === id);
+		
+		if (userIndex === -1) {
+			return res.status(404).json({
+				success: false,
+				message: 'User not found'
+			});
+		}
+		
+		defaultUser.splice(userIndex, 1);
+		
+		return res.status(200).json({
+			success: true,
+			message: 'User deleted successfully'
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			message: 'Error deleting user',
+			error: error.message
+		});
+	}
+};
+
+// Update a user
+const updateUser = (req, res) => {
+	try {
+		const { id } = req.params;
+		const updates = req.body;
+		
+		const userIndex = defaultUser.findIndex(user => user.id === id);
+		
+		if (userIndex === -1) {
+			return res.status(404).json({
+				success: false,
+				message: 'User not found'
+			});
+		}
+		
+		// Update user fields (except id)
+		defaultUser[userIndex] = {
+			...defaultUser[userIndex],
+			...updates,
+			id: defaultUser[userIndex].id // Preserve original id
+		};
+		
+		return res.status(200).json({
+			success: true,
+			message: 'User updated successfully',
+			data: {
+				id: defaultUser[userIndex].id,
+				username: defaultUser[userIndex].username,
+				email: defaultUser[userIndex].email,
+				status: defaultUser[userIndex].status
+			}
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			message: 'Error updating user',
+			error: error.message
+		});
+	}
+};
+
 // Verify admin token (middleware)
 const verifyAdminToken = (req, res, next) => {
 	const token = req.headers.authorization?.split(' ')[1];
@@ -141,5 +236,8 @@ module.exports = {
 	getDashboardStats,
 	getUsersCount,
 	getProductsCount,
+	getAllUsers,
+	deleteUser,
+	updateUser,
 	verifyAdminToken
 };

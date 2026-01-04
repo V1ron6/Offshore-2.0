@@ -1,55 +1,133 @@
-# Offshore Project
-A full-stack e-commerce web application with a React frontend and Express.js backend. Features product browsing, shopping cart functionality, user authentication, and responsive design.
+#  Offshore E-Commerce Platform
 
+A full-stack e-commerce web application built with React frontend and Express.js backend. Features product browsing, shopping cart, user authentication, admin dashboard, and responsive design.
 
-#check out documentation for more information
+>  Check out the [documentation](./documentation/) folder for detailed guides and architecture information.
 
+---
 
-##setup and installation
-i have provide two scripts to aid and help in setting up and running dev 
-in the current directory you will find two files .bat is for windows and .sh is for macos and linux  , by default backend or servers run on 3000 and frontend runs on 5173
+## 🚀 Quick Setup
 
-## Project Structure
+### Automated Setup (Recommended)
+
+**Windows:**
+
+```bash
+# Double-click or run in command prompt:
+windows_setup.bat
+```
+
+**macOS / Linux:**
+
+```bash
+chmod +x linux_macos_setup.sh
+./linux_macos_setup.sh
+```
+
+The setup scripts will:
+
+1. Install all dependencies (backend & frontend)
+2. Create environment files with default values
+3. Start both development servers automatically
+
+### Default Server Ports
+
+| Service      | URL                   |
+| ------------ | --------------------- |
+| Backend API  | http://localhost:4000 |
+| Frontend App | http://localhost:5173 |
+
+---
+
+## 📁 Project Structure
 
 ```
 offshore/
-├── client/                 # React frontend
+├── client/                    # React frontend (Vite)
 │   ├── src/
-│   │   ├── components/    # Reusable components (all error-free)
-│   │   ├── pages/         # Page components (all error-free)
-│   │   ├── utils/         # Utility functions (apiClient, security)
-│   │   ├── assets/        # Static assets (including offShoreLogo.jpg)
-│   │   ├── App.jsx        # Shopping dashboard component (FIXED)
-│   │   ├── main.jsx       # Router entry point
-│   │   ├── index.css      # Global styles
-│   │   └── App.css        # App-specific styles
-│   ├── public/            # Public assets
-│   ├── package.json       # Dependencies
-│   ├── vite.config.js     # Vite configuration
-│   └── index.html         # HTML template
+│   │   ├── components/        # Reusable UI components
+│   │   │   ├── Alert.jsx
+│   │   │   ├── Button.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── CartMenu.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── LoadingScreen.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   └── Navbar.jsx
+│   │   ├── pages/             # Page components
+│   │   │   ├── home.jsx
+│   │   │   ├── login.jsx
+│   │   │   ├── signup.jsx
+│   │   │   ├── dashboard.jsx
+│   │   │   ├── productdetails.jsx
+│   │   │   ├── cart.jsx
+│   │   │   ├── checkout.jsx
+│   │   │   ├── orders.jsx
+│   │   │   ├── profile.jsx
+│   │   │   └── admin/         # Admin pages
+│   │   │       ├── admindashboard.jsx
+│   │   │       ├── adminlogin.jsx
+│   │   │       ├── ManageUsers.jsx
+│   │   │       ├── ManageProducts.jsx
+│   │   │       ├── ViewOrders.jsx
+│   │   │       └── Analytics.jsx
+│   │   ├── utils/             # Utility functions
+│   │   │   ├── apiClient.js
+│   │   │   ├── cartService.js
+│   │   │   └── security.js
+│   │   ├── assets/            # Static assets
+│   │   ├── App.jsx            # Main app component
+│   │   ├── main.jsx           # Entry point with router
+│   │   └── index.css          # Global styles
+│   ├── public/                # Public assets
+│   ├── package.json           # Frontend dependencies
+│   ├── vite.config.js         # Vite configuration
+│   └── index.html             # HTML template
 │
-└── servers/               # Express.js backend
-    ├── Controllers/       # Route controllers
-    │   ├── user.controller.js
-    │   └── product.controller.js
-    ├── Models/           # Data models
-    │   ├── user.model.js
-    │   └── product.model.js (177 products!)
-    ├── Routes/           # API routes
-    │   ├── user.route.js
-    │   └── product.route.js
-    ├── middleware/       # Middleware (enhanced logging)
-    │   ├── cors.Multihandler.js
-    │   ├── security.js
-    │   └── logging.js (NEW - date-based logging middleware)
-    ├── logs/             # Date-based log files (NEW)
-    │   └── access-DDMMYYYY.log
-    ├── server.js         # Server entry point (UPDATED)
-    ├── package.json      # Dependencies
-    └── .env              # Environment variables
+├── servers/                   # Express.js backend
+│   ├── Controllers/           # Route controllers
+│   │   ├── admin.controller.js
+│   │   ├── user.controller.js
+│   │   ├── product.controller.js
+│   │   └── order.controller.js
+│   ├── Models/                # Data models
+│   │   ├── admin.model.js
+│   │   ├── user.model.js
+│   │   ├── product.model.js   # 177+ products
+│   │   └── order.model.js
+│   ├── Routes/                # API routes
+│   │   ├── admin.route.js
+│   │   ├── user.route.js
+│   │   ├── product.route.js
+│   │   └── order.route.js
+│   ├── middleware/            # Express middleware
+│   │   ├── cors.Multihandler.js
+│   │   ├── security.js
+│   │   └── logging.js
+│   ├── logs/                  # Request logs
+│   ├── server.js              # Server entry point
+│   └── package.json           # Backend dependencies
+│
+├── documentation/             # Project documentation
+│   ├── ARCHITECTURE.md
+│   ├── QUICK_START.md
+│   ├── TESTING_GUIDE.md
+│   └── ...
+│
+├── windows_setup.bat          # Windows setup script
+├── linux_macos_setup.sh       # macOS/Linux setup script
+└── README.md                  # This file
 ```
 
-## Installation
+---
+
+## Manual Installation
+
+### Prerequisites
+
+- Node.js v18+
+- npm v9+
 
 ### Backend Setup
 
@@ -58,10 +136,11 @@ cd servers
 npm install
 ```
 
-Create a `.env` file in the `servers` directory:
+Create `servers/.env`:
 
-```
-PORT=3000
+```env
+PORT=4000
+JWT_SECRET=your-secret-key
 ```
 
 ### Frontend Setup
@@ -71,14 +150,22 @@ cd client
 npm install
 ```
 
+Create `client/.env`:
+
+```env
+VITE_API_URL=http://localhost:4000/api
+```
+
+---
+
 ## Running the Application
 
 ### Start Backend Server
 
 ```bash
 cd servers
-npm start
-# Server runs on http://localhost:3000
+npm run dev
+# API runs on http://localhost:4000
 ```
 
 ### Start Frontend Development Server
@@ -86,114 +173,127 @@ npm start
 ```bash
 cd client
 npm run dev
-# Frontend runs on http://localhost:5173
+# App runs on http://localhost:5173
 ```
 
-## API Endpoints
+---
 
-### User Routes (`/api/user`)
+##  API Endpoints
 
-- **POST** `/api/user/login` - User login
+### Authentication
 
-  - Body: `{ username: string, password: string }`
-  - Response: `{ success: boolean, message: string, user: object }`
+| Method | Endpoint            | Description                  |
+| ------ | ------------------- | ---------------------------- |
+| POST   | `/api/user/login`   | User login                   |
+| POST   | `/api/user/logout`  | User logout                  |
+| GET    | `/api/user/profile` | Get user profile (protected) |
 
-- **POST** `/api/user/signup` - User registration
-  - Body: `{ username: string, email: string, password: string }`
-  - Response: `{ success: boolean, message: string }`
+### Products
 
-### Product Routes (`/api/products`)
+| Method | Endpoint                           | Description                     |
+| ------ | ---------------------------------- | ------------------------------- |
+| GET    | `/api/products`                    | Get all products (with filters) |
+| GET    | `/api/products/:id`                | Get product by ID               |
+| GET    | `/api/products/categories`         | Get all categories              |
+| GET    | `/api/products/featured`           | Get featured products           |
+| GET    | `/api/products/category/:category` | Get products by category        |
 
-- **GET** `/api/products` - Get all products with filtering
+**Query Parameters for `/api/products`:**
 
-  - Query: `?category=electronics&search=phone&sort=price-low&limit=50`
-  - Response: `{ products: array, total: number }`
+- `category` - Filter by category
+- `search` - Search in name/description
+- `sort` - Sort by: `price-low`, `price-high`, `rating`, `newest`, `featured`
+- `limit` - Limit results (default: 200)
 
-- **GET** `/api/products/:id` - Get product by ID
+### Orders
 
-  - Response: `{ id, name, description, price, category, stock, image, rating, reviews, inStock }`
+| Method | Endpoint             | Description       |
+| ------ | -------------------- | ----------------- |
+| GET    | `/api/orders`        | Get all orders    |
+| GET    | `/api/orders/recent` | Get recent orders |
+| POST   | `/api/orders`        | Create new order  |
+| GET    | `/api/orders/:id`    | Get order by ID   |
 
-- **GET** `/api/products/categories` - Get all categories
+### Admin
 
-  - Response: `{ categories: array }`
+| Method | Endpoint               | Description                      |
+| ------ | ---------------------- | -------------------------------- |
+| POST   | `/api/admin/login`     | Admin login                      |
+| GET    | `/api/admin/stats`     | Dashboard statistics (protected) |
+| GET    | `/api/admin/users`     | Get all users (protected)        |
+| PUT    | `/api/admin/users/:id` | Update user (protected)          |
+| DELETE | `/api/admin/users/:id` | Delete user (protected)          |
 
-- **GET** `/api/products/category/:category` - Get products by category
+---
 
-  - Response: `{ products: array }`
+## 🔐 Test Credentials
 
-- **GET** `/api/products/featured` - Get featured products
-  - Response: `{ products: array }`
+### Regular User
 
-## Authentication
+- **Username:** `user`
+- **Password:** `password123`
 
-**Default Test Credentials:**
+### Admin User
 
-- Username: `user123`
-- Password: `passw0rd123`
+- **Username:** `admin1`
+- **Password:** `admin123`
 
-(Also displayed as hints on login/signup pages)
+---
 
-## Features
+## ✨ Features
 
-### Frontend
+### Customer Features
 
-- 🛍️ **E-Commerce Shopping** - Browse and purchase products
-- 🔍 **Product Search & Filtering** - Search by name, filter by category
-- 📊 **Product Sorting** - Sort by price, rating, newest
-- 🛒 **Shopping Cart** - Add/remove items, update quantities
-- 📄 **Product Details** - Dedicated page for each product
-- 👤 **User Authentication** - Login, signup, user profiles
-- 📱 **Responsive Design** - Mobile-first, fully responsive UI
-- 🔒 **Security** - XSS protection, input sanitization
-- 💾 **Data Persistence** - localStorage for cart and user sessions
+- 🛍️ Browse products by category
+- 🔍 Search and filter products
+- 📊 Sort by price, rating, newest
+- 🛒 Shopping cart with quantity management
+- 💳 Checkout process
+- 📦 Order tracking
+- 👤 User profile management
+- 📱 Fully responsive design
 
-### Backend
+### Admin Features
 
-- ✅ **RESTful API** - Product and user management
-- 📦 **177 Products** - Massively expanded product catalog across 18+ categories
-- 🔐 **Security Middleware** - CORS, rate limiting, input validation
-- 📝 **Professional Logging** - Date-based log files with logging middleware
-- ⚡ **Express.js** - Fast, lightweight server
+- 📊 Dashboard with statistics
+- 👥 User management (view, edit, delete)
+- 📦 Product management
+- 📋 Order management
+- 📈 Analytics dashboard
 
-## Product Categories
+### Technical Features
 
-**Electronics & Devices:**
+- ✅ RESTful API architecture
+- 🔒 JWT authentication
+- 🛡️ XSS protection & input sanitization
+- 📝 Request logging with date-based files
+- 💾 localStorage for cart persistence
+- ⚡ Fast development with Vite
 
-- Electronics (gaming monitors, cameras, audio equipment)
-- Devices (smartphones, tablets, smart home devices)
-- Gaming & Peripherals (gaming chairs, headsets, peripherals)
-- Audio & Music (studio monitors, microphones, turntables)
+---
 
-**Home & Kitchen:**
+## 🛒 Product Categories
 
-- Home (decor, smart home, office supplies)
-- Kitchen Appliances (air fryer, instant pot, blenders)
-- Furniture (gaming chairs, office chairs)
+| Category           | Examples                                  |
+| ------------------ | ----------------------------------------- |
+| Electronics        | Gaming monitors, cameras, audio equipment |
+| Devices            | Smartphones, tablets, smart home devices  |
+| Gaming             | Gaming chairs, headsets, peripherals      |
+| Audio & Music      | Studio monitors, microphones, turntables  |
+| Home & Kitchen     | Decor, appliances, furniture              |
+| Clothing           | T-shirts, jeans, hoodies, shoes           |
+| Personal Care      | Skincare, makeup, perfume                 |
+| Food & Supplements | Snacks, beverages, organic products       |
+| Sports & Fitness   | Bikes, yoga mats, dumbbells               |
+| Camping & Outdoor  | Tents, sleeping bags, hiking gear         |
+| Books              | Fiction, non-fiction, cookbooks           |
+| Toys & Games       | Board games, puzzles, LEGO                |
 
-**Fashion & Personal:**
+**Total: 177+ products across 18+ categories**
 
-- Clothing (t-shirts, jeans, hoodies, shoes, coats)
-- Personal Care & Beauty (skincare, makeup, perfume)
+---
 
-**Food & Supplements:**
-
-- Foodstuffs (snacks, beverages, supplements, fresh produce)
-- Healthy Foods (organic products, protein bars)
-
-**Outdoor & Sports:**
-
-- Camping & Outdoor (tents, sleeping bags, hiking gear)
-- Sports & Fitness (bikes, skateboard, yoga mats, dumbbells)
-- Accessories (cameras, photography, pet supplies, automotive)
-
-**Other:**
-
-- Books (fiction, non-fiction, cookbooks)
-- Toys & Games (board games, puzzles, LEGO)
-
-**Total: 177 products across 18+ categories**
-
-## Technologies Used
+## 🛠️ Technologies
 
 ### Frontend
 
@@ -201,39 +301,59 @@ npm run dev
 - React Router v6
 - Tailwind CSS
 - Lucide React (icons)
-- Vite
-- Axios
+- Vite (build tool)
 
 ### Backend
 
 - Node.js
 - Express.js
+- JSON Web Tokens (JWT)
 - Morgan (logging)
-- CORS (cross-origin requests)
-- dotenv (environment variables)
+- CORS
 
-## Project Pages
+---
 
-1. **Home** (`/`) - Welcome landing page
-2. **Login** (`/login`) - User authentication
-3. **Signup** (`/signup`) - New user registration
-4. **App** (`/app`) - Shopping dashboard with product list
-5. **Product Details** (`/product/:id`) - Individual product page with full details
-6. **Profile** (`/profile/:id`) - User profile page
+## 📱 Application Routes
 
-## Development Architecture
+| Route                    | Page               | Auth Required |
+| ------------------------ | ------------------ | ------------- |
+| `/`                      | Home / Landing     | No            |
+| `/login`                 | User Login         | No            |
+| `/signup`                | User Registration  | No            |
+| `/dashboard`             | Product Catalog    | Yes           |
+| `/product/:id`           | Product Details    | Yes           |
+| `/cart`                  | Shopping Cart      | Yes           |
+| `/checkout`              | Checkout           | Yes           |
+| `/orders`                | Order History      | Yes           |
+| `/profile`               | User Profile       | Yes           |
+| `/admin/login`           | Admin Login        | No            |
+| `/admin/dashboard`       | Admin Dashboard    | Admin         |
+| `/admin/manage-users`    | User Management    | Admin         |
+| `/admin/manage-products` | Product Management | Admin         |
+| `/admin/view-orders`     | Order Management   | Admin         |
+| `/admin/analytics`       | Analytics          | Admin         |
 
-- **State Management**: React Hooks (useState, useEffect)
-- **Data Storage**: In-memory mock data + localStorage
-- **API Calls**: Custom apiClient with axios
-- **Security**: Input sanitization, XSS protection
-- **Styling**: Tailwind CSS with responsive breakpoints
+---
 
-## Notes
+## ⚠️ Development Notes
 
-- The backend uses in-memory storage (data resets on server restart)
-- Cart and user sessions persist in browser localStorage
-- All product data is dynamically served from the backend API
+- Backend uses in-memory storage (data resets on server restart)
+- Cart and sessions persist in browser localStorage
+- Passwords are stored in plain text (use bcrypt in production)
+- CORS is configured for localhost development only
 
-- Passwords are stored in plain text (for development only - use bcrypt in production)
-- CORS is configured for localhost development
+---
+
+## 📄 License
+
+This project is for educational/demonstration purposes.
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
