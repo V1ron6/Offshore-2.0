@@ -221,11 +221,12 @@ const Signup = () => {
 
 			if (response.data.success) {
 				// Store token and user data
-				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('authToken', response.data.token);
 				localStorage.setItem('user', JSON.stringify({
 					id: response.data.user.id,
 					username: response.data.user.username,
 					email: response.data.user.email,
+					stats: response.data.user.stats,
 					signupTime: new Date().toISOString()
 				}));
 

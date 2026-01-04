@@ -5,8 +5,8 @@ import { addToCart, getCart } from '../utils/cartService.js';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
 import WishlistButton from '../components/WishlistButton.jsx'
 import StickyAddToCart from '../components/StickyAddToCart.jsx'
-import { Breadcrumb } from '../components/Breadcrumb.jsx'
-import { ImageZoom } from '../components/ImageZoom.jsx'
+import Breadcrumb from '../components/Breadcrumb.jsx'
+import ImageZoom from '../components/ImageZoom.jsx'
 
 const ProductDetails = () => {
 	const { id } = useParams();

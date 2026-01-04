@@ -69,5 +69,5 @@ createRoot(document.getElementById('root')).render(
         <ScrollToTop />
       </ToastProvider>
     </ThemeProvider>
-  </StrictMode>,
+  </StrictMode>
 )

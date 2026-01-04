@@ -4,8 +4,10 @@ const defaultUser = require("../Models/user.model.js");
 const { 
 	findUserByUsername, 
 	findUserByEmail, 
+	findUserById,
 	verifyPassword, 
-	createUser 
+	createUser,
+	getUserStats 
 } = require("../Models/user.model.js");
 
 // Login controller with JWT and bcrypt password verification
@@ -58,7 +60,7 @@ const loginUser = async (req, res) => {
 			success: true, 
 			message: `Welcome ${username}`,
 			token,
-			user: { id: user.id, username: user.username, email: user.email }
+			user: { id: user.id, username: user.username, email: user.email, stats: user.stats }
 		});
 
 	} catch (error) {
@@ -202,9 +204,44 @@ const logoutUser = (req, res) => {
 	}
 };
 
+// Get user stats (for dashboard)
+const getUserStatsController = async (req, res) => {
+	try {
+		const userId = req.user?.id || req.params.userId;
+		
+		if (!userId) {
+			return res.status(401).json({ 
+				success: false, 
+				message: 'Unauthorized' 
+			});
+		}
+
+		const user = findUserById(userId);
+		if (!user) {
+			return res.status(404).json({ 
+				success: false, 
+				message: 'User not found' 
+			});
+		}
+
+		return res.status(200).json({ 
+			success: true, 
+			stats: user.stats
+		});
+
+	} catch (error) {
+		console.error('Get user stats error:', error);
+		return res.status(500).json({ 
+			success: false, 
+			message: 'Internal server error' 
+		});
+	}
+};
+
 module.exports = {
 	loginUser,
 	signupUser,
 	getUserProfile,
-	logoutUser
+	logoutUser,
+	getUserStatsController
 };

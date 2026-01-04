@@ -78,6 +78,7 @@ const App = () => {
 			if (category !== 'all') params.append('category', category);
 			if (search) params.append('search', search);
 			params.append('sort', sort);
+			params.append('limit', '200'); // Fetch all 177 products
 			
 			const response = await fetch(
 				`${API_URL}/products?${params.toString()}`,
@@ -323,7 +324,7 @@ const App = () => {
 					{/* Welcome & Cart Button */}
 					<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
 						<div className="min-w-0">
-							<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 break-words">
+							<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 wrap-break-word">
 								Welcome, <span className="text-red-500">{user?.username}</span> to the market place
 							</h1>
 							<p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Browse our amazing products</p>
@@ -442,7 +443,7 @@ const App = () => {
 												onClick={() => navigate(`/product/${product.id}`)}
 											>
 												{/* Product Image */}
-												<div className="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-4xl sm:text-5xl h-32 sm:h-40 flex items-center justify-center group-hover:scale-110 transition overflow-hidden">
+												<div className="bg-linear-to-br from-gray-100 to-gray-200 p-4 text-4xl sm:text-5xl h-32 sm:h-40 flex items-center justify-center group-hover:scale-110 transition overflow-hidden">
 												{product.image?.startsWith('http') ? (
 													<img src={product.image} alt={product.name} className="w-full h-full object-cover" />
 												) : (
@@ -451,7 +452,7 @@ const App = () => {
 											</div>
 
 												{/* Product Info */}
-												<div className="p-3 sm:p-4 space-y-2 sm:space-y-3 flex-grow flex flex-col">
+												<div className="p-3 sm:p-4 space-y-2 sm:space-y-3 grow flex flex-col">
 													<div>
 														<h3 className="font-bold text-gray-900 line-clamp-2 text-sm sm:text-base">{product.name}</h3>
 														<p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1 capitalize">{product.category}</p>

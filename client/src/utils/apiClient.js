@@ -1,44 +1,56 @@
 /**
  * Secure API Client
- * Handles IDOR and XSS protection
+ * Handles API requests with authentication
  */
 
 import axios from 'axios';
-import { sanitizeInput, validateSession, getSecureHeaders, logSecurityEvent, isValidJWT } from './security.js';
+import { sanitizeInput, logSecurityEvent } from './security.js';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
-// Create axios instance with secure defaults
+// Public endpoints that don't require authentication
+const PUBLIC_ENDPOINTS = [
+  '/user/signup',
+  '/user/login',
+  '/admin/login',
+  '/products',
+  '/categories'
+];
+
+// Check if endpoint is public
+const isPublicEndpoint = (url) => {
+  if (!url) return false;
+  return PUBLIC_ENDPOINTS.some(endpoint => url.includes(endpoint));
+};
+
+// Create axios instance with defaults
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
-  headers: getSecureHeaders()
+  timeout: 15000
 });
 
 /**
- * Request interceptor - Add security headers and validate session
+ * Request interceptor - Add auth headers
  */
 apiClient.interceptors.request.use(
   (config) => {
-    // Validate session before each request
-    const user = validateSession();
     const token = localStorage.getItem('authToken');
     
-    if (!isValidJWT(token)) {
-      logSecurityEvent('INVALID_TOKEN', { url: config.url });
-      // Clear invalid token
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      throw new Error('Invalid session');
+    // Set default headers
+    config.headers = config.headers || {};
+    
+    // Don't set Content-Type for FormData (let browser set it with boundary)
+    if (!(config.data instanceof FormData)) {
+      config.headers['Content-Type'] = 'application/json';
     }
 
-    // Add token to headers
+    // Add token to headers if available
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // Sanitize query parameters
-    if (config.params) {
+    // Sanitize query parameters (but not for public endpoints to allow search)
+    if (config.params && !isPublicEndpoint(config.url)) {
       Object.keys(config.params).forEach(key => {
         if (typeof config.params[key] === 'string') {
           config.params[key] = sanitizeInput(config.params[key]);
@@ -46,50 +58,30 @@ apiClient.interceptors.request.use(
       });
     }
 
-    // Sanitize request data
-    if (config.data && typeof config.data === 'object') {
-      Object.keys(config.data).forEach(key => {
-        if (typeof config.data[key] === 'string') {
-          config.data[key] = sanitizeInput(config.data[key]);
-        }
-      });
-    }
-
     return config;
   },
   (error) => {
-    logSecurityEvent('REQUEST_ERROR', { error: error.message });
     return Promise.reject(error);
   }
 );
 
 /**
- * Response interceptor - Validate response and handle errors
+ * Response interceptor - Handle errors
  */
 apiClient.interceptors.response.use(
   (response) => {
-    // Verify response contains expected data
-    if (!response.data) {
-      logSecurityEvent('EMPTY_RESPONSE', { url: response.config.url });
-      throw new Error('Invalid response from server');
-    }
-
     return response;
   },
   (error) => {
     // Handle different error types
-    if (error.response?.status === 401) {
-      // Unauthorized - clear session
+    if (error.response?.status === 401 && !isPublicEndpoint(error.config?.url)) {
+      // Unauthorized on protected endpoint - clear session
       logSecurityEvent('UNAUTHORIZED', { url: error.config?.url });
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      // Don't redirect automatically, let the component handle it
     } else if (error.response?.status === 403) {
-      // Forbidden - IDOR attempt detected
-      logSecurityEvent('IDOR_ATTEMPT', { url: error.config?.url });
-      throw new Error('Access denied: You do not have permission to access this resource');
-    } else if (error.response?.status === 404) {
-      logSecurityEvent('NOT_FOUND', { url: error.config?.url });
+      logSecurityEvent('FORBIDDEN', { url: error.config?.url });
     }
 
     return Promise.reject(error);

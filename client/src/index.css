@@ -11,7 +11,7 @@
   background: url(./src/assets/offShoreLogo.jpg);
 }
 .prefFont {
-  font-family: "Baloo2", sans-sherif;
+  font-family: "Baloo2", sans-serif;
 }
 .bgGradient {
   background: linear-gradient(30deg, rgb(235, 256, 156), blue);

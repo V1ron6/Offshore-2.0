@@ -8,7 +8,7 @@ import { Package, ChevronRight, Calendar, MapPin, DollarSign, Star, FileText } f
 import Card from '../components/Card';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
 import { OrderCardSkeleton } from '../components/Skeleton.jsx';
-import { Breadcrumb } from '../components/Breadcrumb.jsx';
+import Breadcrumb from '../components/Breadcrumb.jsx';
 import { downloadInvoice } from '../utils/invoiceService';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';

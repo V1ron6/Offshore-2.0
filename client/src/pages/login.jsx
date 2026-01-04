@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
-import Offshorelogo from '../assets/Offshorelogo.jpg'
+import Offshorelogo from '../assets/offShoreLogo.jpg'
 import LoadingScreen  from '../components/LoadingScreen.jsx'
 import { useToast } from '../components/ToastContext.jsx'
 
@@ -274,6 +274,8 @@ const Login = () =>{
 				localStorage.setItem('user', JSON.stringify({
 					id: response.data.user.id,
 					username: response.data.user.username,
+					email: response.data.user.email,
+					stats: response.data.user.stats,
 					loginTime: new Date().toISOString()
 				}));
 

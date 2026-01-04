@@ -11,7 +11,7 @@ const AdminLogin = () => {
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
 	const navigate = useNavigate();
-  const apiURL = import.meta.VITE_API_URL || "http://localhost:4000/api"
+  const apiURL = import.meta.env.VITE_API_URL || "http://localhost:4000/api"
 	// Check if already logged in as admin
 	useEffect(() => {
 		const adminToken = localStorage.getItem('adminToken');
@@ -67,7 +67,7 @@ const AdminLogin = () => {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center px-4">
+		<div className="min-h-screen bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center px-4">
 			<div className="w-full max-w-md">
 				{/* Card Container */}
 				<div className="bg-white rounded-lg shadow-2xl overflow-hidden">
@@ -85,7 +85,7 @@ const AdminLogin = () => {
 						{/* Error Alert */}
 						{error && (
 							<div className="mb-4 p-4 bg-red-50 border border-red-300 rounded-lg flex items-start gap-3">
-								<AlertCircle className="text-red-600 mt-0.5 flex-shrink-0" size={20} />
+								<AlertCircle className="text-red-600 mt-0.5 shrink-0" size={20} />
 								<p className="text-red-700 text-sm font-medium">{error}</p>
 							</div>
 						)}
@@ -93,7 +93,7 @@ const AdminLogin = () => {
 						{/* Success Alert */}
 						{success && (
 							<div className="mb-4 p-4 bg-green-50 border border-green-300 rounded-lg flex items-start gap-3">
-								<CheckCircle className="text-green-600 mt-0.5 flex-shrink-0" size={20} />
+								<CheckCircle className="text-green-600 mt-0.5 shrink-0" size={20} />
 								<p className="text-green-700 text-sm font-medium">{success}</p>
 							</div>
 						)}

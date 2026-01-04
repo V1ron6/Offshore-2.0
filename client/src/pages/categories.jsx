@@ -2,7 +2,7 @@
  * Categories Page - Browse products by category
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	Grid,
@@ -22,6 +22,8 @@ import AdvancedSearch from '../components/AdvancedSearch.jsx'
 import ProductQuickView from '../components/ProductQuickView.jsx'
 import { ProductGridSkeleton } from '../components/Skeleton.jsx'
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+
 const CategoriesPage = () => {
 	const [viewMode, setViewMode] = useState('grid'); // grid or list
 	const [sortBy, setSortBy] = useState('featured');
@@ -30,44 +32,95 @@ const CategoriesPage = () => {
 	const [user, setUser] = useState(null);
 	const [quickViewProduct, setQuickViewProduct] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [products, setProducts] = useState([]);
+	const [categories, setCategories] = useState([
+		{ id: 'all', name: 'All Products', count: 0 }
+	]);
+
+	// Fetch products from backend
+	const fetchProducts = useCallback(async () => {
+		try {
+			setLoading(true);
+			const params = new URLSearchParams();
+			if (selectedCategory !== 'all') params.append('category', selectedCategory);
+			if (searchTerm) params.append('search', searchTerm);
+			params.append('sort', sortBy);
+			params.append('limit', '200'); // Fetch all 177 products
+
+			const response = await fetch(`${API_URL}/products?${params.toString()}`);
+			const data = await response.json();
+
+			if (data.success) {
+				setProducts(data.data || []);
+			}
+		} catch (err) {
+			console.error('Error fetching products:', err);
+		} finally {
+			setLoading(false);
+		}
+	}, [selectedCategory, searchTerm, sortBy]);
+
+	// Fetch categories from backend
+	const fetchCategories = useCallback(async () => {
+		try {
+			const response = await fetch(`${API_URL}/products/categories`);
+			const data = await response.json();
+
+			if (data.success && data.data) {
+				// Fetch counts for each category
+				const categoryList = [
+					{ id: 'all', name: 'All Products', count: 0 }
+				];
+
+				for (const cat of data.data) {
+					categoryList.push({
+						id: cat,
+						name: cat.charAt(0).toUpperCase() + cat.slice(1),
+						count: 0
+					});
+				}
+
+				// Get product counts per category
+				const allResponse = await fetch(`${API_URL}/products`);
+				const allData = await allResponse.json();
+				if (allData.success && allData.data) {
+					categoryList[0].count = allData.data.length;
+					categoryList.forEach((cat, idx) => {
+						if (cat.id !== 'all') {
+							cat.count = allData.data.filter(p => p.category === cat.id).length;
+						}
+					});
+				}
+
+				setCategories(categoryList);
+			}
+		} catch (err) {
+			console.error('Error fetching categories:', err);
+		}
+	}, []);
 
 	useEffect(() => {
 		const userData = JSON.parse(localStorage.getItem('user') || '{}');
 		if (userData.id) {
 			setUser(userData);
 		}
-		// Simulate loading
-		setTimeout(() => setLoading(false), 800);
-	}, []);
+		fetchCategories();
+	}, [fetchCategories]);
 
-	// Mock products data
-	const products = [
-		{ id: 1, name: 'Wireless Headphones', price: 79.99, category: 'electronics', rating: 4.5, reviews: 324, image: '🎧' },
-		{ id: 2, name: 'Smart Watch', price: 199.99, category: 'electronics', rating: 4.8, reviews: 156, image: '⌚' },
-		{ id: 3, name: 'Laptop Stand', price: 49.99, category: 'accessories', rating: 4.3, reviews: 89, image: '🖥️' },
-		{ id: 4, name: 'USB-C Cable', price: 12.99, category: 'accessories', rating: 4.6, reviews: 512, image: '🔌' },
-		{ id: 5, name: 'Phone Case', price: 24.99, category: 'accessories', rating: 4.2, reviews: 203, image: '📱' },
-		{ id: 6, name: 'Portable Charger', price: 34.99, category: 'electronics', rating: 4.7, reviews: 445, image: '🔋' },
-		{ id: 7, name: 'Keyboard', price: 129.99, category: 'electronics', rating: 4.9, reviews: 267, image: '⌨️' },
-		{ id: 8, name: 'Mouse Pad', price: 19.99, category: 'accessories', rating: 4.4, reviews: 178, image: '🖱️' },
-		{ id: 9, name: 'HDMI Cable', price: 9.99, category: 'accessories', rating: 4.5, reviews: 298, image: '📺' },
-		{ id: 10, name: 'Laptop Cooling Pad', price: 59.99, category: 'electronics', rating: 4.6, reviews: 134, image: '❄️' },
-		{ id: 11, name: 'Screen Protector', price: 14.99, category: 'accessories', rating: 4.3, reviews: 401, image: '🛡️' },
-		{ id: 12, name: 'Webcam', price: 89.99, category: 'electronics', rating: 4.7, reviews: 228, image: '📷' }
-	];
+	// Fetch products when filters change
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			fetchProducts();
+		}, 300);
+		return () => clearTimeout(timer);
+	}, [fetchProducts]);
 
-	const categories = [
-		{ id: 'all', name: 'All Products', count: 12 },
-		{ id: 'electronics', name: 'Electronics', count: 6 },
-		{ id: 'accessories', name: 'Accessories', count: 6 }
-	];
-
-	// Filter products
+	// Filter products (already filtered from API, but apply local search if needed)
 	let filteredProducts = selectedCategory === 'all'
 		? products
 		: products.filter(p => p.category === selectedCategory);
 
-	// Apply search filter
+	// Apply search filter (in case API doesn't support search)
 	if (searchTerm) {
 		filteredProducts = filteredProducts.filter(p => 
 			p.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -82,7 +135,7 @@ const CategoriesPage = () => {
 			case 'price-high':
 				return b.price - a.price;
 			case 'rating':
-				return b.rating - a.rating;
+				return (b.rating || 0) - (a.rating || 0);
 			default:
 				return 0;
 		}
@@ -320,6 +373,7 @@ const CategoriesPage = () => {
 											) : (
 												product.image
 											)}
+										</div>
 
 										{/* Details */}
 										<div className="flex-1">

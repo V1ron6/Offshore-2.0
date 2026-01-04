@@ -10,7 +10,7 @@ import Button from '../components/Button';
 import Card from '../components/Card';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
 import { CardSkeleton } from '../components/Skeleton.jsx';
-import { Breadcrumb } from '../components/Breadcrumb.jsx';
+import Breadcrumb from '../components/Breadcrumb.jsx';
 import { useToast } from '../components/ToastContext.jsx';
 
 const CartPage = () => {

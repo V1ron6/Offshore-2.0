@@ -12,7 +12,7 @@ const WishlistButton = ({ product, userId, size = 'md', className = '' }) => {
 
   useEffect(() => {
     if (userId && product?.id) {
-      setInWishlist(isInWishlist(userId, product.id));
+      setInWishlist(isInWishlist(product.id));
     }
   }, [userId, product?.id]);
 
@@ -26,8 +26,8 @@ const WishlistButton = ({ product, userId, size = 'md', className = '' }) => {
     }
 
     setAnimating(true);
-    const result = await toggleWishlist(userId, product);
-    setInWishlist(result.inWishlist);
+    const result = await toggleWishlist(product);
+    setInWishlist(result.added);
     
     setTimeout(() => setAnimating(false), 300);
   };
