@@ -1,6 +1,10 @@
 # Offshore Project
-# make sure to check the documentation folder for more information
+
 A full-stack e-commerce web application with a React frontend and Express.js backend. Features product browsing, shopping cart functionality, user authentication, and responsive design.
+#check out documentation for more information
+##setup and installation
+i have provide two scripts to aid and help in setting up and running dev 
+in the current directory you will find two files .bat is for windows and .sh is for macos and linux  , by default backend or servers run on 3000 and frontend runs on 5173
 
 ## Project Structure
 
