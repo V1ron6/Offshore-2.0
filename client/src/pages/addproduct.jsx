@@ -293,7 +293,7 @@ const AddProductPage = () => {
 									</button>
 									<button
 										type="submit"
-										className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold rounded-lg hover:from-red-600 hover:to-red-700 transition flex items-center justify-center gap-2"
+										className="flex-1 px-6 py-3 bg-linear-to-r from-red-500 to-red-600 text-white font-bold rounded-lg hover:from-red-600 hover:to-red-700 transition flex items-center justify-center gap-2"
 									>
 										<Plus size={20} />
 										Add Product

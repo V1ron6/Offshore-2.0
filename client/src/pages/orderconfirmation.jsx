@@ -2,13 +2,16 @@
  * Order Confirmation Page - Success page after purchase
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Package, Truck, Clock, ArrowRight } from 'lucide-react';
 import Card from '../components/Card';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import { Confetti, CheckmarkAnimation } from '../components/SuccessAnimation.jsx';
+
 const OrderConfirmation = () => {
 	const [orderNumber] = useState(`ORD-${Date.now().toString().slice(-8).toUpperCase()}`);
+	const [showConfetti, setShowConfetti] = useState(true);
 	const [estimatedDelivery] = useState(() => {
 		const date = new Date();
 		date.setDate(date.getDate() + 3);
@@ -19,26 +22,32 @@ const OrderConfirmation = () => {
 		});
 	});
 
+	useEffect(() => {
+		// Hide confetti after 4 seconds
+		const timer = setTimeout(() => setShowConfetti(false), 4000);
+		return () => clearTimeout(timer);
+	}, []);
+
 	return (
 		<div className="min-h-screen bg-linear-to-b from-green-50 to-white py-12 sm:py-16">
+			{/* Confetti Animation */}
+			<Confetti show={showConfetti} duration={4000} />
+
 			<div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Success Message */}
 				<div className="text-center mb-12">
 					<div className="flex justify-center mb-6">
-						<div className="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center">
-							<div className="absolute inset-0 bg-green-100 rounded-full animate-pulse"></div>
-							<CheckCircle size={80} className="text-green-600 relative z-10" />
-						</div>
+						<CheckmarkAnimation show={true} size="lg" />
 					</div>
-					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
+					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 animate-fade-in-up">
 						Thank You for Your Order!
 					</h1>
-					<p className="text-lg text-gray-600 mb-6">
+					<p className="text-lg text-gray-600 mb-6 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
 						Your order has been placed successfully. We've sent a confirmation email to your address.
 					</p>
 
 					{/* Order Number */}
-					<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 inline-block">
+					<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 inline-block animate-fade-in-up" style={{ animationDelay: '200ms' }}>
 						<p className="text-sm text-gray-600 mb-2">Order Number</p>
 						<p className="text-2xl font-bold text-blue-600 font-mono">{orderNumber}</p>
 					</div>

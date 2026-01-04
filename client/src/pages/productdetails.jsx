@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ShoppingCart, ArrowLeft, Star, Minus, Plus, CheckCircle } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, Star, Minus, Plus, CheckCircle, Heart } from 'lucide-react';
 import { addToCart, getCart } from '../utils/cartService.js';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import WishlistButton from '../components/WishlistButton.jsx'
+import StickyAddToCart from '../components/StickyAddToCart.jsx'
+import { Breadcrumb } from '../components/Breadcrumb.jsx'
+import { ImageZoom } from '../components/ImageZoom.jsx'
 
 const ProductDetails = () => {
 	const { id } = useParams();
@@ -117,6 +121,15 @@ const ProductDetails = () => {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
+			{/* Sticky Add to Cart Bar */}
+			<StickyAddToCart
+				product={product}
+				quantity={quantity}
+				setQuantity={setQuantity}
+				onAddToCart={addToCartHandler}
+				disabled={!product.inStock}
+			/>
+
 			{/* Header */}
 			<div className="bg-white shadow-sm sticky top-0 z-40">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -134,17 +147,43 @@ const ProductDetails = () => {
 
 			{/* Main Content */}
 			<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+				{/* Breadcrumb Navigation */}
+				<div className="mb-6">
+					<Breadcrumb 
+						items={[
+							{ label: 'Home', path: '/' },
+							{ label: 'Products', path: '/app' },
+							{ label: product?.category || 'Category', path: `/categories?cat=${product?.category}` },
+							{ label: product?.name || 'Product' }
+						]}
+					/>
+				</div>
+
 				{success && (
-					<div className="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center gap-2">
+					<div className="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center gap-2 animate-fade-in">
 						<CheckCircle size={20} />
 						{success}
 					</div>
 				)}
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-					{/* Product Image */}
-					<div className="flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 rounded-lg p-8 min-h-96">
-						<div className="text-8xl sm:text-9xl">{product.image}</div>
+					{/* Product Image with Zoom */}
+					<div className="flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 rounded-lg p-8 min-h-96 relative">
+						<ImageZoom
+							src={product.image?.startsWith('http') ? product.image : null}
+							emoji={!product.image?.startsWith('http') ? product.image : null}
+							alt={product.name}
+							zoomScale={1.5}
+							className="text-8xl sm:text-9xl w-full h-full"
+						/>
+						{/* Wishlist Button */}
+						<div className="absolute top-4 right-4">
+							<WishlistButton 
+								product={product}
+								userId={user?.id}
+								size="lg"
+							/>
+						</div>
 					</div>
 
 					{/* Product Info */}

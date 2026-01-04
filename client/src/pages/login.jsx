@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import Offshorelogo from '../assets/Offshorelogo.jpg'
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import { useToast } from '../components/ToastContext.jsx'
+
 // ========================================
 // CONSTANTS - Styling and Configuration
 // ========================================
@@ -57,6 +59,9 @@ const Login = () =>{
 
 	// Navigation
 	const navigate = useNavigate();
+	
+	// Toast notifications
+	const toast = useToast();
 
 	// ========================================
 	// EFFECTS
@@ -262,6 +267,7 @@ const Login = () =>{
 			// Handle successful response
 			if (response.data && response.data.success) {
 				setSuccess(`Welcome ${formData.username}! Redirecting to dashboard...`);
+				toast.success(`Welcome back, ${formData.username}!`);
 
 				// Save token and user data to localStorage
 				localStorage.setItem('authToken', response.data.token);
@@ -288,25 +294,33 @@ const Login = () =>{
 				}, 1500);
 			} else {
 				// Handle unsuccessful login response
-				setError(response.data?.message || "Login failed. Please try again.");
+				const errorMsg = response.data?.message || "Login failed. Please try again.";
+				setError(errorMsg);
+				toast.error(errorMsg);
 			}
 		} catch (error) {
 			// Handle different types of errors
+			let errorMsg = "An error occurred. Please try again.";
 			if (error.response?.status === 404) {
-				setError("Username not found. Please check your credentials.");
+				errorMsg = "Username not found. Please check your credentials.";
 			} else if (error.response?.status === 401 || error.response?.status === 400) {
-				setError(error.response?.data?.message || "Invalid username or password");
+				errorMsg = error.response?.data?.message || "Invalid username or password";
+			} else if (error.response?.status === 429) {
+				errorMsg = "Too many login attempts. Please try again in 15 minutes.";
 			} else if (error.code === 'ECONNABORTED') {
-				setError("Request timeout. The server is not responding. Please try again.");
+				errorMsg = "Request timeout. The server is not responding. Please try again.";
 			} else if (error.code === 'ERR_NETWORK') {
-				setError("Network error. Please check your internet connection.");
+				errorMsg = "Network error. Please check your internet connection.";
 			} else if (error.response?.data?.message) {
-				setError(error.response.data.message);
+				errorMsg = error.response.data.message;
 			} else if (error.message) {
-				setError(error.message);
+				errorMsg = error.message;
 			} else {
-				setError("An unexpected error occurred. Please try again.");
+				errorMsg = "An unexpected error occurred. Please try again.";
 			}
+			
+			setError(errorMsg);
+			toast.error(errorMsg);
 
 			// Log error for debugging
 			console.error("Login error:", error);

@@ -4,9 +4,12 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, ChevronRight, Calendar, MapPin, DollarSign, Star } from 'lucide-react';
+import { Package, ChevronRight, Calendar, MapPin, DollarSign, Star, FileText } from 'lucide-react';
 import Card from '../components/Card';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import { OrderCardSkeleton } from '../components/Skeleton.jsx';
+import { Breadcrumb } from '../components/Breadcrumb.jsx';
+import { downloadInvoice } from '../utils/invoiceService';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
@@ -85,12 +88,32 @@ const OrdersPage = () => {
 	};
 
 	if (loading) {
-		return <LoadingScreen message="Loading Orders" submessage="Fetching your order history..." />;
+		return (
+			<div className="min-h-screen bg-gray-50 py-8 sm:py-12">
+				<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div className="mb-8">
+						<div className="h-10 bg-gray-200 rounded w-48 mb-2 animate-pulse" />
+						<div className="h-5 bg-gray-200 rounded w-64 animate-pulse" />
+					</div>
+					<div className="space-y-4">
+						{[1, 2, 3].map(i => <OrderCardSkeleton key={i} />)}
+					</div>
+				</div>
+			</div>
+		);
 	}
 
 	return (
 		<div className="min-h-screen bg-gray-50 py-8 sm:py-12">
 			<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				{/* Breadcrumb */}
+				<div className="mb-6">
+					<Breadcrumb items={[
+						{ label: 'Home', path: '/' },
+						{ label: 'My Orders' }
+					]} />
+				</div>
+
 				{/* Header */}
 				<div className="mb-8">
 					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">My Orders</h1>
@@ -245,6 +268,25 @@ const OrdersPage = () => {
 
 									{/* Actions */}
 									<div className="space-y-3">
+										<button 
+											onClick={() => {
+												const userData = JSON.parse(localStorage.getItem('user') || '{}');
+												downloadInvoice({
+													id: selectedOrder.orderId,
+													items: selectedOrder.items,
+													total: selectedOrder.totalAmount,
+													status: selectedOrder.status,
+													createdAt: selectedOrder.date,
+													shippingAddress: selectedOrder.shippingAddress,
+													discount: selectedOrder.discount || 0,
+													couponCode: selectedOrder.couponCode
+												}, userData);
+											}}
+											className="w-full py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition text-sm flex items-center justify-center gap-2"
+										>
+											<FileText size={16} />
+											Download Invoice
+										</button>
 										<button className="w-full py-2 bg-blue-100 text-blue-600 rounded-lg font-semibold hover:bg-blue-200 transition text-sm">
 											Track Shipment
 										</button>

@@ -72,7 +72,7 @@ const AdminLogin = () => {
 				{/* Card Container */}
 				<div className="bg-white rounded-lg shadow-2xl overflow-hidden">
 					{/* Header */}
-					<div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-8 text-white text-center">
+					<div className="bg-linear-to-r from-red-600 to-red-700 px-6 py-8 text-white text-center">
 						<div className="flex items-center justify-center gap-2 mb-2">
 							<Lock size={28} />
 							<h1 className="text-3xl font-bold">Admin Portal</h1>

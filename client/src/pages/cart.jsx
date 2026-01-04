@@ -9,6 +9,9 @@ import { getCart, removeFromCart, updateQuantity, getCartTotal } from '../utils/
 import Button from '../components/Button';
 import Card from '../components/Card';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import { CardSkeleton } from '../components/Skeleton.jsx';
+import { Breadcrumb } from '../components/Breadcrumb.jsx';
+import { useToast } from '../components/ToastContext.jsx';
 
 const CartPage = () => {
 	const [user, setUser] = useState(null);
@@ -18,6 +21,7 @@ const CartPage = () => {
 	const [discount, setDiscount] = useState(0);
 
 	const navigate = useNavigate();
+	const toast = useToast();
 
 	useEffect(() => {
 		const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -41,6 +45,7 @@ const CartPage = () => {
 	const handleRemove = (productId) => {
 		removeFromCart(user.id, productId);
 		loadCart(user.id);
+		toast.success('Item removed from cart');
 	};
 
 	const handleUpdateQuantity = (productId, newQuantity) => {
@@ -54,10 +59,13 @@ const CartPage = () => {
 		// Simple promo code validation
 		if (promoCode.toUpperCase() === 'SAVE10') {
 			setDiscount(0.1);
+			toast.success('Promo code applied! 10% off');
 		} else if (promoCode.toUpperCase() === 'SAVE20') {
 			setDiscount(0.2);
+			toast.success('Promo code applied! 20% off');
 		} else {
 			setDiscount(0);
+			toast.error('Invalid promo code');
 		}
 	};
 
@@ -67,12 +75,37 @@ const CartPage = () => {
 	const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
 	if (loading) {
-		return <LoadingScreen message="Loading Cart" submessage="Fetching your items..." />;
+		return (
+			<div className="min-h-screen bg-gray-50 py-8 sm:py-12">
+				<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div className="mb-8">
+						<div className="h-10 bg-gray-200 rounded w-48 mb-2 animate-pulse" />
+						<div className="h-5 bg-gray-200 rounded w-32 animate-pulse" />
+					</div>
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+						<div className="lg:col-span-2 space-y-4">
+							{[1, 2, 3].map(i => <CardSkeleton key={i} />)}
+						</div>
+						<div className="lg:col-span-1">
+							<CardSkeleton />
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 	}
 
 	return (
 		<div className="min-h-screen bg-gray-50 py-8 sm:py-12">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				{/* Breadcrumb */}
+				<div className="mb-6">
+					<Breadcrumb items={[
+						{ label: 'Home', path: '/' },
+						{ label: 'Shopping Cart' }
+					]} />
+				</div>
+
 				{/* Header */}
 				<div className="mb-8 sm:mb-12">
 					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Shopping Cart</h1>
@@ -101,12 +134,16 @@ const CartPage = () => {
 										<div key={item.id} className="pt-4 sm:pt-6 first:pt-0 flex gap-4 sm:gap-6">
 											{/* Product Image */}
 											{item.image && (
-												<div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 bg-gray-200 rounded-lg overflow-hidden">
-													<img
-														src={item.image}
-														alt={item.name}
-														className="w-full h-full object-cover"
-													/>
+												<div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+													{item.image?.startsWith('http') ? (
+														<img
+															src={item.image}
+															alt={item.name}
+															className="w-full h-full object-cover"
+														/>
+													) : (
+														<span className="text-4xl">{item.image}</span>
+													)}
 												</div>
 											)}
 

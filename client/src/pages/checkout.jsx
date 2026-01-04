@@ -8,11 +8,14 @@ import { ChevronRight, Truck, MapPin, CreditCard, Lock } from 'lucide-react';
 import { getCart, getCartTotal, clearCart } from '../utils/cartService';
 import Card from '../components/Card';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import CouponInput from '../components/CouponInput.jsx';
+
 const CheckoutPage = () => {
 	const [user, setUser] = useState(null);
 	const [cart, setCart] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [step, setStep] = useState(1); // 1: Shipping, 2: Payment
+	const [appliedCoupon, setAppliedCoupon] = useState(null);
 	const [formData, setFormData] = useState({
 		firstName: '',
 		lastName: '',
@@ -111,9 +114,10 @@ const CheckoutPage = () => {
 	}
 
 	const cartTotal = getCartTotal(cart);
-	const tax = cartTotal * 0.1;
+	const discount = appliedCoupon?.discount || 0;
+	const tax = (cartTotal - discount) * 0.1;
 	const shipping = 0;
-	const totalAmount = cartTotal + tax + shipping;
+	const totalAmount = cartTotal - discount + tax + shipping;
 
 	return (
 		<div className="min-h-screen bg-gray-50 py-8 sm:py-12">
@@ -468,6 +472,12 @@ const CheckoutPage = () => {
 									<span>Subtotal</span>
 									<span>${cartTotal.toFixed(2)}</span>
 								</div>
+								{appliedCoupon && (
+									<div className="flex justify-between text-green-600">
+										<span>Discount ({appliedCoupon.code})</span>
+										<span>-${discount.toFixed(2)}</span>
+									</div>
+								)}
 								<div className="flex justify-between text-gray-600">
 									<span>Shipping</span>
 									<span className="text-green-600 font-semibold">Free</span>
@@ -482,6 +492,15 @@ const CheckoutPage = () => {
 										${totalAmount.toFixed(2)}
 									</span>
 								</div>
+							</div>
+
+							{/* Coupon Input */}
+							<div className="mt-6 pt-6 border-t border-gray-200">
+								<CouponInput 
+									subtotal={cartTotal}
+									appliedCoupon={appliedCoupon}
+									onCouponApplied={setAppliedCoupon}
+								/>
 							</div>
 						</Card>
 					</div>

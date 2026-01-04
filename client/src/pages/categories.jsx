@@ -2,7 +2,7 @@
  * Categories Page - Browse products by category
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	Grid,
@@ -10,17 +10,35 @@ import {
 	ChevronDown,
 	Star,
 	ShoppingCart,
-	Heart
+	Heart,
+	Eye
 } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
 import HeaderBeforeLogin from '../components/HeaderBeforeLogin.jsx'
+import WishlistButton from '../components/WishlistButton.jsx'
+import AdvancedSearch from '../components/AdvancedSearch.jsx'
+import ProductQuickView from '../components/ProductQuickView.jsx'
+import { ProductGridSkeleton } from '../components/Skeleton.jsx'
 
 const CategoriesPage = () => {
 	const [viewMode, setViewMode] = useState('grid'); // grid or list
 	const [sortBy, setSortBy] = useState('featured');
 	const [selectedCategory, setSelectedCategory] = useState('all');
+	const [searchTerm, setSearchTerm] = useState('');
+	const [user, setUser] = useState(null);
+	const [quickViewProduct, setQuickViewProduct] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const userData = JSON.parse(localStorage.getItem('user') || '{}');
+		if (userData.id) {
+			setUser(userData);
+		}
+		// Simulate loading
+		setTimeout(() => setLoading(false), 800);
+	}, []);
 
 	// Mock products data
 	const products = [
@@ -45,9 +63,16 @@ const CategoriesPage = () => {
 	];
 
 	// Filter products
-	const filteredProducts = selectedCategory === 'all'
+	let filteredProducts = selectedCategory === 'all'
 		? products
 		: products.filter(p => p.category === selectedCategory);
+
+	// Apply search filter
+	if (searchTerm) {
+		filteredProducts = filteredProducts.filter(p => 
+			p.name.toLowerCase().includes(searchTerm.toLowerCase())
+		);
+	}
 
 	// Sort products
 	const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -137,6 +162,28 @@ const CategoriesPage = () => {
 
 					{/* Main Content */}
 					<div className="lg:col-span-3">
+						{/* Search Bar */}
+						<div className="mb-6">
+							<AdvancedSearch 
+								onSearch={setSearchTerm}
+								categories={['electronics', 'accessories']}
+								onFilterChange={(filters) => {
+									if (filters.category) {
+										setSelectedCategory(filters.category);
+									}
+									if (filters.sortBy) {
+										const sortMap = {
+											'price-low': 'price-low',
+											'price-high': 'price-high',
+											'newest': 'featured',
+											'name-asc': 'featured'
+										};
+										setSortBy(sortMap[filters.sortBy] || 'featured');
+									}
+								}}
+							/>
+						</div>
+
 						{/* Toolbar */}
 						<div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 							<div className="text-sm text-gray-600">
@@ -185,19 +232,38 @@ const CategoriesPage = () => {
 						</div>
 
 						{/* Products Grid/List */}
-						{viewMode === 'grid' ? (
+						{loading ? (
+							<ProductGridSkeleton count={6} />
+						) : viewMode === 'grid' ? (
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 								{sortedProducts.map(product => (
 									<Card
 										key={product.id}
-										className="overflow-hidden hover:shadow-lg transition flex flex-col"
+										className="overflow-hidden hover:shadow-lg transition flex flex-col group animate-fade-in"
 									>
 										{/* Image */}
-										<div className="w-full h-48 bg-gray-200 flex items-center justify-center text-6xl overflow-hidden relative group">
-											{product.image}
-											<button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-lg hover:bg-red-500 hover:text-white transition opacity-0 group-hover:opacity-100">
-												<Heart size={20} />
-											</button>
+										<div className="w-full h-48 bg-gray-200 flex items-center justify-center text-6xl overflow-hidden relative">
+											{product.image?.startsWith('http') ? (
+												<img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+											) : (
+												product.image
+											)}
+											{/* Hover Actions */}
+											<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+												<button
+													onClick={() => setQuickViewProduct(product)}
+													className="p-3 bg-white rounded-full hover:bg-gray-100 transition transform hover:scale-110"
+													title="Quick View"
+												>
+													<Eye size={20} className="text-gray-900" />
+												</button>
+												<WishlistButton 
+													product={product}
+													userId={user?.id}
+													size="sm"
+													className="bg-white rounded-full p-3 hover:bg-gray-100"
+												/>
+											</div>
 										</div>
 
 										{/* Details */}
@@ -248,9 +314,12 @@ const CategoriesPage = () => {
 								{sortedProducts.map(product => (
 									<Card key={product.id} className="p-6 flex flex-col sm:flex-row gap-6">
 										{/* Image */}
-													<div className="w-full sm:w-32 h-32 bg-gray-200 flex items-center justify-center text-5xl shrink-0 rounded-lg">
-											{product.image}
-										</div>
+														<div className="w-full sm:w-32 h-32 bg-gray-200 flex items-center justify-center text-5xl shrink-0 rounded-lg overflow-hidden">
+											{product.image?.startsWith('http') ? (
+												<img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+											) : (
+												product.image
+											)}
 
 										{/* Details */}
 										<div className="flex-1">
@@ -297,6 +366,14 @@ const CategoriesPage = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* Product Quick View Modal */}
+			<ProductQuickView
+				product={quickViewProduct}
+				isOpen={!!quickViewProduct}
+				onClose={() => setQuickViewProduct(null)}
+				userId={user?.id}
+			/>
 		</div>
 	</>
 	);

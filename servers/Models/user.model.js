@@ -1,256 +1,201 @@
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcryptjs');
 
+// Store for users - passwords will be hashed for new users
+// Default users have plain text passwords for demo (they'll work with both plain and hash comparison)
 const defaultUser = [
 	{
 		id: uuidv4(),
 		username: "user",
-		password: "password123"
+		password: "password123",
+		email: "user@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "john",
-		password: "12john3"
+		password: "12john3",
+		email: "john@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "david",
-		password: "yoofi123"
+		password: "yoofi123",
+		email: "david@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "alice",
-		password: "alice123"
+		password: "alice123",
+		email: "alice@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "bob",
-		password: "bob123"
+		password: "bob123",
+		email: "bob@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "sarah",
-		password: "sarah123"
+		password: "sarah123",
+		email: "sarah@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "mike",
-		password: "mike123"
+		password: "mike123",
+		email: "mike@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "emma",
-		password: "emma123"
+		password: "emma123",
+		email: "emma@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "james",
-		password: "james123"
+		password: "james123",
+		email: "james@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "lucy",
-		password: "lucy123"
-	},
-	{
-		id: uuidv4(),
-		username: "oliver",
-		password: "oliver123"
+		password: "lucy123",
+		email: "lucy@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "sophia",
-		password: "sophia123"
+		password: "sophia123",
+		email: "sophia@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "liam",
-		password: "liam123"
-	},
-	{
-		id: uuidv4(),
-		username: "ava",
-		password: "ava123"
+		password: "liam123",
+		email: "liam@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "noah",
-		password: "noah123"
+		password: "noah123",
+		email: "noah@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
-		username: "isabella",
-		password: "isabella123"
-	},
-	{
-		id: uuidv4(),
-		username: "elijah",
-		password: "elijah123"
-	},
-	{
-		id: uuidv4(),
-		username: "mia",
-		password: "mia123"
-	},
-	{
-		id: uuidv4(),
-		username: "benjamin",
-		password: "benjamin123"
+		username: "oliver",
+		password: "oliver123",
+		email: "oliver@example.com",
+		isHashed: false
 	},
 	{
 		id: uuidv4(),
 		username: "charlotte",
-		password: "charlotte123"
-	},
-	{
-		id: uuidv4(),
-		username: "lucas",
-		password: "lucas123"
-	},
-	{
-		id: uuidv4(),
-		username: "amelia",
-		password: "amelia123"
-	},
-	{
-		id: uuidv4(),
-		username: "mason",
-		password: "mason123"
-	},
-	{
-		id: uuidv4(),
-		username: "harper",
-		password: "harper123"
-	},
-	{
-		id: uuidv4(),
-		username: "logan",
-		password: "logan123"
-	},
-	{
-		id: uuidv4(),
-		username: "evelyn",
-		password: "evelyn123"
-	},
-	{
-		id: uuidv4(),
-		username: "ethan",
-		password: "ethan123"
-	},
-	{
-		id: uuidv4(),
-		username: "abigail",
-		password: "abigail123"
-	},
-	{
-		id: uuidv4(),
-		username: "alexander",
-		password: "alexander123"
-	},
-	{
-		id: uuidv4(),
-		username: "elizabeth",
-		password: "elizabeth123"
-	},
-	{
-		id: uuidv4(),
-		username: "jacob",
-		password: "jacob123"
-	},
-	{
-		id: uuidv4(),
-		username: "sofia",
-		password: "sofia123"
-	},
-	{
-		id: uuidv4(),
-		username: "michael",
-		password: "michael123"
-	},
-	{
-		id: uuidv4(),
-		username: "avery",
-		password: "avery123"
-	},
-	{
-		id: uuidv4(),
-		username: "daniel",
-		password: "daniel123"
-	},
-	{
-		id: uuidv4(),
-		username: "ella",
-		password: "ella123"
-	},
-	{
-		id: uuidv4(),
-		username: "matthew",
-		password: "matthew123"
-	},
-	{
-		id: uuidv4(),
-		username: "scarlett",
-		password: "scarlett123"
-	},
-	{
-		id: uuidv4(),
-		username: "andrew",
-		password: "andrew123"
-	},
-	{
-		id: uuidv4(),
-		username: "victoria",
-		password: "victoria123"
-	},
-	{
-		id: uuidv4(),
-		username: "christopher",
-		password: "christopher123"
-	},
-	{
-		id: uuidv4(),
-		username: "grace",
-		password: "grace123"
-	},
-	{
-		id: uuidv4(),
-		username: "anthony",
-		password: "anthony123"
-	},
-	{
-		id: uuidv4(),
-		username: "chloe",
-		password: "chloe123"
-	},
-	{
-		id: uuidv4(),
-		username: "ryan",
-		password: "ryan123"
-	},
-	{
-		id: uuidv4(),
-		username: "natalie",
-		password: "natalie123"
-	},
-	{
-		id: uuidv4(),
-		username: "kevin",
-		password: "kevin123"
-	},
-	{
-		id: uuidv4(),
-		username: "hannah",
-		password: "hannah123"
-	},
-	{
-		id: uuidv4(),
-		username: "robert",
-		password: "robert123"
-	},
-	{
-		id: uuidv4(),
-		username: "lily",
-		password: "lily123"
+		password: "charlotte123",
+		email: "charlotte@example.com",
+		isHashed: false
 	}
 ];
 
+// Helper functions
+const findUserByUsername = (username) => {
+	return defaultUser.find(u => u.username === username);
+};
+
+const findUserByEmail = (email) => {
+	return defaultUser.find(u => u.email === email);
+};
+
+const findUserById = (id) => {
+	return defaultUser.find(u => u.id === id);
+};
+
+// Verify password (handles both hashed and plain text for backward compatibility)
+const verifyPassword = async (inputPassword, user) => {
+	if (user.isHashed) {
+		return await bcrypt.compare(inputPassword, user.password);
+	}
+	// For demo users with plain text passwords
+	return inputPassword === user.password;
+};
+
+// Hash password for new users
+const hashPassword = async (password) => {
+	const salt = await bcrypt.genSalt(10);
+	return await bcrypt.hash(password, salt);
+};
+
+// Create new user with hashed password
+const createUser = async (username, email, password) => {
+	const hashedPassword = await hashPassword(password);
+	const newUser = {
+		id: uuidv4(),
+		username,
+		email,
+		password: hashedPassword,
+		isHashed: true,
+		createdAt: new Date().toISOString()
+	};
+	defaultUser.push(newUser);
+	return {
+		id: newUser.id,
+		username: newUser.username,
+		email: newUser.email
+	};
+};
+
+// Get all users (without passwords)
+const getAllUsersData = () => {
+	return defaultUser.map(u => ({
+		id: u.id,
+		username: u.username,
+		email: u.email || `${u.username}@example.com`,
+		createdAt: u.createdAt || new Date().toISOString()
+	}));
+};
+
+// Delete user by ID
+const deleteUserById = (id) => {
+	const index = defaultUser.findIndex(u => u.id === id);
+	if (index !== -1) {
+		defaultUser.splice(index, 1);
+		return true;
+	}
+	return false;
+};
+
+// Update user by ID
+const updateUserById = (id, updates) => {
+	const user = defaultUser.find(u => u.id === id);
+	if (user) {
+		if (updates.username) user.username = updates.username;
+		if (updates.email) user.email = updates.email;
+		return { id: user.id, username: user.username, email: user.email };
+	}
+	return null;
+};
+
 module.exports = defaultUser;
+module.exports.findUserByUsername = findUserByUsername;
+module.exports.findUserByEmail = findUserByEmail;
+module.exports.findUserById = findUserById;
+module.exports.verifyPassword = verifyPassword;
+module.exports.hashPassword = hashPassword;
+module.exports.createUser = createUser;
+module.exports.getAllUsersData = getAllUsersData;
+module.exports.deleteUserById = deleteUserById;
+module.exports.updateUserById = updateUserById;

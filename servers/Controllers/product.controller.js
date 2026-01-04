@@ -6,12 +6,18 @@
 const { mockProducts } = require('../Models/product.model.js');
 
 /**
- * Get all products with optional filtering
- * Query params: category, search, sort, limit
+ * Get all products with optional filtering and pagination
+ * Query params: category, search, sort, page, limit
  */
 const getAllProducts = (req, res) => {
 	try {
-		const { category, search, sort = 'featured', limit = 200 } = req.query;
+		const { 
+			category, 
+			search, 
+			sort = 'featured', 
+			page = 1, 
+			limit = 12 
+		} = req.query;
 		
 		let products = [...mockProducts];
 
@@ -43,14 +49,25 @@ const getAllProducts = (req, res) => {
 			products.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 		}
 
-		// Apply limit
-		const maxLimit = Math.min(parseInt(limit) || 150, 200);
-		products = products.slice(0, maxLimit);
+		// Pagination
+		const pageNum = Math.max(1, parseInt(page) || 1);
+		const limitNum = Math.min(Math.max(1, parseInt(limit) || 12), 100); // Max 100 per page
+		const totalProducts = products.length;
+		const totalPages = Math.ceil(totalProducts / limitNum);
+		const startIndex = (pageNum - 1) * limitNum;
+		const endIndex = startIndex + limitNum;
+		
+		const paginatedProducts = products.slice(startIndex, endIndex);
 
 		res.status(200).json({
 			success: true,
-			count: products.length,
-			data: products
+			count: paginatedProducts.length,
+			total: totalProducts,
+			page: pageNum,
+			totalPages,
+			hasNextPage: pageNum < totalPages,
+			hasPrevPage: pageNum > 1,
+			data: paginatedProducts
 		});
 	} catch (error) {
 		res.status(500).json({

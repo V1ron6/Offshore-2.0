@@ -16,9 +16,10 @@ const {
 	updateUser,
 	verifyAdminToken 
 } = require('../Controllers/admin.controller.js');
+const { authLimiter } = require('../middleware/rateLimit.js');
 
-// Admin Login Route
-router.post('/login', adminLogin);
+// Admin Login Route with rate limiting
+router.post('/login', authLimiter, adminLogin);
 
 // Get all admins (protected)
 router.get('/admins', verifyAdminToken, getAllAdminsData);

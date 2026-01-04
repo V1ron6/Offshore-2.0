@@ -14,6 +14,9 @@ const userRoute = require("./Routes/user.route.js");
 const productRoute = require("./Routes/product.route.js");
 const adminRoute = require("./Routes/admin.route.js");
 const orderRoute = require("./Routes/order.route.js");
+const complaintRoute = require("./Routes/complaint.route.js");
+const wishlistRoute = require("./Routes/wishlist.route.js");
+const couponRoute = require("./Routes/coupon.route.js");
 
 // CORS configuration
 app.use(cors({
@@ -41,6 +44,9 @@ app.use("/api/user", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/orders", orderRoute);
+app.use("/api/complaints", complaintRoute);
+app.use("/api/wishlist", wishlistRoute);
+app.use("/api/coupons", couponRoute);
 
 app.get("/", (req, res) => {
 	res.send("Offshore API - Secure & Production Ready");

@@ -442,8 +442,12 @@ const App = () => {
 												onClick={() => navigate(`/product/${product.id}`)}
 											>
 												{/* Product Image */}
-												<div className="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-4xl sm:text-5xl h-32 sm:h-40 flex items-center justify-center group-hover:scale-110 transition">
-												<img src={product.image} alt={product.name} />
+												<div className="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-4xl sm:text-5xl h-32 sm:h-40 flex items-center justify-center group-hover:scale-110 transition overflow-hidden">
+												{product.image?.startsWith('http') ? (
+													<img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+												) : (
+													<span>{product.image}</span>
+												)}
 											</div>
 
 												{/* Product Info */}

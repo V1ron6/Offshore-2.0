@@ -52,7 +52,7 @@ const CTA = ({
 
   return (
     <div className={`
-      bg-gradient-to-r ${variants[variant]}
+      bg-linear-to-r ${variants[variant]}
       rounded-2xl p-8 md:p-12
       text-white overflow-hidden relative
     `}>
@@ -74,7 +74,7 @@ const CTA = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
             {features.map((feature, idx) => (
               <div key={idx} className="flex items-start gap-3">
-                <CheckCircle2 size={20} className="text-green-300 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 size={20} className="text-green-300 shrink-0 mt-0.5" />
                 <span className="text-sm">{feature}</span>
               </div>
             ))}

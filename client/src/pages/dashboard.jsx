@@ -13,6 +13,7 @@ import { Search, ShoppingCart, Star, Heart, Filter, Grid, List, TrendingUp, User
 import Button from '../components/Button.jsx';
 import Card from '../components/Card.jsx';
 import LoadingScreen from '../components/LoadingScreen.jsx';
+import { DashboardSkeleton, ProductGridSkeleton } from '../components/Skeleton.jsx';
 import { sanitizeInput } from '../utils/security.js';
 import { addToCart } from '../utils/cartService.js';
 
@@ -116,13 +117,13 @@ const Dashboard = () => {
 	};
 
 	if (loading) {
-		return <LoadingScreen message="Loading Dashboard" submessage="Preparing your products..." />;
+		return <DashboardSkeleton />;
 	}
 
 	return (
 		<div className="min-h-screen bg-white">
 			{/* Top Search Bar */}
-			<div className="bg-gradient-to-b from-red-600 to-red-500 text-white shadow-md sticky top-0 z-50">
+			<div className="bg-linear-to-b from-red-600 to-red-500 text-white shadow-md sticky top-0 z-50">
 				<div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
 					<div className="flex items-center justify-between gap-4">
 						<h1 className="text-2xl font-bold">🌊 Offshore</h1>
@@ -185,7 +186,7 @@ const Dashboard = () => {
 				{/* Dashboard Stats */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 					{/* Total Sales Card */}
-					<div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+					<div className="bg-linear-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
 						<div className="flex items-center justify-between mb-2">
 							<h3 className="text-sm font-semibold opacity-90">Total Sales</h3>
 							<DollarSign size={20} className="opacity-70" />
@@ -195,7 +196,7 @@ const Dashboard = () => {
 					</div>
 
 					{/* Monthly Revenue */}
-					<div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
+					<div className="bg-linear-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
 						<div className="flex items-center justify-between mb-2">
 							<h3 className="text-sm font-semibold opacity-90">Monthly Revenue</h3>
 							<TrendingUp size={20} className="opacity-70" />
@@ -205,7 +206,7 @@ const Dashboard = () => {
 					</div>
 
 					{/* Monthly Profit */}
-					<div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+					<div className="bg-linear-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg">
 						<div className="flex items-center justify-between mb-2">
 							<h3 className="text-sm font-semibold opacity-90">Monthly Profit</h3>
 							<BarChart3 size={20} className="opacity-70" />
@@ -215,7 +216,7 @@ const Dashboard = () => {
 					</div>
 
 					{/* Total Orders */}
-					<div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+					<div className="bg-linear-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
 						<div className="flex items-center justify-between mb-2">
 							<h3 className="text-sm font-semibold opacity-90">Total Orders</h3>
 							<ShoppingCart size={20} className="opacity-70" />
@@ -273,7 +274,7 @@ const Dashboard = () => {
 					<h3 className="text-xl font-bold text-gray-900 mb-4">📊 Weekly Sales & Profit</h3>
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 						{chartData.map((data, idx) => (
-							<div key={idx} className="bg-gradient-to-b from-gray-50 to-white p-4 rounded-lg border border-gray-200">
+							<div key={idx} className="bg-linear-to-b from-gray-50 to-white p-4 rounded-lg border border-gray-200">
 								<p className="text-sm font-bold text-gray-900 mb-3">{data.name}</p>
 								<div className="space-y-2">
 									<div>
@@ -382,10 +383,12 @@ const Dashboard = () => {
 								{filteredProducts.map((product) => (
 									<div key={product.id} className={`bg-white border border-gray-200 rounded-lg hover:shadow-lg transition ${viewMode === 'list' ? 'flex gap-4 p-4' : 'p-4'}`}>
 										{/* Product Image */}
-										<div className={`flex-shrink-0 ${viewMode === 'list' ? 'w-32 h-32' : 'w-full h-40'} bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mb-4 sm:mb-0`}>
-											<span className={viewMode === 'list' ? 'text-5xl' : 'text-6xl'}>{product.image}</span>
-										</div>
-
+										<div className={`shrink-0 ${viewMode === 'list' ? 'w-32 h-32' : 'w-full h-40'} bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mb-4 sm:mb-0`}>
+													{product.image?.startsWith('http') ? (
+														<img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+													) : (
+														<span className={viewMode === 'list' ? 'text-5xl' : 'text-6xl'}>{product.image}</span>
+													)}
 										{/* Product Info */}
 										<div className={viewMode === 'list' ? 'flex-1' : ''}>
 											<h3 className="font-bold text-gray-900 mb-2 line-clamp-2">{product.name}</h3>

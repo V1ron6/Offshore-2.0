@@ -1,8 +1,14 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const defaultUser = require("../Models/user.model.js");
+const { 
+	findUserByUsername, 
+	findUserByEmail, 
+	verifyPassword, 
+	createUser 
+} = require("../Models/user.model.js");
 
-// Login controller with JWT
+// Login controller with JWT and bcrypt password verification
 const loginUser = async (req, res) => {
 	try {
 		const { username, password } = req.body;
@@ -24,7 +30,7 @@ const loginUser = async (req, res) => {
 		}
 
 		// Find user
-		const user = defaultUser.find((u) => u.username === username);
+		const user = findUserByUsername(username);
 		if (!user) {
 			return res.status(401).json({ 
 				success: false, 
@@ -32,8 +38,8 @@ const loginUser = async (req, res) => {
 			});
 		}
 
-		// Verify password (in production, use bcrypt)
-		const isPasswordValid = password === user.password; // TODO: Use bcrypt.compare()
+		// Verify password using bcrypt (handles both hashed and plain text)
+		const isPasswordValid = await verifyPassword(password, user);
 		if (!isPasswordValid) {
 			return res.status(401).json({ 
 				success: false, 
@@ -52,7 +58,7 @@ const loginUser = async (req, res) => {
 			success: true, 
 			message: `Welcome ${username}`,
 			token,
-			user: { id: user.id, username: user.username }
+			user: { id: user.id, username: user.username, email: user.email }
 		});
 
 	} catch (error) {
@@ -60,6 +66,88 @@ const loginUser = async (req, res) => {
 		return res.status(500).json({ 
 			success: false, 
 			message: 'Internal server error' 
+		});
+	}
+};
+
+// Signup controller with bcrypt password hashing
+const signupUser = async (req, res) => {
+	try {
+		const { username, email, password } = req.body;
+
+		// Input validation
+		if (!username || !email || !password) {
+			return res.status(400).json({
+				success: false,
+				message: 'Username, email, and password are required'
+			});
+		}
+
+		// Validate username length
+		if (username.length < 3 || username.length > 20) {
+			return res.status(400).json({
+				success: false,
+				message: 'Username must be between 3 and 20 characters'
+			});
+		}
+
+		// Validate email format
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) {
+			return res.status(400).json({
+				success: false,
+				message: 'Invalid email format'
+			});
+		}
+
+		// Validate password length
+		if (password.length < 6) {
+			return res.status(400).json({
+				success: false,
+				message: 'Password must be at least 6 characters'
+			});
+		}
+
+		// Check if username already exists
+		const existingUser = findUserByUsername(username);
+		if (existingUser) {
+			return res.status(409).json({
+				success: false,
+				message: 'Username already taken'
+			});
+		}
+
+		// Check if email already exists
+		const existingEmail = findUserByEmail(email);
+		if (existingEmail) {
+			return res.status(409).json({
+				success: false,
+				message: 'Email already registered'
+			});
+		}
+
+		// Create new user with hashed password
+		const newUser = await createUser(username, email, password);
+
+		// Generate JWT token for auto-login
+		const token = jwt.sign(
+			{ id: newUser.id, username: newUser.username },
+			process.env.JWT_SECRET || 'your-secret-key',
+			{ expiresIn: '24h' }
+		);
+
+		return res.status(201).json({
+			success: true,
+			message: 'Account created successfully',
+			token,
+			user: newUser
+		});
+
+	} catch (error) {
+		console.error('Signup error:', error);
+		return res.status(500).json({
+			success: false,
+			message: 'Internal server error'
 		});
 	}
 };
@@ -116,6 +204,7 @@ const logoutUser = (req, res) => {
 
 module.exports = {
 	loginUser,
+	signupUser,
 	getUserProfile,
 	logoutUser
 };

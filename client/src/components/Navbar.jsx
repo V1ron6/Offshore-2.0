@@ -2,14 +2,16 @@
  * Navbar Component - Enhanced header
  */
 
-import { Menu, X, LogOut, Settings, Moon, Sun } from 'lucide-react';
+import { Menu, X, LogOut, Settings, Moon, Sun, MessageSquare, Heart } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CartMenu from './CartMenu';
+import { useTheme } from './ThemeContext.jsx';
 
-const Navbar = ({ user = null, onLogout, isDarkMode = false, toggleTheme = () => {} }) => {
+const Navbar = ({ user = null, onLogout }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
+  const { isDark, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -19,30 +21,38 @@ const Navbar = ({ user = null, onLogout, isDarkMode = false, toggleTheme = () =>
   };
 
   return (
-    <nav className={`${isDarkMode ? 'bg-gray-900 border-gray-800 text-white' : 'bg-white border-gray-200 text-gray-900'} border-b shadow-sm sticky top-0 z-50`}>
+    <nav className={`${isDark ? 'bg-gray-900 border-gray-800 text-white' : 'bg-white border-gray-200 text-gray-900'} border-b shadow-sm sticky top-0 z-50`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-linear-to-r from-red-500 to-orange-500 rounded-lg" />
-            <span className={`font-bold text-xl ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <span className={`font-bold text-xl ${isDark ? 'text-white' : 'text-gray-900'}`}>
               Off<span className="text-red-500">Shore</span>
             </span>
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <Link to="/" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Home</Link>
+            <Link to="/" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Home</Link>
             {user ? (
               <>
-                <Link to="/dashboard" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Dashboard</Link>
-                <Link to="/categories" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Shop</Link>
-                <Link to="/orders" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Orders</Link>
-                <Link to="/profile" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Profile</Link>
+                <Link to="/dashboard" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Dashboard</Link>
+                <Link to="/categories" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Shop</Link>
+                <Link to="/orders" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Orders</Link>
+                <Link to="/wishlist" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition flex items-center gap-1`}>
+                  <Heart size={16} />
+                  Wishlist
+                </Link>
+                <Link to="/complaints" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition flex items-center gap-1`}>
+                  <MessageSquare size={16} />
+                  Help
+                </Link>
+                <Link to="/profile" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Profile</Link>
               </>
             ) : (
               <>
-                <Link to="/login" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Login</Link>
+                <Link to="/login" className={`${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}>Login</Link>
                 <Link to="/signup" className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
                   Get Started
                 </Link>
@@ -55,16 +65,16 @@ const Navbar = ({ user = null, onLogout, isDarkMode = false, toggleTheme = () =>
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className={`p-2 rounded-lg transition ${isDarkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-              title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+              className={`p-2 rounded-lg transition ${isDark ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDark ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
             {user && (
               <button
                 onClick={handleLogout}
-                className={`p-2 rounded-lg ${isDarkMode ? 'text-gray-400 hover:text-red-400' : 'text-gray-600 hover:text-red-500'} transition`}
+                className={`p-2 rounded-lg ${isDark ? 'text-gray-400 hover:text-red-400' : 'text-gray-600 hover:text-red-500'} transition`}
                 title="Logout"
               >
                 <LogOut size={20} />
@@ -83,37 +93,45 @@ const Navbar = ({ user = null, onLogout, isDarkMode = false, toggleTheme = () =>
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className={`md:hidden pb-4 border-t ${isDarkMode ? 'border-gray-800 bg-gray-800' : 'border-gray-200'}`}>
-            <Link to="/" className={`block px-4 py-2 ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+          <div className={`md:hidden pb-4 border-t ${isDark ? 'border-gray-800 bg-gray-800' : 'border-gray-200'}`}>
+            <Link to="/" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
               Home
             </Link>
             {user ? (
               <>
-                <Link to="/dashboard" className={`block px-4 py-2 ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Link to="/dashboard" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
                   Dashboard
                 </Link>
-                <Link to="/categories" className={`block px-4 py-2 ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Link to="/categories" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
                   Shop
                 </Link>
-                <Link to="/orders" className={`block px-4 py-2 ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Link to="/orders" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
                   Orders
                 </Link>
-                <Link to="/profile" className={`block px-4 py-2 ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Link to="/wishlist" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'} flex items-center gap-2`}>
+                  <Heart size={16} />
+                  Wishlist
+                </Link>
+                <Link to="/complaints" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'} flex items-center gap-2`}>
+                  <MessageSquare size={16} />
+                  Help & Complaints
+                </Link>
+                <Link to="/profile" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
                   Profile
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className={`w-full text-left px-4 py-2 ${isDarkMode ? 'text-red-400 hover:bg-red-900/30' : 'text-red-600 hover:bg-red-50'}`}
+                  className={`w-full text-left px-4 py-2 ${isDark ? 'text-red-400 hover:bg-red-900/30' : 'text-red-600 hover:bg-red-50'}`}
                 >
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link to="/login" className={`block px-4 py-2 ${isDarkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                <Link to="/login" className={`block px-4 py-2 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}>
                   Login
                 </Link>
-                <Link to="/signup" className={`block px-4 py-2 font-semibold ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>
+                <Link to="/signup" className={`block px-4 py-2 font-semibold ${isDark ? 'text-red-400' : 'text-red-600'}`}>
                   Get Started
                 </Link>
               </>

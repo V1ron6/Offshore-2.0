@@ -19,6 +19,10 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import apiClient from '../utils/apiClient.js';
+import { useToast } from '../components/ToastContext.jsx';
+import PasswordStrength from '../components/PasswordStrength.jsx';
+
 // Validation rules for signup form
 const VALIDATION_RULES = {
 	username: {
@@ -64,6 +68,7 @@ const Signup = () => {
 	// HOOKS
 	// ========================================
 	const navigate = useNavigate();
+	const toast = useToast();
 
 	// ========================================
 	// EFFECTS
@@ -200,34 +205,42 @@ const Signup = () => {
 		if (!validation.isValid) {
 			setFieldErrors(validation.errors);
 			setError("Please fix the errors above");
+			toast.warning("Please fix the form errors");
 			return;
 		}
 
 		try {
 			setLoading(true);
 
-			// In a real app, this would create a new user in the backend
-			// For now, we'll just add them to the user list
-			const newUser = {
-				id: Math.random(),
+			// Call backend API to create user with hashed password
+			const response = await apiClient.post('/user/signup', {
 				username: formData.username.trim(),
 				email: formData.email.trim(),
 				password: formData.password
-			};
+			});
 
-		setSuccess("Account created successfully! Redirecting to dashboard...");
-		localStorage.setItem('user', JSON.stringify({
-			username: newUser.username,
-			email: newUser.email,
-			signupTime: new Date().toISOString()
-		}));
+			if (response.data.success) {
+				// Store token and user data
+				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('user', JSON.stringify({
+					id: response.data.user.id,
+					username: response.data.user.username,
+					email: response.data.user.email,
+					signupTime: new Date().toISOString()
+				}));
 
-		setTimeout(() => {
-			navigate('/app');
-			}, 1500);
+				setSuccess("Account created successfully! Redirecting to dashboard...");
+				toast.success("Account created successfully!");
+
+				setTimeout(() => {
+					navigate('/dashboard');
+				}, 1500);
+			}
 		} catch (err) {
 			console.error("Signup error:", err);
-			setError(err.response?.data?.message || "Signup failed. Please try again.");
+			const errorMsg = err.response?.data?.message || "Signup failed. Please try again.";
+			setError(errorMsg);
+			toast.error(errorMsg);
 		} finally {
 			setLoading(false);
 		}
@@ -374,7 +387,8 @@ const Signup = () => {
 						{fieldErrors.password && (
 							<p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>
 						)}
-						<p className="mt-1 text-xs text-gray-500">Minimum 6 characters</p>
+						{/* Password Strength Indicator */}
+						<PasswordStrength password={formData.password} showRequirements={true} />
 					</div>
 
 					{/* Confirm Password Field */}

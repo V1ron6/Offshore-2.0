@@ -1,5 +1,7 @@
 import '../index.css'
 import Logo from '../assets/offShoreLogo.jpg'
+import { Link } from 'react-router-dom'
+
 const Footer=()=>{
 	return(
 		<>
@@ -18,6 +20,7 @@ const Footer=()=>{
 						<div>
 							<h4 className="text-white font-bold mb-4">Customer Service</h4>
 							<ul className="space-y-2 text-sm">
+								<li><Link to="/complaints" className="hover:text-white transition">Help & Complaints</Link></li>
 								<li><a href="#" className="hover:text-white transition">Contact Us</a></li>
 								<li><a href="#" className="hover:text-white transition">Returns</a></li>
 								<li><a href="#" className="hover:text-white transition">Shipping Info</a></li>

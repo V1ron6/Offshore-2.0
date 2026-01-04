@@ -125,12 +125,16 @@ const CartMenu = ({ user = null, isDarkMode = false }) => {
                     <div className="flex gap-3 sm:gap-4">
                       {/* Product Image */}
                       {item.image && (
-                        <div className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-full h-full object-cover"
-                          />
+                        <div className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden flex items-center justify-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                          {item.image?.startsWith('http') ? (
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-3xl">{item.image}</span>
+                          )}
                         </div>
                       )}
 

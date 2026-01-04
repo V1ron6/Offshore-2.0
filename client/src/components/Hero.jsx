@@ -45,7 +45,7 @@ const Hero = ({
   return (
     <div className={`
       relative overflow-hidden rounded-2xl p-8 md:p-16
-      bg-gradient-to-r ${bgColor}
+      bg-linear-to-r ${bgColor}
       text-white shadow-2xl
     `}>
       {/* Animated Background Elements */}

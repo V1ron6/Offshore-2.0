@@ -16,11 +16,12 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate ,Link } from 'react-router-dom';
-import { User, LogOut, Lock, Edit2 } from 'lucide-react';
+import { User, LogOut, Lock, Edit2, MessageSquare, HelpCircle } from 'lucide-react';
 import Card from '../components/Card.jsx';
 import Button from '../components/Button.jsx';
 import Alert from '../components/Alert.jsx';
 import LoadingScreen  from '../components/LoadingScreen.jsx'
+import ConfirmDialog from '../components/ConfirmDialog.jsx'
 const Profile = () => {
 	// ========================================
 	// STATE MANAGEMENT
@@ -33,6 +34,8 @@ const Profile = () => {
 	const [showPasswordModal, setShowPasswordModal] = useState(false);
 	const [passwordData, setPasswordData] = useState({ current: '', new: '', confirm: '' });
 	const [show2FAModal, setShow2FAModal] = useState(false);
+	const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+	const [showDeactivateConfirm, setShowDeactivateConfirm] = useState(false);
 
 	// ========================================
 	// HOOKS
@@ -117,9 +120,14 @@ const Profile = () => {
 		setShow2FAModal(false);
 	};
 	const handleLogout = () => {
+		setShowLogoutConfirm(true);
+	};
+
+	const confirmLogout = () => {
 		localStorage.removeItem('user');
 		localStorage.removeItem('authToken');
 		localStorage.removeItem('rememberMe');
+		setShowLogoutConfirm(false);
 		setAlertMessage('Logged out successfully!');
 		setShowAlert(true);
 		setTimeout(() => navigate('/'), 1500);
@@ -145,14 +153,17 @@ const Profile = () => {
 	 * Handle deactivate account
 	 */
 	const handleDeactivateAccount = () => {
-		if (window.confirm('Are you sure you want to deactivate your account? This action cannot be undone.')) {
-			localStorage.removeItem('user');
-			localStorage.removeItem('authToken');
-			localStorage.removeItem('rememberMe');
-			setAlertMessage('Account deactivated. Redirecting to home...');
-			setShowAlert(true);
-			setTimeout(() => navigate('/'), 1500);
-		}
+		setShowDeactivateConfirm(true);
+	};
+
+	const confirmDeactivateAccount = () => {
+		localStorage.removeItem('user');
+		localStorage.removeItem('authToken');
+		localStorage.removeItem('rememberMe');
+		setShowDeactivateConfirm(false);
+		setAlertMessage('Account deactivated. Redirecting to home...');
+		setShowAlert(true);
+		setTimeout(() => navigate('/'), 1500);
 	};
 
 	/**
@@ -386,6 +397,32 @@ const Profile = () => {
 								</Link>
 							</div>
 						</Card>
+
+						{/* Help & Support Card */}
+						<Card title="Help & Support">
+							<div className="space-y-3">
+								<p className="text-sm text-gray-600">
+									Need help? Have a concern? We're here for you!
+								</p>
+								<Link to="/complaints">
+									<Button
+										variant="danger"
+										size="sm"
+										fullWidth
+										className="flex items-center justify-center gap-2"
+									>
+										<MessageSquare size={16} />
+										Submit a Complaint
+									</Button>
+								</Link>
+								<div className="pt-2 border-t border-gray-200">
+									<p className="text-xs text-gray-500 flex items-center gap-1">
+										<HelpCircle size={12} />
+										Our team typically responds within 24 hours
+									</p>
+								</div>
+							</div>
+						</Card>
 					</div>
 				</div>
 			</div>
@@ -521,6 +558,28 @@ const Profile = () => {
 					</Card>
 				</div>
 			)}
+
+			{/* Logout Confirmation Dialog */}
+			<ConfirmDialog
+				isOpen={showLogoutConfirm}
+				onClose={() => setShowLogoutConfirm(false)}
+				onConfirm={confirmLogout}
+				title="Logout"
+				message="Are you sure you want to logout? You'll need to sign in again to access your account."
+				confirmText="Logout"
+				type="logout"
+			/>
+
+			{/* Deactivate Account Confirmation Dialog */}
+			<ConfirmDialog
+				isOpen={showDeactivateConfirm}
+				onClose={() => setShowDeactivateConfirm(false)}
+				onConfirm={confirmDeactivateAccount}
+				title="Deactivate Account"
+				message="Are you sure you want to deactivate your account? This action cannot be undone and you will lose access to all your data."
+				confirmText="Deactivate"
+				type="delete"
+			/>
 		</div>
 	);
 };

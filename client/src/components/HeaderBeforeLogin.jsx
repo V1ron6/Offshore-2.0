@@ -4,7 +4,7 @@ import Button from '../components/Button'
 import "../index.css"
 const HeaderBeforeLogin = () => {
 	return (
-		<nav className="bg-gradient-to-r from-red-600 to-red-400 text-white sticky top-0 z-50 shadow-lg">
+		<nav className="bg-linear-to-r from-red-600 to-red-400 text-white sticky top-0 z-50 shadow-lg">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex justify-between items-center h-16 prefFont">
 						<h1 className="text-3xl font-bold prefFont">OFFSHORE</h1>

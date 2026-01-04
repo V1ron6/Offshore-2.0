@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, Users, ShoppingCart, TrendingUp, Package, BarChart3, AlertCircle, CheckCircle, Trash2, Edit2 } from 'lucide-react';
+import { LogOut, Users, ShoppingCart, TrendingUp, Package, BarChart3, AlertCircle, CheckCircle, Trash2, Edit2, Bell, MessageSquare } from 'lucide-react';
 import Button from '../../components/Button.jsx';
 import LoadingScreen from '../../components/LoadingScreen.jsx';
 
@@ -11,7 +11,8 @@ const AdminDashboard = () => {
 	const [admin, setAdmin] = useState(null);
 	const [adminList, setAdminList] = useState([]);
 	const [success, setSuccess] = useState('');
-	const [error, setError] = useState('');
+	const [error, _setError] = useState('');
+	const [unreadComplaints, setUnreadComplaints] = useState(0);
 	const navigate = useNavigate();
 
 	// Dashboard Stats (From Backend)
@@ -108,11 +109,35 @@ const AdminDashboard = () => {
 			// Fetch stats and orders
 			fetchStats();
 			fetchRecentOrders();
+			fetchComplaintStats();
 		} catch (err) {
 			navigate('/admin/login');
 			console.log(err)
 		}
 	}, [navigate]);
+
+	// Fetch complaint statistics for notification
+	const fetchComplaintStats = async () => {
+		try {
+			const adminToken = localStorage.getItem('adminToken');
+			const response = await fetch(`${API_BASE_URL}/complaints/admin/stats`, {
+				method: 'GET',
+				headers: {
+					'Authorization': `Bearer ${adminToken}`,
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				if (data.success && data.stats) {
+					setUnreadComplaints(data.stats.unread || 0);
+				}
+			}
+		} catch (err) {
+			console.error('Error fetching complaint stats:', err);
+		}
+	};
 
 	const handleLogout = () => {
 		setSuccess('Logging out...');
@@ -149,7 +174,7 @@ const AdminDashboard = () => {
 	return (
 		<div className="min-h-screen bg-gray-100">
 			{/* Top Navigation Bar */}
-			<div className="bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg sticky top-0 z-50">
+			<div className="bg-linear-to-r from-red-600 to-red-700 text-white shadow-lg sticky top-0 z-50">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
 					<div className="flex items-center justify-between">
 						<div>
@@ -157,6 +182,19 @@ const AdminDashboard = () => {
 							<p className="text-red-100 text-sm">Welcome back, {admin?.username}! </p>
 						</div>
 						<div className="flex items-center gap-3">
+							{/* Notification Bell */}
+							<Link 
+								to="/admin/view-concerns" 
+								className="relative p-2 bg-red-500 hover:bg-red-400 rounded-lg transition"
+								title="Customer Concerns"
+							>
+								<Bell size={20} />
+								{unreadComplaints > 0 && (
+									<span className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 text-red-900 text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
+										{unreadComplaints > 9 ? '9+' : unreadComplaints}
+									</span>
+								)}
+							</Link>
 							<span className="px-4 py-2 bg-red-500 rounded-lg text-sm font-semibold">
 								Role: {admin?.role === 'super_admin' ? '👑 Super Admin' : '🔐 Admin'}
 							</span>
@@ -192,7 +230,7 @@ const AdminDashboard = () => {
 				{/* Dashboard Stats Grid */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
 					{/* Total Users */}
-					<div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
+					<div className="bg-linear-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
 						<div className="flex items-center justify-between mb-4">
 							<h3 className="text-sm font-semibold opacity-90">Total Users</h3>
 							<Users size={24} className="opacity-70" />
@@ -202,7 +240,7 @@ const AdminDashboard = () => {
 					</div>
 
 					{/* Total Products */}
-					<div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
+					<div className="bg-linear-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
 						<div className="flex items-center justify-between mb-4">
 							<h3 className="text-sm font-semibold opacity-90">Total Products</h3>
 							<Package size={24} className="opacity-70" />
@@ -212,7 +250,7 @@ const AdminDashboard = () => {
 					</div>
 
 					{/* Total Orders */}
-					<div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
+					<div className="bg-linear-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
 						<div className="flex items-center justify-between mb-4">
 							<h3 className="text-sm font-semibold opacity-90">Total Orders</h3>
 							<ShoppingCart size={24} className="opacity-70" />
@@ -222,7 +260,7 @@ const AdminDashboard = () => {
 					</div>
 
 					{/* Total Revenue */}
-					<div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
+					<div className="bg-linear-to-br from-yellow-500 to-yellow-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
 						<div className="flex items-center justify-between mb-4">
 							<h3 className="text-sm font-semibold opacity-90">Total Revenue</h3>
 							<TrendingUp size={24} className="opacity-70" />
@@ -232,7 +270,7 @@ const AdminDashboard = () => {
 					</div>
 
 					{/* Active Admins */}
-					<div className="bg-gradient-to-br from-red-500 to-red-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
+					<div className="bg-linear-to-br from-red-500 to-red-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
 						<div className="flex items-center justify-between mb-4">
 							<h3 className="text-sm font-semibold opacity-90">Active Admins</h3>
 							<BarChart3 size={24} className="opacity-70" />
@@ -242,7 +280,7 @@ const AdminDashboard = () => {
 					</div>
 
 					{/* System Health */}
-					<div className="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
+					<div className="bg-linear-to-br from-cyan-500 to-cyan-600 rounded-lg p-6 text-white shadow-lg hover:shadow-xl transition">
 						<div className="flex items-center justify-between mb-4">
 							<h3 className="text-sm font-semibold opacity-90">System Status</h3>
 							<CheckCircle size={24} className="opacity-70" />
@@ -313,7 +351,7 @@ const AdminDashboard = () => {
 				</div>
 
 				{/* Quick Actions */}
-				<div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+				<div className="mt-8 grid grid-cols-1 md:grid-cols-5 gap-4">
 				<Link to="/admin/manage-users" className="no-underline">
 					<Button variant="danger" fullWidth className="py-3 flex items-center justify-center gap-2">
 						<Users size={20} /> Manage Users
@@ -327,6 +365,16 @@ const AdminDashboard = () => {
 				<Link to="/admin/view-orders" className="no-underline">
 					<Button variant="danger" fullWidth className="py-3 flex items-center justify-center gap-2">
 						<ShoppingCart size={20} /> View Orders
+					</Button>
+				</Link>
+				<Link to="/admin/view-concerns" className="no-underline relative">
+					<Button variant="danger" fullWidth className="py-3 flex items-center justify-center gap-2">
+						<MessageSquare size={20} /> Concerns
+						{unreadComplaints > 0 && (
+							<span className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 text-red-900 text-xs font-bold rounded-full flex items-center justify-center">
+								{unreadComplaints > 9 ? '9+' : unreadComplaints}
+							</span>
+						)}
 					</Button>
 				</Link>
 				<Link to="/admin/analytics" className="no-underline">

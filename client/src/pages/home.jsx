@@ -70,7 +70,7 @@ const Home = () => {
 			
      <HeaderBeforeLogin />
 			{/* Hero Section */}
-			<section className="bg-gradient-to-r from-red-50 to-orange-50 border-b-4 border-red-500">
+			<section className="bg-linear-to-r from-red-50 to-orange-50 border-b-4 border-red-500">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 						{/* Hero Content */}
@@ -116,7 +116,7 @@ const Home = () => {
 
 						{/* Hero Image */}
 						<div className="relative">
-							<div className="bg-gradient-to-br from-red-400 via-red-500 to-orange-500 rounded-2xl p-8 shadow-2xl">
+							<div className="bg-linear-to-br from-red-400 via-red-500 to-orange-500 rounded-2xl p-8 shadow-2xl">
 								<div className="grid grid-cols-3 gap-4 opacity-90">
 									<div className="text-6xl">🛍️</div>
 									<div className="text-6xl">📱</div>
@@ -149,7 +149,7 @@ const Home = () => {
 							const Icon = feature.icon;
 							return (
 								<div key={idx} className="text-center">
-									<div className="bg-gradient-to-br from-red-100 to-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+									<div className="bg-linear-to-br from-red-100 to-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
 										<Icon size={32} className="text-red-600" />
 									</div>
 									<h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
@@ -162,7 +162,7 @@ const Home = () => {
 			</section>
 
 			{/* Browse Categories */}
-			<section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+			<section className="py-16 bg-linear-to-b from-gray-50 to-white">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<h2 className="text-4xl font-bold text-center mb-4 text-gray-900">Popular Categories</h2>
 					<p className="text-center text-gray-600 mb-12">Browse our extensive collection</p>
@@ -170,7 +170,7 @@ const Home = () => {
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 						{categories.map((cat, idx) => (
 							<div key={idx} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition group cursor-pointer">
-								<div className="h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:scale-110 transition">
+								<div className="h-40 bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:scale-110 transition">
 									<span className="text-7xl">{cat.emoji}</span>
 								</div>
 								<div className="p-4">
@@ -184,7 +184,7 @@ const Home = () => {
 			</section>
 
 			{/* Call to Action Section */}
-			<section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-20">
+			<section className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-20">
 				<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
 					<div>
 						<h2 className="text-5xl font-bold mb-4">Ready to Get Started?</h2>
@@ -199,7 +199,7 @@ const Home = () => {
 							<input
 								type="email"
 								placeholder="Enter your email"
-								className="flex-1 px-4 py-3 rounded-lg text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 border-white  border-1"
+								className="flex-1 px-4 py-3 rounded-lg text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 border-white border"
 							/>
 							<Button variant="danger" className="px-8 py-3">
 								Subscribe
