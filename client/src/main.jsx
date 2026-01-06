@@ -8,6 +8,8 @@ import { ThemeProvider } from './components/ThemeContext.jsx';
 import { SkipToContent } from './components/Accessibility.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import AppWrapper from './components/AppWrapper.jsx';
+import { SessionProvider } from './context/SessionContext.jsx';
+import RootLayout from './components/RootLayout.jsx';
 
 import Login from "./pages/login.jsx"
 import Signup from "./pages/signup.jsx"
@@ -35,29 +37,35 @@ import Analytics from "./pages/admin/Analytics.jsx"
 
 
 const flipper = createBrowserRouter([
- {path:"/" ,element: <Home />},
- {path:"/app", element: <App />},
- {path:"/product/:id", element: <ProductDetails />},
- {path:"/signup",element: <Signup />},
- {path:"/login", element:<Login />},
- {path:"/profile/",element: <Profile />},
- {path:"/dashboard/",element:<Dashboard />},
- {path:"/add-product",element:<AddProductPage />},
- {path:"/cart",element:<CartPage />},
- {path:"/checkout",element:<CheckoutPage />},
- {path:"/order-confirmation",element:<OrderConfirmation />},
- {path:"/orders",element:<OrdersPage />},
- {path:"/categories",element:<CategoriesPage />},
- {path:"/complaints",element:<ComplaintsPage />},
- {path:"/wishlist",element:<WishlistPage />},
- {path:"/admin/login",element:<AdminLogin />},
- {path:"/admin/dashboard",element:<AdminDashboard />},
- {path:"/admin/manage-users",element:<ManageUsers />},
- {path:"/admin/manage-products",element:<ManageProducts />},
- {path:"/admin/view-orders",element:<ViewOrders />},
- {path:"/admin/view-concerns",element:<ViewConcerns />},
- {path:"/admin/analytics",element:<Analytics />},
- {path:"*",element:<Notfound />}
+ {
+   path: "/",
+   element: <RootLayout />,
+   children: [
+     {path:"" ,element: <Home />},
+     {path:"app", element: <App />},
+     {path:"product/:id", element: <ProductDetails />},
+     {path:"signup",element: <Signup />},
+     {path:"login", element:<Login />},
+     {path:"profile/",element: <Profile />},
+     {path:"dashboard/",element:<Dashboard />},
+     {path:"add-product",element:<AddProductPage />},
+     {path:"cart",element:<CartPage />},
+     {path:"checkout",element:<CheckoutPage />},
+     {path:"order-confirmation",element:<OrderConfirmation />},
+     {path:"orders",element:<OrdersPage />},
+     {path:"categories",element:<CategoriesPage />},
+     {path:"complaints",element:<ComplaintsPage />},
+     {path:"wishlist",element:<WishlistPage />},
+     {path:"admin/login",element:<AdminLogin />},
+     {path:"admin/dashboard",element:<AdminDashboard />},
+     {path:"admin/manage-users",element:<ManageUsers />},
+     {path:"admin/manage-products",element:<ManageProducts />},
+     {path:"admin/view-orders",element:<ViewOrders />},
+     {path:"admin/view-concerns",element:<ViewConcerns />},
+     {path:"admin/analytics",element:<Analytics />},
+     {path:"*",element:<Notfound />}
+   ]
+ }
 ])
 
 createRoot(document.getElementById('root')).render(

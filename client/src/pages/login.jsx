@@ -5,6 +5,7 @@ import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import Offshorelogo from '../assets/offShoreLogo.jpg'
 import LoadingScreen  from '../components/LoadingScreen.jsx'
 import { useToast } from '../components/ToastContext.jsx'
+import { useSession } from '../context'
 
 // ========================================
 // CONSTANTS - Styling and Configuration
@@ -62,6 +63,9 @@ const Login = () =>{
 	
 	// Toast notifications
 	const toast = useToast();
+
+	// Session management
+	const { setIsAuthenticated } = useSession();
 
 	// ========================================
 	// EFFECTS
@@ -278,6 +282,9 @@ const Login = () =>{
 					stats: response.data.user.stats,
 					loginTime: new Date().toISOString()
 				}));
+
+				// Initialize session tracking
+				setIsAuthenticated(true);
 
 				// Save credentials if "Remember Me" is checked
 				if (rememberMe) {

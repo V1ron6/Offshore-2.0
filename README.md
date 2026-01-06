@@ -100,7 +100,15 @@ offshore/
 │   │   │   ├── cartService.js
 │   │   │   ├── security.js
 │   │   │   ├── wishlistService.js # Wishlist operations
-│   │   │   └── invoiceService.js  # PDF invoice generation
+│   │   │   ├── invoiceService.js  # PDF invoice generation
+│   │   │   └── sessionManager.js  # Session activity tracking
+│   │   ├── context/           # React contexts
+│   │   │   ├── SessionContext.jsx # Session timeout management
+│   │   │   ├── sessionContextDef.js
+│   │   │   ├── ThemeContext.jsx
+│   │   │   └── ToastContext.jsx
+│   │   ├── hooks/             # Custom React hooks
+│   │   │   └── useSession.js  # Session hook
 │   │   ├── assets/            # Static assets
 │   │   ├── App.jsx            # Main app component
 │   │   ├── main.jsx           # Entry point with router
@@ -137,7 +145,8 @@ offshore/
 │   │   ├── cors.Multihandler.js
 │   │   ├── security.js
 │   │   ├── logging.js
-│   │   └── rateLimit.js       # Rate limiting for auth
+│   │   ├── rateLimit.js       # Rate limiting for auth
+│   │   └── sessionManager.js  # Backend session tracking
 │   ├── logs/                  # Request logs
 │   ├── server.js              # Server entry point
 │   └── package.json           # Backend dependencies
@@ -224,11 +233,12 @@ npm run dev
 
 ### Authentication
 
-| Method | Endpoint            | Description                  |
-| ------ | ------------------- | ---------------------------- |
-| POST   | `/api/user/login`   | User login                   |
-| POST   | `/api/user/logout`  | User logout                  |
-| GET    | `/api/user/profile` | Get user profile (protected) |
+| Method | Endpoint                 | Description                  |
+| ------ | ------------------------ | ---------------------------- |
+| POST   | `/api/user/login`        | User login                   |
+| POST   | `/api/user/logout`       | User logout                  |
+| GET    | `/api/user/profile`      | Get user profile (protected) |
+| GET    | `/api/user/session-status` | Check session status (protected) |
 
 ### Products
 
@@ -352,6 +362,7 @@ npm run dev
 - 📧 NodeMailer integration for email notifications
 - 🔔 Toast notification system
 - 📄 Pagination support for product listings
+- ⏰ **Session Management** - Auto-logout after 15 mins of inactivity with 1 min warning
 
 ### UX Enhancements
 
@@ -367,6 +378,25 @@ npm run dev
 - ⌨️ **Keyboard Shortcuts** - Navigation shortcuts with command palette (press `?` for help)
 - ♿ **Accessibility** - Skip to content, focus traps, screen reader announcements
 - 🎬 **Page Transitions** - Smooth fade animations between pages
+
+---
+
+## ⏰ Session Management
+
+The platform includes automatic session timeout for security:
+
+### How It Works:
+1. **Idle Detection** - Tracks user activity (mouse, keyboard, scroll, touch)
+2. **15-Minute Timeout** - After 15 minutes of inactivity, a warning modal appears
+3. **1-Minute Grace Period** - User has 60 seconds to click "Continue Session"
+4. **Auto-Logout** - If no response, user is automatically logged out
+
+### Features:
+- Visual countdown timer in warning modal
+- Option to logout immediately or continue session
+- Activity resets the timer (mouse movement, clicks, key presses, scrolling)
+- Clears all session data (localStorage, sessionStorage) on logout
+- Backend session validation
 
 ---
 
@@ -445,6 +475,8 @@ npm run dev
 - CORS is configured for localhost development only
 - Email notifications require Gmail App Password configuration
 - Rate limiting: 5 requests per 15 minutes on auth endpoints
+- Session timeout: 15 minutes idle + 1 minute warning before auto-logout
+- API URL configured via `VITE_API_URL` environment variable
 
 ---
 

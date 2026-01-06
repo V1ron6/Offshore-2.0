@@ -9,6 +9,7 @@ const {
 	createUser,
 	getUserStats 
 } = require("../Models/user.model.js");
+const { checkSessionStatus } = require("../middleware/sessionManager.js");
 
 // Login controller with JWT and bcrypt password verification
 const loginUser = async (req, res) => {
@@ -238,10 +239,39 @@ const getUserStatsController = async (req, res) => {
 	}
 };
 
+// Check session status
+const checkSessionStatusController = async (req, res) => {
+	try {
+		const userId = req.user?.id;
+		
+		if (!userId) {
+			return res.status(401).json({ 
+				success: false, 
+				message: 'Unauthorized' 
+			});
+		}
+
+		const sessionStatus = checkSessionStatus(userId);
+		
+		return res.status(200).json({
+			success: true,
+			session: sessionStatus
+		});
+
+	} catch (error) {
+		console.error('Check session status error:', error);
+		return res.status(500).json({
+			success: false,
+			message: 'Internal server error'
+		});
+	}
+};
+
 module.exports = {
 	loginUser,
 	signupUser,
 	getUserProfile,
 	logoutUser,
-	getUserStatsController
+	getUserStatsController,
+	checkSessionStatusController
 };

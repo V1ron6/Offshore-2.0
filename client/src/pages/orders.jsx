@@ -193,6 +193,26 @@ const OrdersPage = () => {
 											Track Order
 											<ChevronRight size={16} />
 										</a>
+										<button
+											onClick={(e) => {
+												e.stopPropagation();
+												const userData = JSON.parse(localStorage.getItem('user') || '{}');
+												downloadInvoice({
+													id: order.orderId,
+													items: order.items,
+													total: order.totalAmount,
+													status: order.status,
+													createdAt: order.date,
+													shippingAddress: order.shippingAddress,
+													discount: order.discount || 0,
+													couponCode: order.couponCode
+												}, userData);
+											}}
+											className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 transition"
+										>
+											<FileText size={16} />
+											Download Invoice
+										</button>
 									</div>
 								</Card>
 							))}
