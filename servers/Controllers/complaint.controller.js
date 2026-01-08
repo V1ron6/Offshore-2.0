@@ -21,9 +21,8 @@ const defaultUser = require('../Models/user.model.js');
 // Email transporter configuration
 const createTransporter = () => {
 	return nodemailer.createTransport({
-		service: process.env.EMAIL_SERVICE || 'gmail',
 		host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-		port: process.env.EMAIL_PORT || 587,
+		port: parseInt(process.env.EMAIL_PORT) || 587,
 		secure: false,
 		auth: {
 			user: process.env.ADMIN_EMAIL,
@@ -45,60 +44,102 @@ const sendEmailNotification = async (complaint) => {
 	try {
 		const transporter = createTransporter();
 		
+		const formattedDate = new Date(complaint.createdAt).toLocaleDateString('en-US', {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit'
+		});
+
 		const mailOptions = {
 			from: process.env.ADMIN_EMAIL,
 			to: process.env.ADMIN_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL,
-			subject: `🚨 New Complaint: ${complaint.subject} [${complaint.priority.toUpperCase()}]`,
+			subject: `Customer Complaint - ${complaint.subject} [${complaint.priority.toUpperCase()} Priority]`,
 			html: `
-				<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-					<div style="background: linear-gradient(135deg, #dc2626, #b91c1c); padding: 20px; border-radius: 10px 10px 0 0;">
-						<h1 style="color: white; margin: 0;">🚢 Offshore E-Commerce</h1>
-						<p style="color: #fecaca; margin: 5px 0 0 0;">New Customer Complaint Received</p>
+				<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 650px; margin: 0 auto; border: 1px solid #e0e0e0;">
+					<!-- Header -->
+					<div style="background-color: #1a1a2e; padding: 30px; text-align: center;">
+						<h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">OFFSHORE E-COMMERCE</h1>
+						<p style="color: #a0a0a0; margin: 8px 0 0 0; font-size: 13px;">Customer Support Notification</p>
 					</div>
 					
-					<div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb;">
-						<h2 style="color: #1f2937; margin-top: 0;">Complaint Details</h2>
+					<!-- Reference Banner -->
+					<div style="background-color: #f8f9fa; padding: 15px 30px; border-bottom: 1px solid #e0e0e0;">
+						<table style="width: 100%;">
+							<tr>
+								<td style="color: #666; font-size: 13px;">Reference No: <strong style="color: #1a1a2e;">${complaint.id}</strong></td>
+								<td style="text-align: right; color: #666; font-size: 13px;">${formattedDate}</td>
+							</tr>
+						</table>
+					</div>
+
+					<!-- Main Content -->
+					<div style="padding: 30px;">
+						<p style="color: #333; font-size: 14px; margin: 0 0 20px 0;">Dear Administrator,</p>
 						
-						<table style="width: 100%; border-collapse: collapse;">
-							<tr>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #6b7280;">Complaint ID:</td>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; color: #1f2937;">${complaint.id}</td>
+						<p style="color: #333; font-size: 14px; line-height: 1.7; margin: 0 0 25px 0;">
+							A new customer complaint has been submitted and requires your attention. Please review the details below and take appropriate action.
+						</p>
+
+						<!-- Complaint Details Table -->
+						<table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
+							<tr style="background-color: #1a1a2e;">
+								<th colspan="2" style="padding: 12px 15px; text-align: left; color: #ffffff; font-size: 14px; font-weight: 600;">Complaint Information</th>
 							</tr>
 							<tr>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #6b7280;">From:</td>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; color: #1f2937;">${complaint.username} (${complaint.userEmail})</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px; width: 35%;">Customer Name</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">${complaint.username}</td>
+							</tr>
+							<tr style="background-color: #fafafa;">
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Email Address</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">${complaint.userEmail}</td>
 							</tr>
 							<tr>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #6b7280;">Category:</td>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; color: #1f2937;">${complaint.category}</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Category</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">${complaint.category}</td>
 							</tr>
-							<tr>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #6b7280;">Priority:</td>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">
-									<span style="background: ${complaint.priority === 'urgent' ? '#dc2626' : complaint.priority === 'high' ? '#f97316' : complaint.priority === 'medium' ? '#eab308' : '#22c55e'}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px;">
-										${complaint.priority.toUpperCase()}
+							<tr style="background-color: #fafafa;">
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Priority Level</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">
+									<span style="background-color: ${complaint.priority === 'urgent' ? '#dc3545' : complaint.priority === 'high' ? '#fd7e14' : complaint.priority === 'medium' ? '#ffc107' : '#28a745'}; color: ${complaint.priority === 'medium' ? '#333' : '#fff'}; padding: 4px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+										${complaint.priority}
 									</span>
 								</td>
 							</tr>
 							<tr>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #6b7280;">Subject:</td>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; color: #1f2937; font-weight: bold;">${complaint.subject}</td>
-							</tr>
-							<tr>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-weight: bold; color: #6b7280;">Date:</td>
-								<td style="padding: 10px; border-bottom: 1px solid #e5e7eb; color: #1f2937;">${new Date(complaint.createdAt).toLocaleString()}</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Subject</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px; font-weight: 600;">${complaint.subject}</td>
 							</tr>
 						</table>
-						
-						<div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #dc2626;">
-							<h3 style="color: #1f2937; margin-top: 0;">Message:</h3>
-							<p style="color: #4b5563; line-height: 1.6;">${complaint.message}</p>
+
+						<!-- Message Section -->
+						<div style="margin-bottom: 25px;">
+							<p style="color: #1a1a2e; font-size: 14px; font-weight: 600; margin: 0 0 10px 0; border-bottom: 2px solid #1a1a2e; padding-bottom: 8px;">Customer Message</p>
+							<div style="background-color: #f8f9fa; padding: 20px; border-left: 3px solid #1a1a2e;">
+								<p style="color: #333; font-size: 14px; line-height: 1.7; margin: 0; white-space: pre-wrap;">${complaint.message}</p>
+							</div>
 						</div>
+
+						<!-- Action Required -->
+						<div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin-bottom: 25px;">
+							<p style="color: #856404; font-size: 13px; margin: 0;">
+								<strong>Action Required:</strong> Please log in to the administration dashboard to review and respond to this complaint at your earliest convenience.
+							</p>
+						</div>
+
+						<p style="color: #333; font-size: 14px; margin: 0;">
+							Best regards,<br>
+							<strong>Offshore E-Commerce System</strong>
+						</p>
 					</div>
-					
-					<div style="background: #1f2937; padding: 15px; border-radius: 0 0 10px 10px; text-align: center;">
-						<p style="color: #9ca3af; margin: 0; font-size: 12px;">
-							Please login to the admin dashboard to respond to this complaint.
+
+					<!-- Footer -->
+					<div style="background-color: #1a1a2e; padding: 20px 30px; text-align: center;">
+						<p style="color: #a0a0a0; font-size: 11px; margin: 0; line-height: 1.6;">
+							This is an automated notification from Offshore E-Commerce.<br>
+							Please do not reply directly to this email.
 						</p>
 					</div>
 				</div>
@@ -110,6 +151,134 @@ const sendEmailNotification = async (complaint) => {
 		return { success: true, message: 'Email sent successfully' };
 	} catch (error) {
 		console.error('Error sending email:', error);
+		return { success: false, message: error.message };
+	}
+};
+
+/**
+ * Send resolution email to user when complaint is resolved
+ */
+const sendResolutionEmail = async (complaint) => {
+	// Skip if email credentials not configured
+	if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_EMAIL_PASSWORD) {
+		console.log('Resolution email skipped - credentials not configured');
+		return { success: false, message: 'Email credentials not configured' };
+	}
+
+	try {
+		const transporter = createTransporter();
+		
+		const formattedDate = new Date(complaint.createdAt).toLocaleDateString('en-US', {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		});
+
+		const resolvedDate = new Date().toLocaleDateString('en-US', {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit'
+		});
+
+		const mailOptions = {
+			from: process.env.ADMIN_EMAIL,
+			to: complaint.userEmail,
+			subject: `Your Complaint Has Been Resolved - Reference: ${complaint.id.slice(0, 8).toUpperCase()}`,
+			html: `
+				<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 650px; margin: 0 auto; border: 1px solid #e0e0e0;">
+					<!-- Header -->
+					<div style="background-color: #1a1a2e; padding: 30px; text-align: center;">
+						<h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">OFFSHORE E-COMMERCE</h1>
+						<p style="color: #a0a0a0; margin: 8px 0 0 0; font-size: 13px;">Customer Support</p>
+					</div>
+					
+					<!-- Status Banner -->
+					<div style="background-color: #d4edda; padding: 20px 30px; border-bottom: 1px solid #c3e6cb; text-align: center;">
+						<span style="background-color: #28a745; color: #fff; padding: 8px 20px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">RESOLVED</span>
+					</div>
+
+					<!-- Main Content -->
+					<div style="padding: 30px;">
+						<p style="color: #333; font-size: 14px; margin: 0 0 20px 0;">Dear ${complaint.username},</p>
+						
+						<p style="color: #333; font-size: 14px; line-height: 1.7; margin: 0 0 25px 0;">
+							We are pleased to inform you that your complaint has been reviewed and resolved by our support team. Thank you for bringing this matter to our attention.
+						</p>
+
+						<!-- Complaint Summary Table -->
+						<table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
+							<tr style="background-color: #1a1a2e;">
+								<th colspan="2" style="padding: 12px 15px; text-align: left; color: #ffffff; font-size: 14px; font-weight: 600;">Complaint Summary</th>
+							</tr>
+							<tr>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px; width: 35%;">Reference Number</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px; font-weight: 600;">${complaint.id.slice(0, 8).toUpperCase()}</td>
+							</tr>
+							<tr style="background-color: #fafafa;">
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Subject</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">${complaint.subject}</td>
+							</tr>
+							<tr>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Category</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">${complaint.category}</td>
+							</tr>
+							<tr style="background-color: #fafafa;">
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Date Submitted</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">${formattedDate}</td>
+							</tr>
+							<tr>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #666; font-size: 13px;">Date Resolved</td>
+								<td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; color: #333; font-size: 13px;">${resolvedDate}</td>
+							</tr>
+						</table>
+
+						${complaint.adminNotes ? `
+						<!-- Admin Response Section -->
+						<div style="margin-bottom: 25px;">
+							<p style="color: #1a1a2e; font-size: 14px; font-weight: 600; margin: 0 0 10px 0; border-bottom: 2px solid #1a1a2e; padding-bottom: 8px;">Resolution Notes</p>
+							<div style="background-color: #f8f9fa; padding: 20px; border-left: 3px solid #28a745;">
+								<p style="color: #333; font-size: 14px; line-height: 1.7; margin: 0; white-space: pre-wrap;">${complaint.adminNotes}</p>
+							</div>
+						</div>
+						` : ''}
+
+						<!-- Feedback Notice -->
+						<div style="background-color: #e7f3ff; border: 1px solid #b6d4fe; padding: 15px; margin-bottom: 25px;">
+							<p style="color: #084298; font-size: 13px; margin: 0;">
+								<strong>We Value Your Feedback:</strong> If you have any further questions or concerns regarding this matter, please do not hesitate to contact us again through our support portal.
+							</p>
+						</div>
+
+						<p style="color: #333; font-size: 14px; line-height: 1.7; margin: 0 0 20px 0;">
+							Thank you for choosing Offshore E-Commerce. We appreciate your patience and understanding.
+						</p>
+
+						<p style="color: #333; font-size: 14px; margin: 0;">
+							Best regards,<br>
+							<strong>Offshore E-Commerce Support Team</strong>
+						</p>
+					</div>
+
+					<!-- Footer -->
+					<div style="background-color: #1a1a2e; padding: 20px 30px; text-align: center;">
+						<p style="color: #a0a0a0; font-size: 11px; margin: 0; line-height: 1.6;">
+							This is an automated notification from Offshore E-Commerce.<br>
+							Please do not reply directly to this email.
+						</p>
+					</div>
+				</div>
+			`
+		};
+
+		await transporter.sendMail(mailOptions);
+		console.log('Resolution email sent to user successfully');
+		return { success: true, message: 'Resolution email sent successfully' };
+	} catch (error) {
+		console.error('Error sending resolution email:', error);
 		return { success: false, message: error.message };
 	}
 };
@@ -321,12 +490,21 @@ const updateComplaintStatus = (req, res) => {
 			});
 		}
 
+		const previousStatus = complaint.status;
+		
 		const updates = {};
 		if (status) updates.status = status;
 		if (adminNotes !== undefined) updates.adminNotes = adminNotes;
 		if (priority) updates.priority = priority;
 
 		const updatedComplaint = updateComplaint(id, updates);
+
+		// Send resolution email to user if status changed to resolved
+		if (status === 'resolved' && previousStatus !== 'resolved') {
+			sendResolutionEmail(updatedComplaint).catch(err => {
+				console.error('Failed to send resolution email:', err);
+			});
+		}
 
 		return res.status(200).json({
 			success: true,

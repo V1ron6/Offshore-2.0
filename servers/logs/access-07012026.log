@@ -1,0 +1,8 @@
+::ffff:127.0.0.1 - - [07/Jan/2026:14:22:21 +0000] "POST /api/complaints HTTP/1.1" 404 44 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [07/Jan/2026:14:22:56 +0000] "GET /api/complaints/my-complaints HTTP/1.1" 200 36 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [07/Jan/2026:14:22:56 +0000] "GET /api/complaints/my-complaints HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [07/Jan/2026:14:23:03 +0000] "GET /api/products/categories HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [07/Jan/2026:14:23:03 +0000] "GET /api/products/categories HTTP/1.1" 200 137 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [07/Jan/2026:14:23:05 +0000] "GET /api/products?sort=featured&limit=200 HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [07/Jan/2026:14:23:21 +0000] "GET /api/products/categories HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"
+::ffff:127.0.0.1 - - [07/Jan/2026:14:23:21 +0000] "GET /api/products?sort=featured&limit=200 HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0"

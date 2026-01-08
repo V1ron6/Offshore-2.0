@@ -156,6 +156,126 @@ const defaultUser = [
 		email: "charlotte@example.com",
 		isHashed: false,
 		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "william",
+		password: "william123",
+		email: "william@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "ava",
+		password: "ava123",
+		email: "ava@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "ethan",
+		password: "ethan123",
+		email: "ethan@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "mia",
+		password: "mia123",
+		email: "mia@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "alexander",
+		password: "alexander123",
+		email: "alexander@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "isabella",
+		password: "isabella123",
+		email: "isabella@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "benjamin",
+		password: "benjamin123",
+		email: "benjamin@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "harper",
+		password: "harper123",
+		email: "harper@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "daniel",
+		password: "daniel123",
+		email: "daniel@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "evelyn",
+		password: "evelyn123",
+		email: "evelyn@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "henry",
+		password: "henry123",
+		email: "henry@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "abigail",
+		password: "abigail123",
+		email: "abigail@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "sebastian",
+		password: "sebastian123",
+		email: "sebastian@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "ella",
+		password: "ella123",
+		email: "ella@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
+	},
+	{
+		id: uuidv4(),
+		username: "jackson",
+		password: "jackson123",
+		email: "jackson@example.com",
+		isHashed: false,
+		stats: generateRandomStats()
 	}
 ];
 
