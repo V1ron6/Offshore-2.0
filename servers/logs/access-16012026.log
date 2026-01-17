@@ -1,0 +1,4 @@
+::ffff:127.0.0.1 - - [16/Jan/2026:09:47:28 +0000] "GET /api/products/categories HTTP/1.1" 200 137 "http://169.254.238.188:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0"
+::ffff:127.0.0.1 - - [16/Jan/2026:09:47:28 +0000] "GET /api/products/featured HTTP/1.1" 200 13036 "http://169.254.238.188:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0"
+::ffff:127.0.0.1 - - [16/Jan/2026:09:47:28 +0000] "GET /api/products/categories HTTP/1.1" 304 - "http://169.254.238.188:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0"
+::ffff:127.0.0.1 - - [16/Jan/2026:09:47:28 +0000] "GET /api/products/featured HTTP/1.1" 304 - "http://169.254.238.188:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0"
