@@ -196,7 +196,7 @@ const AdminDashboard = () => {
 								)}
 							</Link>
 							<span className="px-4 py-2 bg-red-500 rounded-lg text-sm font-semibold">
-								Role: {admin?.role === 'super_admin' ? '👑 Super Admin' : '🔐 Admin'}
+								Role: {admin?.role === 'super_admin' ? 'Super Admin' : 'Admin'}
 							</span>
 							<Button 
 								variant="danger" 
@@ -335,7 +335,7 @@ const AdminDashboard = () => {
 									<p className="text-sm text-gray-600">{admin.email}</p>
 									<div className="flex items-center justify-between mt-2">
 										<span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-											{admin.role === 'super_admin' ? '👑 Super Admin' : '🔐 Admin'}
+											{admin.role === 'super_admin' ? 'Super Admin' : 'Admin'}
 										</span>
 										<span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
 											Active

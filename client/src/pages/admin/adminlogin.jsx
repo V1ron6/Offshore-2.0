@@ -77,7 +77,7 @@ const AdminLogin = () => {
 							<Lock size={28} />
 							<h1 className="text-3xl font-bold">Admin Portal</h1>
 						</div>
-						<p className="text-red-100 text-sm">🌊 Offshore Administration</p>
+						<p className="text-red-100 text-sm">Offshore Administration</p>
 					</div>
 
 					{/* Form Container */}
@@ -143,7 +143,7 @@ const AdminLogin = () => {
 
 						{/* Demo Credentials */}
 						<div className="mt-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
-							<p className="text-blue-900 font-semibold text-sm mb-2">📌 Demo Credentials:</p>
+							<p className="text-blue-900 font-semibold text-sm mb-2">Demo Credentials:</p>
 							<p className="text-blue-800 text-xs mb-1"><strong>Admin 1:</strong> admin1 / Admin@123</p>
 							<p className="text-blue-800 text-xs"><strong>Admin 2:</strong> admin2 / Admin@456</p>
 						</div>
@@ -152,7 +152,7 @@ const AdminLogin = () => {
 
 				{/* Footer */}
 				<div className="text-center mt-6 text-white">
-					<p className="text-sm">🔐 Secure Admin Access Only</p>
+					<p className="text-sm">Secure Admin Access Only</p>
 				</div>
 			</div>
 		</div>
