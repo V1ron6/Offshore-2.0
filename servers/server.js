@@ -17,7 +17,8 @@ const orderRoute = require("./Routes/order.route.js");
 const complaintRoute = require("./Routes/complaint.route.js");
 const wishlistRoute = require("./Routes/wishlist.route.js");
 const couponRoute = require("./Routes/coupon.route.js");
-
+//trust proxy
+app.set('trust proxy', 1);
 // CORS configuration
 app.use(cors({
 	origin: frontendurl,
