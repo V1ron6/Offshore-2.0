@@ -325,8 +325,9 @@ const App = () => {
 					<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
 						<div className="min-w-0">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 wrap-break-word">
-								Welcome, <span className="text-red-500">{user?.username}</span> to the market place
+								Welcome, <span className="text-red-500">{user?.username}</span> 
 							</h1>
+								<p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Market Place</p>
 							<p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Browse our amazing products</p>
 						</div>
 						<button
@@ -346,7 +347,7 @@ const App = () => {
 					{/* Error & Success Messages */}
 					{error && (
 						<div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
-							⚠️ {error}
+							X {error}
 						</div>
 					)}
 					{success && (

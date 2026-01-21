@@ -85,7 +85,7 @@ const NotFound = () => {
 
 				{/* Fun Message */}
 				<p className="text-sm text-gray-500 mt-8">
-					Error code: 404 | Lost in the digital ocean 🌊
+					Error code: 404 | I Think You Are Lost
 				</p>
 			</div>
 		</div>

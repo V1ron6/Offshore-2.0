@@ -395,6 +395,17 @@ const Profile = () => {
 									back
 								</Button>
 								</Link>
+
+								<Link to="/wishlist">
+								<Button
+									variant="secondary"
+									size="sm"
+									fullWidth
+									className="text-left"
+								>
+									wishlist
+								</Button>
+								</Link>
 							</div>
 						</Card>
 

@@ -262,7 +262,7 @@ const CartPage = () => {
 								</div>
 
 								<Link
-									to="/dashboard"
+									to="/app"
 									className="block text-center text-red-600 hover:text-red-700 font-semibold transition"
 								>
 									Continue Shopping

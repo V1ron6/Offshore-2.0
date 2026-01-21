@@ -270,7 +270,7 @@ const Login = () =>{
 
 			// Handle successful response
 			if (response.data && response.data.success) {
-				setSuccess(`Welcome ${formData.username}! Redirecting to dashboard...`);
+				setSuccess(`Welcome ${formData.username}! Redirecting to market...`);
 				toast.success(`Welcome back, ${formData.username}!`);
 
 				// Save token and user data to localStorage
@@ -565,7 +565,7 @@ const Login = () =>{
 								>
 									{loading ? (
 										<span className="flex items-center justify-center">
-											<span className="inline-block animate-spin mr-2">⏳</span>
+											<span className="inline-block animate-spin mr-2">|</span>
 											Logging in...
 										</span>
 									) : (
@@ -575,7 +575,7 @@ const Login = () =>{
 
 								{/* Footer Text */}
 								<p className="text-center text-xs text-gray-600 mt-4">
-									Demo Credentials: username: <span className="font-semibold">viron</span> | password: <span className="font-semibold">1234</span>
+									Demo Credentials: username: <span className="font-semibold">user</span> | password: <span className="font-semibold">password123</span>
 								</p>
 						</form>
 					</div>

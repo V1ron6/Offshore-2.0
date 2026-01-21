@@ -207,12 +207,12 @@ const Dashboard = () => {
 	// Helper to get category icon
 	const getCategoryIcon = (category) => {
 		const icons = {
-			electronics: '📱',
-			accessories: '🎧',
-			clothing: '👕',
-			home: '🏡',
-			sports: '⚽',
-			other: '📦'
+			electronics: '',
+			accessories: '',
+			clothing: '',
+			home: '',
+			sports: '',
+			other: ''
 		};
 		return icons[category?.toLowerCase()] || '📦';
 	};
@@ -283,7 +283,7 @@ const Dashboard = () => {
 			<div className="bg-linear-to-b from-red-600 to-red-500 text-white shadow-md sticky top-0 z-50">
 				<div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
 					<div className="flex items-center justify-between gap-4">
-						<h1 className="text-2xl font-bold">🌊 Offshore</h1>
+						<h1 className="text-2xl font-bold">Offshore</h1>
 						<div className="flex-1 mx-4">
 							<div className="relative">
 								<Search className="absolute left-3 top-3 text-gray-400" size={20} />
@@ -301,14 +301,16 @@ const Dashboard = () => {
 								<Button variant="danger" size="sm" className="whitespace-nowrap">
 									+ Add Product
 								</Button>
-							</Link>						<Link to="/app" className="hidden sm:block">
-							<Button variant="danger" size="sm" className="whitespace-nowrap">
-								Go to App
+							</Link>				
+							<Link to="/app" className="hidden sm:block">
+							  <Button variant="danger" size="sm" className="whitespace-nowrap">
+								 Market
 							</Button>
-						</Link>							<Link to="/cart">
+						</Link>	
+						<Link to="/cart">
 								<button className="relative p-2 hover:bg-red-700 rounded-lg transition">
 									<ShoppingCart size={24} />
-									<span className="absolute top-0 right-0 bg-yellow-400 text-red-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">3</span>
+									<span className="absolute top-0 right-0 bg-yellow-400 text-red-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"></span>
 								</button>
 							</Link>
 						</div>
@@ -324,7 +326,7 @@ const Dashboard = () => {
 			)}
 			{error && (
 				<div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 max-w-7xl mx-auto mt-4">
-					⚠️ {error}
+				x	 {error}
 				</div>
 			)}
 
@@ -338,6 +340,11 @@ const Dashboard = () => {
 					<Link to="/add-product" className="sm:hidden">
 						<Button variant="danger">+ Add Product</Button>
 					</Link>
+					<Link to="/app" className="hidden sm:block">
+							<Button variant="danger" size="sm" className="whitespace-nowrap">
+								market
+							</Button>
+						</Link>
 				</div>
 
 				{/* Dashboard Stats */}

@@ -181,7 +181,7 @@ const OrderConfirmation = () => {
 				{/* Action Buttons */}
 				<div className="flex flex-col sm:flex-row gap-4">
 					<Link
-						to="/dashboard"
+						to="/app"
 						className="flex-1 py-3 bg-linear-to-r from-red-500 to-orange-500 text-white rounded-lg font-bold hover:shadow-lg transition text-center flex items-center justify-center gap-2"
 					>
 						Continue Shopping
@@ -203,8 +203,8 @@ const OrderConfirmation = () => {
 							support@offshore.com
 						</a>
 						<span className="text-gray-400 hidden sm:block">•</span>
-						<a href="tel:+1-800-123-4567" className="text-red-600 hover:text-red-700 font-semibold">
-							+1-800-123-4567
+						<a href="tel:+233123456789" className="text-red-600 hover:text-red-700 font-semibold">
+							+233123456789
 						</a>
 					</div>
 				</div>

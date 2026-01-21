@@ -404,7 +404,7 @@ const Home = () => {
 
 					<div className="flex flex-col sm:flex-row gap-4 justify-center">
 						<Link to="/signup">
-							<Button className="px-10 py-4 bg-white text-purple-600 hover:bg-gray-100 font-bold text-lg rounded-xl shadow-lg transition-all duration-300 hover:scale-105">
+							<Button className="px-10 py-4 bg-white text-black hover:bg-gray-100 font-bold text-lg rounded-xl shadow-lg transition-all duration-300 hover:scale-105">
 								Create Free Account
 								<Sparkles className="ml-2 inline" size={20} />
 							</Button>
@@ -425,7 +425,7 @@ const Home = () => {
 								placeholder="Enter your email"
 								className="flex-1 px-5 py-3 rounded-xl bg-white/20 backdrop-blur-sm text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
 							/>
-							<Button className="px-6 py-3 bg-white text-purple-600 hover:bg-gray-100 font-semibold rounded-xl transition-colors">
+							<Button className="px-6 py-3 bg-white text-black hover:bg-gray-100 font-semibold rounded-xl transition-colors">
 								Subscribe
 							</Button>
 						</div>

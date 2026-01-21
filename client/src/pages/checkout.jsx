@@ -407,7 +407,7 @@ const CheckoutPage = () => {
 												value={formData.cvv}
 												onChange={handleInputChange}
 												placeholder="123"
-												maxLength="4"
+												maxLength="3"
 												className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 ${
 													errors.cvv ? 'border-red-500' : 'border-gray-300'
 												}`}
@@ -422,7 +422,7 @@ const CheckoutPage = () => {
 									<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
 										<Lock size={20} className="text-blue-600 shrink-0 mt-0.5" />
 										<p className="text-sm text-blue-700">
-											Your payment information is secure and encrypted. This is a demo form.
+											Your payment information is secure and encrypted.
 										</p>
 									</div>
 
